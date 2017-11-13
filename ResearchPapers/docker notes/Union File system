@@ -1,0 +1,70 @@
+Union FIle system:
+
+As the name says, it provides a unified view of several different filesystems or directories within the same filesystem.
+Each physical directory is called a branch.
+
+Show the figure from:
+http://www.linuxjournal.com/article/7714
+
+Each branch is assigned a priority, a branch with higher priority overrides the branch with lower priority.
+
+consider the following ex:
+Branch 1:
+/vegetables
+     -Tomato
+     -Potato
+Branch 2:
+/Fruits
+    - Apple
+    - Tomato
+
+Mounting these two branches on a directory /veg-fruit, will result in following.
+
+/veg-fruit
+   - Apple      (from branch2)
+   - Tomato     (from branch1) 
+   - Potato     (from branch1)
+
+The file Tomato from branch1 overrides tomato from branch2, this is because branch1 has more priority than branch2.
+NOTE: By default, the branch that is mounted 1st has more priority.
+
+ 
+like any other filesystem, Unionfs is mounted. Unlike other filesystems, Unionfs does not mount on top of a device; it mounts on top of directories that are specified as a mount-time option. To create a union, we mount Unionfs as follows: 
+
+`# mount -t unionfs -o dirs=/Fruits:/Vegetables \
+> none /mnt/healthy`
+
+
+ This process is recursive. If there were a subdirectory of Fruits named Green that contained a file named Lime and a subdirectory of Vegetables also named Green that contained a file named Lettuce, the result would be:
+
+$ ls /mnt/healthy
+Apple Carrots Green/ Tomato
+$ ls /mnt/healthy/Green
+Lime Lettuce
+
+
+Overlayfs allows one, usually read-write, directory tree to be overlaid onto another, read-only directory tree. All modifications go to the upper, writable layer. This type of mechanism is most often used for live CDs but there's a wide variety of other uses.
+
+
+ With a simple modification, we also can use an overlay mount. That is, we can replace /home/cpw/ linux with the unified view:
+
+
+# mount -t unionfs -o
+> dirs=/home/cpw/linux:/usr/src/linux=ro
+> none /home/cpw/linux
+
+
+Example usage of union file systems:
+Live CDs => where users can have experience of whole OS even through CDs are read only. 
+Harddisk filesystem is overlayed over CDROM, so that when a user writes to running live cd, entries are copied to HDD fs instead.
+This is called copy on write.
+
+
+
+Links:
+http://www.thegeekstuff.com/2013/05/linux-aufs
+http://www.linuxjournal.com/article/7714
+ 
+
+
+ 

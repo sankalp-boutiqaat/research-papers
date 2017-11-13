@@ -1,0 +1,123 @@
+VPN (virtual private network):
+A vpn extends a private network across public network.
+What this means is that, a user on the public netwok can connect to a private network using a secured encrypted tunnel, giving an impression that the user is part of the private network. 
+For VPN to work a VPN server needs to be setup in the Private network, which can perform all above stated duties.
+VPN works on OS level, so its easy to configure OS so that all the running applications go through VPN tunnel.
+This can be a way to access face book in countries which do not allow it.
+
+########################################################################################################################
+
+An IPv4 address:
+
+An IPv4 address consists of 32 bits.
+8bits(255) . 8bits(255) . 8bits(255) . 8 bits(255)
+
+Any IP address consists of 2 logical portions:
+a:) Network Prefix or Routing prefix
+b:) Host Identifier or Rest of the bits.
+
+Evolution of IP4 address:
+
+In the very initial days of internet, the first 8 bits were reserved as a Network prefix and the rest 24 bits were used as a host identifier.
+The problem of this architecture was that, the internet could support only  254 (2^8) independent networks. 
+This format was sufficient at a time when only a few large networks existed, such as the ARPANET but soon it became clear
+that this would not be enough in near future.
+
+
+To bypass the limitation of above architecture classful addressing scheme was introduced.
+The solution was to increase the number of bits representing network prefix so that more networks can be created, each potentially having fewer hosts. 
+A challenge for classful scheme was to provide backward compatibility with the existing networks.
+Since all existing network numbers at the time were smaller than 64, Which means they had only used the 6 (00111111) least-significant bits of the network number field out of 8.  
+Hence, it was possible to use the most-significant bits to introduce a set of classes, where all existsing networks lie in the same class, thus
+being backward compatible.
+
+The address space was divided into 5 classes, A,B,C,D,E. Out of these classes only 3 are significant ones(A,B,C). Class D is reserved for multicast
+and Class E is reserved for future usage.
+All the existing network of that time was assigned to class A.
+
+Following is the class distribution:
+Take table from here:
+https://en.wikipedia.org/wiki/Classful_network
+
+
+In the following table:
+
+    n indicates a bit used for the network ID.
+    H indicates a bit used for the host ID.
+
+Class A
+  0.  0.  0.  0 = 00000000.00000000.00000000.00000000
+127.255.255.255 = 01111111.11111111.11111111.11111111
+                  0nnnnnnn.HHHHHHHH.HHHHHHHH.HHHHHHHH
+
+Class B
+128.  0.  0.  0 = 10000000.00000000.00000000.00000000
+191.255.255.255 = 10111111.11111111.11111111.11111111
+                  10nnnnnn.nnnnnnnn.HHHHHHHH.HHHHHHHH
+
+Class C
+192.  0.  0.  0 = 11000000.00000000.00000000.00000000
+223.255.255.255 = 11011111.11111111.11111111.11111111
+                  110nnnnn.nnnnnnnn.nnnnnnnn.HHHHHHHH
+
+
+This architecture change extended the addressing capability in the Internet, but did not prevent IP address exhaustion.
+The problem was that many companies needed larger number of host addresses than a Class C network provided (254 hosts).
+and therefore they received a Class B block, which was in most cases much larger than required (2^16 = 65536 hosts).  
+The pool of unassigned Class B addresses (2^14, or about 16,000) was rapidly being depleted.Thus,
+Classful networking was replaced by Classless Inter-Domain Routing (CIDR), starting in 1993.
+
+The CIDR, removed the fixed boundaries over the Network prefix, 
+it suggested that the Network prefix will be of a variable length and the remaining length bits will be used as HOST identifier.
+Now, since the network length was not predefined and restricted via classes as in classful routing, a way was needed to identify the
+number of bits that constitutes for Network prefix in a classless architecture.
+Such a notation came to be known as CIDR notation. In CIDR noation number of bits representing network prefix are added after / as suffix 
+to IP address.
+ex: 192.168.2.0/24
+    NNNNNNNN.NNNNNNNN.NNNNNNNN.HHHHHHHH
+
+Network mask: A network mask is a 32 bit field like IP address, which when performed bitwise AND on the Ip address of a network
+yields the network prefix.
+
+ex: 192.168.2.13/24
+    NNNNNNNN.NNNNNNNN.NNNNNNNN.HHHHHHHH
+    11000000.10101000.00000010.00001101 (ip address)
+      (192)    (168)    (2)       (13)
+
+                   +
+    11111111.11111111.11111111.00000000 (network mask)
+       (255)    (255)   (255)    (0)
+----------------------------------------------------------------
+    11000000.10101000.00000010.00000000 (network prefix) 
+    00000000.00000000.00000000.00001101 (host identifier)
+      
+
+Subnets:  A subnet can be created from a network by using some of the most significant Bits from HOST identifier and grouping them
+with network mask to create subnet mask.This divides a network into smaller subnets.
+              Pick picture from here:
+              https://en.wikipedia.org/wiki/Subnetwork
+
+The following diagram modifies the example by moving 2 bits from the host part to the subnet mask to form four smaller subnets one quarter the previous size:
+
+
+192.168.5.130   11000000.10101000.00000101.10000010   (ip address)
+
+255.255.255.192 11111111.11111111.11111111.11000000    (subnet mask)
+
+192.168.5.128   11000000.10101000.00000101.10000000    (network/routing prefix)
+
+0.0.0.2         00000000.00000000.00000000.00000010    (host part)
+
+Based on the network prefix, routers decide which traffic packet belongs to different subnet and needs to be sent outside and which traffic 
+packet belongs to local subnet and can be routed directly.
+
+
+
+https://en.wikipedia.org/wiki/Subnetwork
+https://en.wikipedia.org/wiki/Broadcast_address
+https://en.wikipedia.org/wiki/Network_address
+https://en.wikipedia.org/wiki/Classful_network
+https://en.wikipedia.org/wiki/Private_network
+https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing
+
+

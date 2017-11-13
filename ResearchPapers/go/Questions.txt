@@ -1,0 +1,35 @@
+1. Defer?
+
+  (done) Value types vs Reference types.
+  (done) allowed tokens during printing (%v,%d,%s etc), when to use what.
+   type switch example
+   (done) understanding buffer package
+   understanding bufio package
+   understanding fmt package.
+   reading and writing files.
+
+2. (done) New() vs make().
+3. (done) Array and slices
+
+
+   Read from stdin and write to a file.
+   Read a file in one go and write to other one.
+   Read a file in chunks and copy. 
+
+
+4. Maps.
+
+
+5. Structs.
+     (done) Size calculation for slice, string and bool 
+	 
+6. Goroutines.
+       Diff b/w concurreny and parallalism  	
+
+If the system distributes over several machines, a number of machines could execute
+the Worker goroutines, and the Master and Workers could communicate amongst themselves
+through netchan or rpc (see chapter 15). ????	   
+   
+
+
+

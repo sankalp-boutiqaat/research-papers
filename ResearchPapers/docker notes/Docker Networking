@@ -1,0 +1,60 @@
+Docker provides 3 networks by default:
+1. Bridge (default)
+2. Host
+3. None
+
+`docker network ls`
+Shows all the docker controlled networks.
+
+When a container is run it is started with Bridge Network by default. However this can be changed via "network" option in docker run command.
+`docker run --network=<NETWORK>`
+
+1. Bridge :-
+`docker0` is the name of default bridge interface. 
+->Using this bridge Host can communicate with container.
+->Container can communicate with HOST.
+->containers can communicate among themselves.
+
+                                        |------------> container A (eth0)
+                                        | 
+     HOST(eth0)  ------>   docker0  --->|
+                                        | 
+                                        |------------> container B (eth0)     
+
+Since Containers A & B belong to same subnet mask, docker0 acts like a router for them and enables communication b/w them.
+All the communications in default bridge network takes place via ip address.
+Communications via container hostnames is possible easily in custom bridge network, which already has embedded nameserver.
+
+2. Host :-
+Container shares same network interfaces as HOST.
+->If a service is running on port 80 on HOST, we cannot start another service listening on port 80 inside conatiner and vice versa.
+->Any port open on container is also opened on HOST and is a security risk. 
+
+3. None :- 
+Container only has loopback interface. 
+No communication to outside world or other containers is possible.
+
+`docker network inspect <networkname>`
+
+CUSTOM NETWORK:
+docker network create --driver bridge isolated_nw
+docker run --network=isolated_nw -itd --name=container3 busybox
+
+containers in isolated_nw cannot communicate with containers in docker0 subnet.
+How can such a communication be established?
+Tip: A container can be assigned to more than one networks.
+
+embedded dns server:
+pick from: https://docs.docker.com/engine/userguide/networking/#embedded-dns-server
+
+Exposing and publishing ports
+https://docs.docker.com/engine/userguide/networking/#embedded-dns-server
+
+Check on some network commands.
+
+
+
+
+ 
+
+

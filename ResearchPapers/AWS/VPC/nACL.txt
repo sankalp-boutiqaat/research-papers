@@ -1,0 +1,39 @@
+Network Access Control List:
+
+A NACL is a firewall (security layer) which controls traffic moving in and out of one or more subnets.
+
+NOTE: the default VPC already has a NACL in place. However, it has all inbound/outbound traffic allowed.
+ 
+NACL's have 2 types of rules for controlling traffic:
+a:) Inbound rules: Applies for incoming traffic to subnets.
+b:) Outbound rules: Applies for outgoing trafifc from subnets.
+[FIG: VPC video5 2:07]
+
+Rules are evaluated based on rule numbers, the rule with lower rule number gets priority over higher one.
+As soon as a traffic type matches a rule that rule is applied to for the traffic type neglecting all lower priority rules.
+
+ex:
+
+Rule no.            type           port          Action
+ 80                 HTTP            80           ALLOW
+ 90                 HTTP            80           DENY
+ 100                 ALL            ALL          DENY
+
+In this example, when a HTTP traffic will come on port 80, it will be allowed entry in subnet, as the RULE 80 will match and get evaluated
+and all the other rules will be ignored. However, if a HTTP traffic will come on port 8080 it will not be allowed, as it will match up
+RULE 100 which states to block all traffic.
+
+Rule no.            type           port          Action
+ 70                  ALL            ALL          DENY
+ 80                 HTTP            80           ALLOW
+ 90                 HTTP            80           DENY
+ 100                 ALL            ALL          ALLOW
+
+In this example, none of the traffic will be allowed entry in subnet as each traffic will match the RULE 70 and so rest
+all the rules will get ignored and the traffic will simple be restricted.
+
+Note:
+ -> A NACL can have multiple subnets under its hood but a subnet can belong to only one NACL at a time.
+    i.e a subnet cannot be associated with two NACL's
+ -> NACL controls the traffic in/out of subnet once inside the subnet AWS resources may have their own controlling rules.
+

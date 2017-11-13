@@ -1,0 +1,100 @@
+
+Mongo Shell:
+
+1. The mongo shell prompt has a limit of 4095 codepoints for each line. If you enter a line with more than 4095 codepoints, the shell will truncate it.
+2. cursor is automatically iterated up to 20 times to print up to the first 20 documents that match the query.
+   (DBQuery.shellBatchSize changes this value)
+3. The maximum BSON document size is 16 megabytes.
+4. MongoDB supports no more than 100 levels of nesting for BSON documents.
+5. Operations of type find(), aggregate(), listIndexes, and listCollections return a maximum of 16 megabytes per batch. batchSize() can enforce a smaller limit, but not a larger one.
+  find() and aggregate() operations have an initial batch size of 101 documents by default. Subsequent getMore operations issued against the resulting cursor have no default batch size, so they are limited only by the 16 megabyte message size
+
+
+
+
+CRUD:
+1. Projection with $elemMatch, $, $slice.
+2. $isolated does not work with sharded clusters.
+
+Aggregation:
+1. Pipeline stages have a limit of 100 megabytes of RAM. If a stage exceeds this limit, MongoDB will produce an error. To allow for the handling of large datasets, use the allowDiskUse option to enable aggregation pipeline stages to write data to temporary files.
+The $graphLookup stage must stay within the 100 megabyte memory limit, even if allowDiskUse is true.
+
+Map Reduce:
+1. Views do not support map-reduce operations.
+2. When writing to out collection map-reduce jobs take a global write lock on mongod instance i.e all writes to all collections are blocked
+for that instance.
+
+Text Search:
+1. Views do not support text search.
+2. To perform text search queries, you must have a text index on your collection. A collection can only have one text search index, but that index can cover multiple fields.
+
+Indexes:
+1. By default, all collections have an index on the _id field.
+2. You may not create compound indexes that have hashed index type. You will receive an error if you attempt to create a compound index that includes a hashed index field.
+3.  sort operations that do not use an index will abort when they use 32 megabytes of memory.
+4. you cannot create a compound multikey index if more than one to-be-indexed field of a document is an array. Or, if a compound multikey index already exists, you cannot insert a document that would violate this restriction.
+5. You cannot specify a multikey index as the shard key index.
+6. Multikey indexes cannot cover a query.
+
+TTL indexes:
+7. (TTL indexes) The background task that removes expired documents runs every 60 seconds.
+8. TTL background thread only deletes documents when a member is in state primary. The TTL background thread is idle when a member is in state secondary.
+9. TTL indexes are a single-field indexes. Compound indexes do not support TTL and ignores the expireAfterSeconds option.
+10. The _id field does not support TTL indexes.
+11. You cannot create a TTL index on a capped collection because MongoDB cannot remove documents from a capped collection.
+12. You may not specify a unique constraint on a hashed index.
+13. Sparse indexes does not include documents which does not contains index field but includes fields with null values.
+14. Index build puts a Database level lock (not collection level).
+
+
+
+
+
+
+Array Field Limitations:
+1. Projection document cannot contain more than one $ operator.
+2. The query document should contain only one array field
+
+Not allowed:
+db.collection.find( { <array>: <value>, <someOtherArray>: <value2> },
+                    { "<array>.$": 1 } )
+ 
+3. Query document should contain only one condition on the array field being projected.
+ 
+
+
+Storage Engines:
+1. Wiredtiger creates checkpoints(disk sync) at interval of 60 seconds or when 2GB of journal files has been written.
+2. wiredtiger uses (snappy) compression for collections and indexes.
+3. Because MongoDB uses a journal file size limit of 100 MB, WiredTiger creates a new journal file approximately every 100 MB of data. When WiredTiger creates a new journal file, WiredTiger syncs the previous journal file.
+4. If the write operation includes a write concern of j: true, WiredTiger forces a sync of the WiredTiger journal files.
+
+
+Replication:
+1. A replica set can have up to 50 members, but only 7 voting members.additional members must be non-voting members.
+2. In general, avoid deploying more than one arbiter per replica set.
+3. Aribiter is deployed only to make replicaset count odd.
+4. Replica set members send heartbeats (pings) to each other every two seconds. If a heartbeat does not return within 10 seconds its considered dead.
+5. Election is called upon by member with highest priority.
+6. Non-voting members must have priority of 0.
+7. A priority 0 member cannot vote, cannot start election, nor can be elected as a primary.
+
+ 
+
+
+
+todo:
+.mongorc
+.dbshell
+
+
+
+
+
+
+
+
+
+
+

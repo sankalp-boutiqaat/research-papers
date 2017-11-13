@@ -1,0 +1,16 @@
+BFS:
+——————
+
+BFS is an algorithm for searching and traversing tree and graphs.
+
+It works by exploring neighbour nodes of the start node followed by neighbours of neighbour nodes and so on . . . till no more nodes can be visited.
+
+BFS can also be used to find shortest path from a source to destination for unweighted graphs or graphs which have same weight for all edges.
+
+BFS makes use of QUEUE to keep track of neighbours of a node.
+A MAP is used to keep track of the VISITED nodes.
+
+
+
+
+  

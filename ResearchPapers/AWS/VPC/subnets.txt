@@ -1,0 +1,41 @@
+Subnets:
+
+A subnet is a subnetwork within our private network (VPC).
+
+A VPC cannot span over multiple Regions, its limited to a single region but it spans over all the availibity zones in that region.
+Similarly, a subnet cannot span over multiple availibity zones, its limited to a single zone. 
+
+NOTE: BUT, a single Availibity zone can have multiple subnets all belonging to same VPC.
+
+NOTE: 
+
+By default, a subnet for each availibity zone is created and linked to VPC. 
+So, if the VPC is created in n. virginia, which have 4 Availibity zones namely A,B,C,D. 
+One subnet for each availibity zone will be created and assigned to it by default. Some thing like:
+A => s1, B=> s2, C=> s3, D=> s4 //where s1,s2,s3,s4 are subnets. 
+
+Suppose the VPC has following address range 172.31.0.0/16:
+
+Means it has 65536 available host ips. It will be broken into 4 subnets as:
+
+Subnet S1 =  172.31.0.0/18    = 16384 ips  00   = Availibility zone A
+Subnet S2 =  172.31.64.0/18   = 16384 ips  01   = Availibility zone B
+Subnet S3 =  172.31.128.0/18  = 16384 ips  10   = Availibility zone C
+Subnet S4 =  172.31.192.0/18  = 16384 ips  11   = Availibility zone D
+
+Public Subnets vs Private Subnets:
+----------------------------------
+
+Public subnets have a route to internet while private subnets does not have a route to internet.
+A private subnet is created as follows:
+ 1. Create a route table which does not have any route to IGW.
+ 2. Attach the subnet you want to make private to this new route table. 
+
+FIG: vpc video6 4:19
+
+NOTE: 
+ -> I believe a subnet cannot be associated with multiple Route Tables (need to verify this.).
+ -> If no route table is explicitely attached to a subnet, traffic of that subnet is governed by default "main" route table.
+
+FIG: VPC video6 10:54 
+

@@ -1,0 +1,9 @@
+Internet Gateway:
+
+An internet gateway is a combination of harware plus software which provides your private network access to internet.
+
+Note: IGW is horizontally scaled so it imposes no bandwidth constraint, it is as well redundant and higly available so it imposes no availability risks.
+
+Note:
+ -> Only 1 Internet gateway can be attached to a VPC at a time.
+ -> An internet gateway cannot be detached from a VPC, while there are active AWS resources in the VPC(such as EC2 or RDS).

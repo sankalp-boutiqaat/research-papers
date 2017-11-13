@@ -1,0 +1,18 @@
+
+Users:
+These users can login into AWS console and perform actions based on the access (policies) provided to them.
+
+Groups: 
+A group consists of one or more users. 
+Access rights can be attached directly to a group and it will be applicable to all the users belonging to that group.
+
+Policies: 
+These are access rights which can be assigned to a user, group or role.
+
+Roles: 
+Roles comes in picture, when an AWS service needs to access another AWS service. 
+Suppose, an EC2 instance wants to access a S3 bucket. In such a scenario, we need to provide correct access rights to EC2 instance so it can 
+access S3 bucket. However, access rights (policies) cannot be directly assigned to a service, the solution is to assign the access rights (policies) to something called 
+Role and then this Role is attached to the service.
+
+Roles are just like groups, the difference is that they get assigned to a AWS service (like EC2) instead of users.

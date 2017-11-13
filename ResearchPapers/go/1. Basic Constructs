@@ -1,0 +1,487 @@
+1. The language is case-sensitive.
+
+2. All File names are in snake case. (i.e lower case, seperated via underscore.), no spaces or special characters allowed.  
+
+3. Statements does not need to end in semi-colon. Go compiler automatically inserts semicolons at the end of statements. However if multiple statements are written on one line,they must be separated by ; (semi colon)
+
+4. When a program executes, the first function to be called after initilaizations is the main() function.
+main() function has no arguments and no return values.
+
+
+      ## Packages: ##
+1. Every go-file belongs to one (and only one) package.
+2. Many different .go files can belong to one package, so the filename(s) and package name are generally not the same.
+3. A standalone executable belongs to package main. Each Go application contains one package called main.
+4. Each directory contains one package.
+
+To build a program, all the packages, and the files within them, must be compiled in the correct order. Package dependencies determine the order in which to build packages.
+The package is compiled as a unit, i.e all source files within a package must be compiled together and by convention each directory contains one package.
+
+NOTE: If a package is changed and recompiled, all the client programs that use this package must be recompiled too!
+
+If A.go depends on B.go which depends on C.go:
+- compile C.go, B.go, then A.go.
+- to compile A.go, compiler reads B.o not C.o.
+
+import “fmt” tells Go that this program needs (functions, or other elements, from) the package
+fmt. The package names are enclosed within “”. 
+Import loads the public declarations from the compiled package, it does not insert the sourcecode.
+
+If the name of a package does not start with . or /, like “fmt” or “container/list”, Go looks for it in
+the global Go tree. If it starts with ./ the package is searched in the actual directory; starting with /
+(even on Windows) it is searched for in the (absolute) path indicated.
+
+Packages expose their code-objects to the code outside of the package according to the following rule,
+which is enforced by the compiler :
+
+visibility rule:
+When the identifier ( of a constant, variable, type, function, struct field, …) starts with an
+uppercase letter, like Group1, then the ‘object’ with this identifier is visible in code outside
+the package (thus available to client-programs, ‘importers’ of the package), it is said to be
+exported (like public in OO languages). Identifiers which start with a lowercase letter are
+not visible outside the package, but they are visible and usable in the whole package (like
+private).
+Remark: importing a package which is not used in the rest of the code is a build-error (for
+example: imported and not used: os)
+
+
+Comments:
+One line comment: //
+Multi line block comment: /* */
+
+
+
+Sample program execution:
+	
+
+The order of execution (program startup ) of a Go application is as follows:
+(1) all packages in package main are imported in the order as indicated,
+in every package:
+(2) if it imports packages, (1) is called for this package (recursively)
+but a certain package is imported only once
+(3) then for every package (in reverse order) all constants and variables are evaluated, and the
+init() if it contains this function.
+(4) at last in package main the same happens, and then main() starts executing.
+
+
+conversions:
+Conversion from one type of value to another type needs to be done explicitely(manually), go does not support implicit (automatic) conversion
+But this can only succeed in certain well defined cases, for example from a narrower type to a
+broader type (for example: int16 to int32). When converting from a broader type to a narrower
+type (for example: int32 to int16, or float32 to int) loss of value (truncation) can occur.
+
+
+Constant:
+ constant const contains data which does not change.
+This data can only be of type boolean, number (integer, float or complex) or string.
+ex: const b string = “abc”
+IOTA trick??????????
+https://splice.com/blog/iota-elegant-constants-golang/
+
+
+Constants must be evaluated at compile time; a const can be defined as a calculation, but all the
+values necessary for the calculation must be available at compile time.
+Note: Specifing type with constant declaration in optional.
+So this is ok: const c1 = 2/3
+this is NOT: const c2 = getNumber()// gives the build error: getNumber() used as value
+
+Multi assignment is possible, ex:
+const beef, two, c = “meat”, 2, “veg”
+const Monday, Tuesday, Wednesday, Thursday, Friday, Saturday = 1, 2, 3, 4, 5, 6
+
+
+
+  ## Variables: ##
+----------------------------------------------------
+A declaration of a variable with var automatically initializes it to the zero-value defined for its type.
+Types can be :
+a:)elementary (or primitive), like int, float, bool, string,
+b:)structured (or composite), like struct, array, slice, map, channel,
+c:)interfaces, which only describe the behavior of a type.
+
+
+
+Variable scope:
+-----------------
+1. A variable declared outside of a function has global or package scope, i.e it is available throughout that package.
+2. A variable declared inside of a function has local scope and is available only within that function.
+3. A variable declared inside a control struct such as if-else, switch, for etc have block level scope.
+
+Variable Shadowing:
+--------------------
+1. If a variable is declared in the local scope with the name that conflicts with another variable present in global scope, then the 
+priority is given to local scope variable and the global scope variable is said to be shadowed within that function.
+Note: Same concept applies for block level too.  
+
+var a int       // variable declaration
+a = 15          // variable assignment 
+var a int = 15  // var assignment + declaration
+a := 15         // short declaration syntax
+var a = 15      // Automatic type inference
+var a, b, c int
+var a, b, c int = 10, 11, 12 // parallel or simulataneous assignment.
+a, b, c := 10, 11, "hello"
+
+Go compiler has the ability to derive the type of variable from its value, this is called Automatic type inference.
+NOTE: Short declaration syntax cannot be used at Package level.
+
+Value types and Reference types:
+-----------------------------------
+1. Value types: All primary types (int, float, strings, bool etc) + Arrays, Structs
+     - variables of value type are contained in Stack memory.
+2. Reference types: Slices, Maps, Channels, Pointers.
+     - variables of reference types are stored in heap.
+
+Swap two variables A, B:
+--------------------------
+
+B, A = A, B //swapped in single line.
+
+
+  ##Functions:##
+-------------------------------------------------------------------------------------------------
+A public function uses PascalCasing, a normal func uses camelCasing.
+
+A function can return more than one variable, then the return-types are indicated separated by
+comma’s and surrounded by ( ), like: func FunctionName (a typea, b typeb) (t1 type1, t2
+type2). Then return takes the form: return var1, var2
+
+init() function:
+--------------------
+This is a special function, which is executed automatically before main() function of the package main.
+ - A source file can contain only one init() function.
+ - init() function cannot be called explicitely.
+
+ 
+Format Specifiers:
+=================================
+
+%v  => uses default specifier for the supplied variable. (%t for booleaon, %d for int etc)
+%+v => in case of struct prints field names as well.
+%#v => Prints In Go's representation.
+%T  => prints type of variable.
+
+%t => booleon
+
+%d => int
+%b => int base 2
+%o => int base 8
+%x => int base 16
+
+%U => unicode code point for the character.
+%c => character represented via code point.
+%s => string
+
+%f => float
+
+
+Numerical Data types:
+-------------------------------------------------
+
+1. Architecture dependent types: These depend on the computer architecture on which the program will run. In 32 bit systems
+they occupy 32 bit and on 64 bit systems thaey take 64 bits.
+Types: int, uint, uintptr 
+
+2. Architecture independent types: These take fixed size and does not depend on computer on which program is run.
+Types:
+  int8,  uint8 ->   8 bits
+  int16, uint16 -> 16 bits
+  int32, uint32 -> 32 bits
+  int64, uint64 -> 64 bits
+  
+  float32, float64
+
+Note: int8 and int16 are different types, explicit conversion needs to be done to convert one to another:
+    var n int8 = 2
+    var m int16
+    m = n // not possible
+    m = int16(n) // works!!
+
+
+Aliasing Types:
+------------------------------------------------------------------
+
+A type can also be given another name, such as:
+"type TimeZone int"
+in this, int is aliased as TimeZone.
+However, for Go compiler these are two different types, so an explicit conversion is needed while doing something like this:
+        type TZ int
+	var a int = 5
+	var b TZ
+	b = TZ(a)
+	fmt.Printf("%v", b)
+
+Characters:
+--------------------------------------------------------------------
+
+A character is represented as a byte, which is actually an alias of uint8.
+In ASCII table, decimal value for A is 65 and hexadecimal is \x41. So A can be declared as:
+var ch byte = 65 or var ch byte = '\x41'
+An ASCII character takes only 1 byte, but there is also support for Unicode characters(UTF-8) which can consume upto 6 bytes.
+Unicode characters are represented in codepoints or what is called as runes. Runes are an alias for int32 datatype.
+
+A unicode code point is represented as U+hhhh, where 'h' is a hexa decimal number. More precisely, something like this:
+\u0041 (\u followed by 4 hexa chars) or \U00101234 (\U followed by 8 hexa chars)
+Incase, unicode character can fit in 2 bytes we use first representation format, incase it needs more bytes we use second one.
+
+  var ch1 rune = '\u0041'
+  var ch2 rune = '\U00101234'
+  
+  fmt.Printf("%d %d", ch1, ch2)   // 65   1053236
+  fmt.Printf("%U %U", ch1, ch2)   // U+0041   U+101234
+  fmt.Printf("%c %c", ch1, ch2)   // A       []
+
+utf8 package provides conversion from rune to []bytes and vice-versa.
+A rune can be converted to []byte by using utf8.EncodeRune(), and []byte to rune by using utf.DecodeRune()
+
+Strings:
+-------------------------------------------------------------------------
+In Go strings are stored as UTF-8. So, strings are a sequence of variable-length characters.
+Each character can take 1-6 bytes for storage. If its a ASCII character it will take 1 byte else it will take more than that.
+
+String are represented as:
+Interpreted Strings => enclosed in double codes. In this special characters such as \n, \t, \u are interpreted. 
+Raw String => enclosed in backtick (not single quotes)
+
+The initial value of a string is empty string ("").
+
+A string can be seen as a slice of bytes. So simple indexing can be used to access contents of a string.
+
+var str string = "hello"
+
+str[0] => represents first byte.
+str[1] => represents second byte.
+Since, ASCII characters take up only 1 byte: str[0] == "h" and str[1] == "e".
+NOTE: Beware, this will not be true when dealing with non ASCII chars.
+
+Strings are immutable, which means they cannot be modified. Thus following operation is invalid:
+str[0] = 'A'
+Also, one cannot take address of a sting byte: &str[0] is invalid.
+To modify a string one first needs to convert string to a slice of bytes, and then can use indexes to modify it.
+s:="hello"
+c := []byte(s)
+c[0] = 'c'
+s2 := string(c) // s2 == "cello"
+xptr := &c[0] // Also, now u can take address of element xptr == 0xsd233e00ed
+
+
+Two strings can be concatenated as:
+
+str = Str1 + Str2
+However, using such operation in a loop is not very efficient. Try using strings.Join() and ever better is byte-buffer.
+
+len(str) => gives the number of bytes in a string.
+
+A for-range loop can be used to iterate over characters of the string (not bytes).
+
+        var ch string = "hòla"
+
+	for k, v := range ch {
+		fmt.Printf("\n index:%d, value:%c, intv:%d", k, v, v)
+	}
+Outputs:
+ index:0, value:h, intv:104
+ index:1, value:ò, intv:242   //this character took 2 bytes.
+ index:3, value:l, intv:108
+ index:4, value:a, intv:97
+
+For normal case:
+        var ch string = "hola"
+
+	for k, v := range ch {
+		fmt.Printf("\n index:%d, value:%c, intv:%d", k, v, v)
+	}
+Outputs:
+ index:0, value:h, intv:104
+ index:1, value:o, intv:111   
+ index:3, value:l, intv:108
+ index:4, value:a, intv:97
+
+This method can be used to calculate number of characters in case string has non-ASCII chars.
+utf8.RuneCountInString(str) can also be used to get number of characters in string.
+
+A string can be converted to slice of rune, simply via:
+var r = []rune(str) // length of rune will give the number of characters.
+And slice of rune can be converted to string via:
+var s = string(runes)
+
+
+
+Conversion of string to int and floats and vice-versa:
+--------------------------------------------------------
+
+strconv package is used for such conversions. 
+strconv.Itoa() => convert int to string
+strconv.Atoi() => convert string to int
+
+strconv.FormatFloat() => convert float to str
+strconv.ParseFloat() => convert str to float
+
+
+Pointers:
+--------------------------------------------------------------------------------------------
+Pointers are special datatype which can store address of a object. 
+
+The address of an object can be extracted by using the address-of operator (&). This operator when placed
+before a variable gives the memory address of that variable.
+
+        var i1 = 5
+	fmt.Printf("\n value:%v, address:%v", i1, &i1)
+        //output:  value:5, address:0xc42000e2b8
+
+A pointer variable can be declared as:
+var intP *int
+(It stores the address of a variable which points to integer value)
+  var i1 = 5
+  var intP *int
+  intP = &i1
+
+A pointer takes 64bit (8 bytes) on 64bit systems and 32 bit on 32bit systems.
+
+The default value of a pointer is nil.
+
+Using the * operator to get the actual value of the pointer is called dereferencing or indirection.
+ex: fmt.Printf("\n%v", *intP) //intP pointer is dereferenced.
+
+POinter arithmetic is not allowed in GO, means following is invalid:
+intP = intP + 2
+or, intP++
+
+Pointed variables persist in memory as long as there is atleast one pointer pointing to it. So, their lifetime is independent
+of the scope in which they were created.
+
+Nesting of pointers is allowed. So, a pointer can point to another pointer which points to another pointer and so on.
+
+Dereferencing a nil pointer will make the process crash.
+ex: var p *int
+    *p = 0 //nil pointer dereference. 
+
+
+new() and make():
+------------------------------------------
+
+- Both are used to allocate memory.
+- Both allocates memory on heap.
+
+The difference is that new() is meant to be used with value type structures like: structs, arrays.
+make() is meant to be used with reference type structures such as slices, maps, channels.
+
+new() allocates memory and provides a pointer to that location.
+make() allocates memory and returns initialized value.  
+   
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+#######################################################################################
+
+
+
+
+
+
+  
+
+
+
+
+
+

@@ -1,0 +1,88 @@
+type Buffer struct {
+
+  buf        []byte   // contains buffer contents in slice.
+  off        int      // contains the offset upto which buffer contents are already read.
+  lastRead   int      // contains length of rune (1-4 byte) so that unread ooperation can be performed easily.
+  bootstrap  [64]byte // underlying array for buf slice (only in certain cases).
+
+}
+
+
+Public functions:
+
+func NewBuffer(b []byte) *Buffer
+  => Initializes new Buffer with 'b' as the initial contents.
+
+func NewBufferString(s string) *Buffer
+  => same as above func just accepts string as input instead of byte slice.
+-----------------------------------------------------------------------------
+
+func (b *Buffer) Bytes() []byte
+  => Retruns the unread portion of buffer slice.
+
+func (b *Buffer) String() string
+  => Same as above just returns the unread portion as string.
+
+func (b *Buffer) Len() int
+  => Returns the number of unread bytes.
+
+func (b *Buffer) Cap() int
+  => Returns max capacity of buffer.
+
+func (b *Buffer) Reset()
+  => Discard whole buffer
+
+func (b *Buffer) Truncate(n int)
+  => Discard whole buffer, just preserve the supplied number of unread bytes.
+
+func (b *Buffer) Grow(n int)
+  => Grows the buffer size by n.
+
+func (b *Buffer) Write(p []byte) int
+  => appends to the current contents of buffer.
+
+func (b *Buffer) ReadFrom(r io.Reader) (n int64)
+  => takes the io.Reader interface and reads its contents into buffer.
+  => It reads entire contents in Buffer till EOF is encountered.
+  => Reading is done in chunks of 512 bytes.
+
+func (b *Buffer) WriteTo(w io.Writer) (n int64
+  => Writes buffer data into io.Writer interface till full buffer is drained.
+
+func (b *Buffer) WriteByte(c byte)
+  => Append byte 'c' to buffer.
+
+func (b *Buffer) WriteRune(r rune) (n int)
+  => Write unicode code point to buffer.
+
+func (b *Buffer) Read(p []byte) (n int)
+  => Read bytes from buffer and fill in supplied slice 'p'. 
+  => Number of bytes read == len(p)
+
+func (b *Buffer) Next(n int) []byte
+  => Read next n bytes from buffer.
+
+func (b *Buffer) UnreadByte() error
+  => unread most recent read byte
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+

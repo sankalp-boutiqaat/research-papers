@@ -1,0 +1,195 @@
+Maps:
+map is declared as:
+var map1 map[keyType]valueType
+var map1 map[string]int
+
+The length of a map does not need to be defined during initialization.
+The memory is alocated dynamically as the map grows.
+
+The value of an uninitialized map is nil.
+
+Key := The map key can be of any type for which == and != is defined. ex: int, string, float.
+      So, arrays, slices and structs cannot be used as a map key.
+      However, Pointers and interfaces can be used as a key.
+
+value := The value type can be of any type.
+         By using EMPTY interface{} as type one could store any value but in order to use that value one must type assert.
+
+len(map1) => gives the no. of key-value pairs in map.
+
+Maps are reference types, memory is alocated via make().
+
+//shows dynamic allocation of map
+func main() {
+  map1 := map[string]string{} //{} does the magic of memory allocation here!!
+  map2 := make(map[string]string)
+  
+  fmt.Printf("\n%v %v\n", map1, map2)
+  
+  map1["three"] = "three"
+  map2["four"] = "four"
+  
+  fmt.Printf("\n%v %v\n", map1, map2)
+}
+//output
+map[] map[]
+map[three:three] map[four:four]		
+
+!!Dont use new() always use make() with maps!!
+
+//map with func as value
+func main() {
+map1 := map[string]func(int) int{
+   "one": func(in int) int{
+       return in
+   },
+   "two": func(in int) int{
+	   return in
+   },
+}
+callme := "two"
+ret := map1[callme](11)
+fmt.Printf("\n%v\n", ret)
+}
+//output
+11
+
+Map capacity:
+-----------------------------
+Unlike arrays, maps does not have any maximum size specified.
+However, one can specify initial size of a map as follows:
+
+map1 := make(map[string]int, 100)
+
+Slices as Map values:
+--------------------------------
+There will be cases where multiple values needs to be associated with single map key.
+In such case values can be specified as a slice.
+
+map[string][]string
+map[int][]string
+
+Testing if a value exists in map:
+-----------------------------------
+val, ok := map1[key1]
+// ok == true means key1 exists in map.
+// val gives the value at key1
+
+Deleting an elemnt from map:
+----------------------------------
+delete(map1, key1)
+
+Iterating:
+--------------------------------
+All the map values can be iterated over using for-range construct.
+
+for key, val := range map1 {
+  //key,val
+}
+
+Slice of maps:
+----------------------------
+When creating a slice of maps. make() needs to be used multiple times for memory initialization.
+once for the slice and then once for each map residing in slice. Something like:
+
+sl := make([]map[string]string, 3) //initializes memory for slice
+for key := range sl {
+  s1[key] = make(map[string]string) // initializes memory for map
+}
+
+Sorting a map:
+By default, the map is not sorted, not even on keys.
+However, it can be sorted as follows:
+a:) copy the map keys on a slice.
+b:) sort the slice.
+c:) print the values from map based on sorted slice.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+  
+ 
+ 

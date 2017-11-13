@@ -1,0 +1,37 @@
+Virtual Private Cloud (VPC):
+
+As the name sugests, it is a private cloud inside AWS's mega cloud, which is dedicated only to you. 
+
+The term `virtual` means that the seperation/isolation from other private clouds is only at software level and not hardware based.
+
+You can create your own virtual network inside a VPC and you will have full controll over it.
+Like: creation of subnets, confiuration of routing tables and network gateways.  
+
+
+
+At a very basic level, VPC can be conceptualized as a private HOME Network. Any home network that talks to internet has following components:
+
+1. Modem.    : Provides gateway to internet.
+2. Router.   : Provides communication between home devices and also routes traffic to external devices through modem.
+3. Firewall  : controls the incoming and outgoing traffic from computers.
+4. Computers : end Receiver or sender of traffic. 
+[Fig: VPC, video2 5:09]
+  
+
+Comparing the components of a home network with the components of a VPC, we can see how similar both are:
+
+      VPC                                        Home network
+
+  Internet Gateway                                  Modem
+  Route Table                                       Router
+  Network ACL                                       Firewall
+  EC2 Instance                                      Computers
+[FIG: VPC, video2 8:03]
+
+NOTE: When you create a AWS account a defaul VPC is created for you. Including components which are required to make it functional:
+      1. Internet Gateway (IGW) to talk to internet
+      2. A Route table with predefined routes to default subnets.
+      3. A network access control list.
+      4. Subnets.
+
+

@@ -1,0 +1,62 @@
+IF-ELSE:
+
+For example instead of: val := 10
+if val > max {
+// do something
+}
+
+you can write: if val := 10; val > max {
+// do something
+}
+
+
+But pay attention that in the more concise form, the variable val initialized with := is only known
+within the if-statement (the scope is limited to the statements in { }, but if there is an else clause
+val is also known there):
+
+SWITCH:
+
+switch var1 {
+case val1:
+…
+case val2:
+…
+default:
+…
+}
+
+More than one value can be tested in a case, the values are presented in a comma separated list
+like: case val1, val2, val3:
+
+So automatic fall-through is not the default behavior; if you want this, use the keyword fallthrough
+at the end of the branch.
+
+So switch i {
+case 0: //empty case body, nothing is executed when i==0
+case 1:
+f() // f is not called when i==0!
+}
+And: switch i {
+case 0: fallthrough
+case 1:
+f() // f is called when i==0!
+}
+
+a switch can also contain an initialization statement:
+switch result := calculate(); {
+case result < 0:
+// …
+case result > 0:
+// …
+default:
+// 0
+}
+
+or
+
+switch a, b := x[i], y[j]; {
+case a < b: t = -1
+case a == b: t = 0
+case a > b: t = 1
+}
+
