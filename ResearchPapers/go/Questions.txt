@@ -24,12 +24,68 @@
      (done) Size calculation for slice, string and bool 
 	 
 6. Goroutines.
-       Diff b/w concurreny and parallalism  	
+       (done) Diff b/w concurreny and parallalism  	
 
 If the system distributes over several machines, a number of machines could execute
 the Worker goroutines, and the Master and Workers could communicate amongst themselves
-through netchan or rpc (see chapter 15). ????	   
+through netchan or rpc (see chapter 15). ????
+
+Make a note of this.
+https://golang.org/cmd/go/#hdr-Description_of_testing_flags	   
+
+Netchan seems a complex topic, need to dive into it.
+
+checkout go dep tool for dependency management.??
+
+How to implement C library in go??
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+(done)sockets?
+internetdomain sockets vs unix sockets.
+(done) blocking sockets?
+(done) non-blocking sockets?
+ (partial) select, poll, epoll??
+raw sockets??
+baclog queue ?? where its maintained and how??
+what if the data exceeds the buffer size of read? do i need to resend rest of da ta again?
+https://www.ulduzsoft.com/2014/01/select-poll-epoll-practical-difference-for-system-architects/
+https://en.wikipedia.org/wiki/Berkeley_sockets
+seems good:
+http://beej.us/guide/bgnet/output/html/multipage/advanced.html#blocking
+http://veithen.github.io/2014/01/01/how-tcp-backlog-works-in-linux.html
+https://jvns.ca/blog/2017/06/03/async-io-on-linux--select--poll--and-epoll/
    
+Answers:
+accept(), recv() are blocking calls. However, send is not a blocking call.    
 
 
 

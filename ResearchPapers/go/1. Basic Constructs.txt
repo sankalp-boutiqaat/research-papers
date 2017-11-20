@@ -368,7 +368,90 @@ make() is meant to be used with reference type structures such as slices, maps, 
 
 new() allocates memory and provides a pointer to that location.
 make() allocates memory and returns initialized value.  
-   
+
+
+HOw to define basic package structure?
+----------------------------------------
+myproj/
+   - main/
+       - main.go
+   - pack1/
+       - pack1.go
+	   - pack3/
+   	       - pack3.go
+   - pack2/
+       - pack2.go
+
+The above program can be run as:
+-> move to myproj folder
+-> go run main/main.go
+-> go build main/main.go (to compile)	   
+
+In the above example, 
+  - pack1 can be imported within main.go  as:  import("../pack1")
+  - pack2 can be imported within pack1.go as:  import("../pack2")
+  - pack3 can be imported within pack2.go as:  import("./pack2")    
+
+
+
+How package referencing works?
+----------------------------------
+  Referencing is used when importing a particular package within another package.
+  or
+  in go get [importpath], go install [importpath], go build [importpath], go run [importpath] like commands.
+
+If the importpath of package starts with a . or .. element, it is assumed to be a filesystem path.
+Otherwise, the package is searched within GOPATH/src. 
+
+Wildcard -> "..." is a wildcard replacement for "*".
+So, In order to test all the subdirectories within package "net", we can simply say
+  go test net/... 
+   or we can move to net directory and say,
+   go test ./...   
+This will compile net package, will also compile net/http package and will also compile net/http/server package.			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+
+
+
+
+
+
+
+			
+           
+      
 
 
 

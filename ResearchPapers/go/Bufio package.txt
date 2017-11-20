@@ -1,0 +1,804 @@
+Handling io using bufio package:
+Reader:
+--------
+The role of the reader is to read data from supplied io.reader object into a buffer.
+The read is throttled using the buffer size, so that the memory does not get overflow with very huge buffer.
+
+type Reader struct {
+	buf          []byte    // buffer into which data is to be read from io.Reader. Default buffer size is 4096 bytes, minimum buffer size is 16 bytes. 
+	rd           io.Reader // reader provided by the client
+	r, w         int       // pointer positions for read and write.
+	err          error     // it contains any error found during read.
+	lastByte     int
+	lastRuneSize int
+}
+
+The *Reader object can be obtained using helper functions: NewReader and NewReaderSize
+
+func NewReader(rd io.Reader) *Reader {
+	//Initialize a *Reader, to read from io.Reader with buffer size of 4096 bytes.
+}
+
+func NewReaderSize(rd io.Reader, size int) *Reader {
+   //Initialize a *Reader, to read from io.Reader with buffer size as provided in input.
+}
+
+The Operations that can be done on *Reader object:
+
+func (b *Reader) Reset(r io.Reader) {
+	//Discards everything thats in the current buffer, including the io.Reader that was set previously in Reader object.
+	//Sets provided io.Reader as the new object to read from.
+	//Its just like initializing a new Reader object.
+}
+
+func (b *Reader) Peek(n int) ([]byte, error) {
+   // Peek return the next n bytes, without advancing the read pointer.
+   // This means that calling peek twice with same value for n will return same bytes as the read pointer does not move ahead.  
+}
+
+func (b *Reader) Discard(n int) (discarded int, err error) {
+   //Discards n bytes from the buffer i.e the read pointer will be simply shifted to n positions ahead.
+}
+
+func (b *Reader) Read(p []byte) (n int, err error) {
+   //The motive of this function is to read the data from Reader buffer into supplied buffer p.
+   //The important point is how's this done? following is the logic for it:
+   // Check if we have any unread data in our Reader buffer, if so copy it to supplied byte slice p and return.
+   // If we dont have any unread data, two cases arise:
+   //   1.) Size of supplied buffer p is greater than our Reader buffer, Then, Read only ONCE from io.Reader object and copy directly to suuplied buffer p.
+            Instead of copying first to Reader buffer and then copying to p.
+        2.) Size of supplied buffer p is less than our Reader buffer, Then, Read only ONCE from io.Reader object into Reader buffer and then copy
+            as much as possible to supplied buffer p. 		
+}
+
+func (b *Reader) ReadByte() (byte, error) {
+  //Read only one byte from Reader buffer.
+  //if the reader buffer is empty use fill() and then return one byte.
+  //See fill() for more description.
+}
+func (b *Reader) UnreadByte() error {
+ //Put the last read byte back to Reader buffer.
+ //How do we know, which was the last read byte??
+ // ANS: this is where the lastByte property of Reader struct comes in effect.
+  //NOTE: lastByte does not contain the actual byte data but only the buffer index where last byte is found.
+  //This will usually be b.r - 1  
+}
+
+func (b *Reader) fill() {
+  // fill reads a new chunk into the buffer.
+  // Read from io.Reader object and fill Reader buffer till atleast one byte is received.
+  // Do not try more than 100 times. 
+}
+
+func (b *Reader) ReadRune() (r rune, size int, err error) {
+  //Instead of reading a single byte, it reads a rune. A rune can be anywhere between 1-4 bytes.
+  
+}
+
+func (b *Reader) UnreadRune() error {
+  // Instead of Putting the last read byte back to Reader buffer. It puts the rune back to buffer.
+  // This is where the lastRuneSize comes into effect. which helps in getting the size of rune to put back.
+}
+
+func (b *Reader) Buffered() int {
+  //Returns the number of pending unread bytes in Reader buffer.
+}
+
+func (b *Reader) ReadSlice(delim byte) (line []byte, err error) {
+ //The Aim is to read and return contents till the delimeter is encountered.
+ //If the delimeter is found in the Reader buffer, contents upto the delimeter are returned.
+ //If not, New data is loaded into buffer using fill() method and again delimeter is searched in the buffer.
+ //If still delimeter is not found, above step is repeated, till the point delimeter is not found OR io.Reader gives io.EOF OR buffer gets FULL.
+ //NOTE: this method does not provide the surity that whole io.Reader data will be read until the delimeter is found.
+ //   There may be a case where Redaer buffer max size is 10 bytes.
+ //   unread bytes is 5 bytes, io.Reader has 20 bytes more pending to be read.
+ //   Now, since the max capacity of buffer is only 10 bytes. the above function will return once the buffer gets full i.e after reading 
+ //   next 5 bytes from io.Reader, Thus there still will be 15 bytes to be read from io.Reader which may contain our required delimeter.
+ //   So, the above function should be called in for loop till we keep getting buffer full error.
+ //   Also, once a buffer full is encountered whole buffer is reset to 0. So, the returned data on each iteration must be stored on a tempory byte slice.
+ 
+}
+
+func (b *Reader) ReadLine() (line []byte, isPrefix bool, err error) {
+  // This is same as calling ReadSlice('\n').
+  // isPrefix => denotes whether full line till delimeter is retrieved or a next call needs to be made
+  //             to above function again.
+  // so basically instead of checking for buffer full error, we simply need to check for isPrefix.
+}
+
+func (b *Reader) ReadBytes(delim byte) ([]byte, error) {
+  //NOTE: If you want to read whole data of io.reader without wrrying about Reader buffer getting full, Then this is the method.
+  //  It returns data upto the delimeter, reading recursively from the io.Reader till delim is found.
+  //   BUT, BEWARE this might not seem to be most logical approach when dealing with large files.  
+  // NOTE: Internally it calls readSlice(delim), maintaining the tempory buffer and expanding it when necessary.   
+}
+
+func (b *Reader) ReadString(delim byte) (string, error) {
+   //Same as readBytes, only the difference is it returns string.
+}
+
+func (b *Reader) WriteTo(w io.Writer) (n int64, err error) {
+  //If you are performing a task of reading from one io media and writing to another io media.
+  //This is the function that will make best sence.
+  //What it does is, it reads from io.Reader and flushes to io.Writer. How??
+  //    - First, Flush all unread bytes to io.Writer.
+  //    - Now, Read from io.Reader to Reader buffer and again flush to io.Writer.
+  //    - Keep doing above step till reader says I dont have more data to give you buddy.
+}
+--------------------------------------------------------------------------
+The role of writer is to write data from buffer to io.Writer.
+
+type Writer struct {
+	err error       //error if any
+	buf []byte      // Writer buffer. 
+	n   int         // pointer to last unwritten byte in buffer(buf). 
+	wr  io.Writer   // writer object
+}
+
+The *Writer object can be obtained by using the following helper functions:
+
+func NewWriterSize(w io.Writer, n int) *Writer {
+   //Creates a *Writer object with buffer length of n and pointing to io.Writer. 
+}
+
+func NewWriter(w io.Writer) *Writer {
+  //Same as calling NewWriterSize() with buffer size of 4096 bytes.    
+}
+
+The following operations can be performed on a *Writer object:
+
+func (b *Writer) Reset(w io.Writer) {
+  //As its name implies, Resets the whole writer buffer. 
+}
+
+func (b *Writer) Flush() error {
+  //Simply writes all the available data in buffer to io.Writer. 
+}
+
+func (b *Writer) Available() int {
+  //Amount of space available in writer buffer.
+}
+
+func (b *Writer) Buffered() int {
+  //No. of bytes in buffer.
+}
+
+func (b *Writer) Write(p []byte) (nn int, err error) {
+  //Write writes the data supplied in p to Writer buffer.
+  //If the size of supplied p is greater than Writer Buffer, the access data is flushed to io.Writer.
+}
+
+func (b *Writer) WriteByte(c byte) error {
+  //Write the supplied byte to Writer buffer.
+  //If the buffer is full, first Flush() all buffer data to io.Writer.
+  //then write the byte to Writer buffer.
+}
+
+func (b *Writer) WriteRune(r rune) (size int, err error) {
+    //Same as writebyte except Writes the supplied rune to buffer.
+}
+
+func (b *Writer) WriteString(s string) (int, error) {
+  //Same as Write(), with the only difference that it takes string.
+}
+
+func (b *Writer) ReadFrom(r io.Reader) (n int64, err error) {
+   // This method is exactly same as WriteTo() method of a Reader.
+   // It reads from the supplied io.Reader in a buffered manner and writes to the io.Writer, when the Writer buffer is fully loaded.
+   //  to free up space.   
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,340 @@
+Go does not have a try-catch mechanism.
+
+In order to signal an error, the inner function returns an error object to the Outer function.
+The outer function can test, if the error object is nil or not.
+ex:
+ if value, err := innerFunc(param1); err != nil {
+   fmt.Printf(“Error %s in innerFunc with parameter %v”, err.Error(), param1)
+   return
+ }   
+
+A simple error object can be created as:
+  var err error = errors.New("I am sn error")
+
+fmt package can also be used to generate error object:
+  fmt.Errorf("Error: %s", "encountered error message")
+fmt.Errorf is similar to fmt.Printf, just that instead of printing string it returns error object.
+
+Panic and recover and defer:
+-------------------------------
+A panic occurs when a runtime exception is encountered in a program. such as:
+- array index out of range
+- nil pointer dereference
+Upon encountering a panic, the program crashes.
+If the panic occurs within a goroutine, that routine will crash, However, normal program execution will continue.
+
+Panics can be thrown manually using the global panic() function.
+ panic("I am panicking")
+
+Panic propogation:
+----------------- 
+The panic propogates from bottom to top. To understand this lets consider a call stack:
+main -> func1 -> func2 -> func3 -> func4
+Now, suppose the panic occurs in line 10 of func3(). Then the runtime will stop the execution of line 11 and will call the defer()
+of func3, followed by defer() of func2, followed by defer of func1 and then atlast defer() of main will be called, before the program
+crashes.
+
+Recovering:
+----------
+Recover is used to recover a panicking program to normal state.
+The recover() global function has following signature usage:
+  if err := recover(); err!= nil {
+    fmt.Println("Caught a panick, program will continue normally from here on")
+  } 
+However, the recover() needs to be called within defer() function to work, as during panicking 
+ only defer() functions are executed.
+
+NOTE: Once, a panicking program is recovered in defer(), the program can continue with its normal execution flow.
+consider below example:
+func main() {
+  fmt.Println("Entered Main()")
+  inner()
+  fmt.Println("main() Normal execution continues")
+}
+
+func inner() {
+  fmt.Println("Entered inner()")
+  defer func() {
+           err := recover()
+           if err != nil {
+               fmt.Println("Caught a panick")
+           }
+      }()
+  innerinner()    
+  fmt.Println("inner() Normal execution continues")
+}
+
+func innerinner() {
+  fmt.Println("Entered innerinner()")
+  panic("i panickeded")
+}
+output:
+Entered Main()
+Entered inner()
+Entered innerinner()
+Caught a panick
+main() Normal execution continues
+
+Taming panic / Converting panicks to normal errors:
+--------------------------------------
+A panic can be converted into a normal error.
+Trick to do this is named return parameters.
+ex:
+func panicTamed() (err error){
+  defer func() {
+           rer := recover()
+           if rer != nil {
+               err = fmt.Errorf("Converted panic to normal error")
+           }
+      }()
+  panic("i panickeded")    
+  return
+}
+err := panicTamed()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+  
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+     
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   
+  
+  
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

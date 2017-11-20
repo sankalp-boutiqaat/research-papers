@@ -1,0 +1,270 @@
+"testing" package is used for automated testing of Go packages.
+It is used in conjunction with "go test" utility.
+
+All The test cases should be contained within a file named *_test.go.
+All the test cases within a single *_test.go file are said to be in one test suite.
+
+Following is the sample test function:
+
+import "testing"
+
+func TestAverage(t *testing.T) {
+  var v float64
+  v = Average([]float64{1,2})
+  if v != 1.5 {
+    t.Errorf("Expected 1.5 but found %v, v)
+  }
+}
+
+Any, function which has the prefix "Test" and has atleast one parameter of type *testing.T, is considered as a test case. Such a function will
+be executed via "go test".
+Note: The character which immediately follows the Test prefix should be in caps. ex: character 'A' in above func TestAverage.
+      So, Testaverage is not a valid test case.  
+Note: Any file named as *_test.go is ignored by go compiler and is only read via "go test" utility.
+
+Note: All the test cases related to a package X, must reside within the package X itself.
+
+Note: In order to execute all test cases of all subdirectories of your project. Simply execute "go test ./..." from within the 
+project folder.
+
+Benchmarking:
+---------------
+"go test" utility can also be used for benchmarking functions.
+The benchmarking code needs to be written along with unit test cases in *_test.go files.
+However, the benchmarking functions has slightly different syntax. Below is an example of a benchmarking function:
+
+
+func BenchmarkHello(b *testing.B) {
+    for i := 0; i < b.N; i++ {
+       Average(10)	
+	}
+}
+
+Note: The bechmarking functions needs to start with prefix "Benchmark" and have *testing.B as one of the params.
+
+The above code benchmarks "Average()" function by running it upto b.N times. We dont have to set the value of b.N
+its automatically adjusted by the testing package.
+The benchmarking output of the above code will look like:
+   BenchmarkHello-4        10000000               158 ns/op
+
+10000000  -> is the number of times the for loop was executed.
+158 ns/op ->  It took 158 nano seconds to complete one iteration of for loop.
+
+Note: In order to execute all the bechmarking functions, run following command
+    go test -test.bench=. ./...
+
+If a pre-setup function takes lot of time, we can reset the benchmarking timer to ignore the time taken during pre-setup.
+ex:
+func BenchmarkBigLen(b *testing.B) {
+    big := PreSetup()
+    b.ResetTimer()
+    for i := 0; i < b.N; i++ {
+        big.Len()
+    }
+}
+
+Need to dive into profiling go code????
+Following is the article on pprof (Not diving in depthn on this as of now)
+http://blog.ralch.com/tutorial/golang-performance-and-memory-analysis/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

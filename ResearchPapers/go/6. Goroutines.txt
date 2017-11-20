@@ -1,0 +1,1137 @@
+Concurrency vs Parallelism:
+------------------------------
+To understand the diff b/w concurrency and parallelism, we first need to see what is the diff b/w serialization and parallelism.
+Considering 3 processes P1, P2 and P3
+Serialization:
+  Execution of P2 will start only when execution of P1 is completely finished.
+  Execution of P3 will start only when P2 is completely finished.
+  i.e the tasks are processed one after another.  
+  
+Parallelism:
+  In parallelism more than one task can be processed at any given time instant.
+  This is possible only in multi core systems where multiple threads can be processed simultaneously.
+  Thus, a task does not need to wait for completion of other task.
+
+Concurrency:
+  This lies b/w serialization and parallelism.
+  In this multiple tasks are processed via system simultaneously but at a given time instant only one task is being executed.
+  i.e processing of task p2 can start before P1 is completely finished, and processing of P3 can start before P1 and P2 are finished.
+  but the system is only able to execute one task at any given instant, so it context switches b/w tasks at random intervals or when necessary.
+  This is how mutiple tasks are processed simultaneously on a single core systems.
+  
+  @todo: try to make figures of all 3.
+-------------------------------------------------------------------------------------------------------------------------------------------------  
+  
+Goroutines:
+----------------
+The parts of the application that can run concurrently are called goroutines.
+There is no one to one mapping b/w a goroutine and OS thread.
+A goroutine can be executed using multiple OS threads, Similarly, single OS thread can be used to
+execute multiple goroutines. All this is managed via goroutine-scheduler.
+
+All Goroutines of an application uses same address space so access to shared memory must be synchronized.
+Synchronization can be done using mutex locking technique or channels.
+
+Goroutines are very cheap to create, about 100K can run on same address space.
+Initially each Goroutine takes up 4K memory. 
+The stack memory size of a goroutine automatically grows and shrinks as per needs. Thus, we dont get stackoverflow errors.
+
+Goroutines are not managed via Garbage collector, the memory is cleared as soon as the goroutine exits.
+
+When a goroutine finishes, it exits silently, nothing is returned to the function which started goroutine. 
+
+Note: When the main program exits, all the goroutines are also killed alongwith it.
+So, in order for the goroutines to complete their execution main program should hold till the goroutine finishes.
+The above limitation is not valid for nested goroutines, ex:
+Main Program -> Starts A (goroutine) -> Starts B (goroutine) -> Starts C (goroutine)
+Then, A and B can exit before C completes its execution.
+
+BEWARE:
+ Go tries to execute a goroutine as soon as go keyword is encountered.
+ This results unpredictable behaviour when using global variables inside goroutines.
+ex:
+  q := 1                              
+  go func  () {
+    fmt.Printf("\n%d\n", q)
+  }()
+  q = 2   // will output 2  
+  
+  q := 1
+  go func  () {
+    fmt.Printf("\n%d\n", q)
+  }()
+  time.Sleep(1e9)
+  q = 2   // will output 1
+  
+To free up CPU, runtime.Gosched() can be called from within goroutine. This frees up cpu for a period
+so that other goroutines can get a chance to execute.  
+-----------------------------------------------------------------------------------
+GOMAXPROCS:
+----------------
+This is the environment variable which decides whether Go will make use of parallelism or not.
+GOMAXPROCS == 1:
+  Means all the goroutines will be run using single OS thread.
+  Thus the execution of routines will be concurrent but not parallel.
+GOMAXPROCS == 8:
+  Means the goroutines will run on a threadpool of eight OS threads.
+  Thus making use of parallelism.
+
+Deciding on correct value for GOMAXPROCS is very crucial.
+As keeping it very low, will result in parallelism not being used to proper extent.
+and keeping it high will increase message passing overhead, Thus both reducing performance.
+An ideal value for GOMAXPROCS is (no. of cpus - 1).
+
+Channels:
+--------------
+Channels are used as a medium of communication b/w goroutines.
+Data can be passed from one routine to another via channel. 
+Channel follows FIFO approach, so data which is passed first will be received first.
+-By default, channels are unbuffered i.e of size 0. This means that there is no space in channel to accomodate data. Anything passed must be evacuated instantly.
+
+An unbuffered channel can be defined as:
+  var ch1 chan string //ch1 is a channel that accepts data of type string.
+Memory allocation can be done as:
+  ch1 = make(chan string) // channels are of reference type.
+  
+An unbuffered channel is also called blocking channel. As it blocks a sender operation till a receiver is available to receive value.
+It also blocks the receiver till a sender is registered.  
+  
+Communication operator (<-):
+----------------------------------
+Sending data to channel:
+   ch1 <- var1  //puts var1 on channel
+
+Receiving data from channel:
+   var1 := <- ch1 // receives single value from ch1 and puts in var1.
+                  // This code blocks if ch1 has no value.
+	
+   <- ch1  //discard a value from channel.
+   
+   if <-ch1 == 100 {
+      //check if the received value from channel is equal to 100.
+   }   
+
+Deadlock Situations:
+-----------------------------
+Blocking channels can result in situations which can be seen as deadlock situations. (one party is waiting for other party and there is no way for other party to show up)
+Go runtime detects these situations and mark with following error:
+  fatal error: all goroutines are asleep - deadlock! 
+  
+Follwoing examples show deadlock situations:
+Sample 1:
+---------
+  ch := make(chan string)
+  ch <- "one"  //program will block here, waiting for a receiver. 
+               //It will never get a receiver as next line will never get executed.Thus, resulting in deadlock.               			   
+  l := <-ch
+  fmt.Println(l)  
+
+Sample 2:
+---------
+  ch := make(chan string)
+  <-ch         //program will block here, waiting for a sender.
+               //It will never get a sender as next line will never get executed.Thus, resulting in deadlock.
+  ch <- "one"                 			   
+  
+Sample 3:
+---------
+  ch := make(chan string)
+
+  //sender
+  go func(ch chan string) {
+     ch <- "one"
+  }(ch)
+
+  //receiver
+  for {
+   l := <-ch
+   fmt.Println(l)
+  }  
+- In this the sender is registered as a seperate routine, the routine will block at ch <- "one"
+  for receiver to become available.
+- The main program will continue its execution and move inside for loop.
+  As soon as l := <-ch is encountered, the blocked routine will get executed, passing "one" onto channel  
+  resulting fmt to print "one".
+- Now, At this point goroutines execution is finished and sender dies.
+- One next iteration of for loop, the program will block at l := <-ch, waiting for sender to become available.
+- However, Go runtime will notice that there is no way we could have a sender now.
+- Thus, the program is said to be in deadlock state.
+
+Non-Blocking or Buffered Channels:
+-------------------------------------
+A buffered channel can be created as:
+ch := make(chan string, 10)
+Now, senders will not block until the buffer is full.
+
+How to identify if a goroutine has finished execution?
+--------------------------------------------------------
+Use below trick:
+
+ch := make(chan int)
+go sum(bigArray, ch) // pass a channel to goroutine and when the execution is completed, put execution result in channel.
+sum := <-ch // block until we have execution result.
+
+Explicitely closing channels:
+--------------------------------
+Only sender can mark the channel as closed.
+  close(ch) //syntax for marking channel as closed.
+This can be used for receivers to identify that sender has finished sending all values to channel.
+Receivers can detect whether the channel is open or not via:
+  val, open := <-ch  //second return value describes whether the channel is closed/open.
+
+This can be used alogwith defer statement. 
+
+NOTE: Sending to a closed channel or reclosing a closed channel is runtime panic. 
+  
+Directionality in channels:
+-------------------------------  
+We can annotate channels to specify whether a particular worker will be sending values to channel or will be receiving
+values from it.
+chan<-   // values will be sent to channel. 
+<-chan   // values will be received from channel.
+
+when a channel is declared, its always bidirectional. i.e
+ch := make(chan string) 
+Later on it can be assigned to receive-only or send-only channels.
+var send_only chan<- int // channel can only receive data
+var recv_only <-chan int // channel can only send data
+send_only = ch
+recv_only = ch
+
+These can also be termed as readonly and writeonly channels.
+NOTE: Sending to a receive only channel is a compile error, same is true for vice-versa. 
+
+The select{} statement:
+--------------------------
+Select{} can be seen as a switch statement but for testing channels.
+ex:
+select {
+  case val := <-ch1:
+    fmt.Println(val)
+  case val := <-ch2:
+    fmt.Println(val)
+ }
+
+The above select blocks till either ch1 has a value or ch2 has a value.
+If both ch1 and ch2 have value at same time, one case is chosen randomly to be executed.
+
+A select block is executed only once as like switch block. To keep blocking in order to receive next value, it needs to be placed inside loop.
+Below example shows a listener which receives from two channels until both are closed.
+ex:
+ch1 := make(chan string)
+ch2 := make(chan string)
+
+go sender(ch1, 3)
+go sender(ch2, 5)
+var open1, open2 bool = true,true
+  for {
+    var val1, val2 string  
+    select {
+
+      case val1, open1 = <-ch1:
+        fmt.Printf("ch1: %v\n", val1)
+        if !open1 {
+          fmt.Println("channel 1 is closed")
+        }
+
+      case val2, open2 = <-ch2:
+        fmt.Printf("ch2: %v\n", val2)
+        if !open2 {
+          fmt.Println("channel 2 is closed")
+        }
+      }
+      if !open1 && !open2 {
+        fmt.Println("both channels are closed")
+        break
+      }
+    //wait before next iteration, this helps when select does not block due to one channel being already closed.
+    time.Sleep(1e7) 
+  }
+ 
+func sender(ch chan string, limit int) {
+  defer close(ch)
+
+  for limit > 0 {
+      
+      ch <- strconv.Itoa(limit)
+      limit--
+  }
+} 
+----------------------------------------------------------
+A simple tick tick bomb:
+func main() {
+
+  ticker := time.Tick(1e9);
+  boomer := time.After(5e9);
+
+  var i bool = true
+  for (i) {
+    //fmt.Printf("%v\n",i)
+  select {
+  case <-ticker:
+    fmt.Println("tick")     
+  case <-boomer:
+      fmt.Println("BOOM")
+      i = false
+  }
+}
+  
+}
+----------------------------------------------------------------
+A structure to process pool of tasks, through channel.
+
+func main() {
+  pending, done := make(chan *Task), make(chan *Task)
+  go sendWork(pending)        // put tasks on the pending channel.
+  for i := 0; i < N; i++ {    // start N goroutines to do work
+    go Worker(pending, done)  // pick a task from pending channel -> process it -> put it in done channel.
+  }
+  consumeWork(done)          // pick the task from done channel, do post processing if any.
+}
+---------------------------------------------------------------
+A structure to generate next set of sequence upon call, using channels:
+this can be used for fibonacci series and ever numbers etc.
+
+func main() {
+  resume = integers()
+  fmt.Println(generateInteger()) //=> 0
+  fmt.Println(generateInteger()) //=> 1
+  fmt.Println(generateInteger()) //=> 2
+}
+func integers() chan int {
+  yield := make (chan int)
+  count := 0
+  go func () {
+   for {
+    yield <- count
+    count++
+   } 
+  }()
+  return yield
+}
+func generateInteger() int {
+  return <-resume
+}
+--------------------------------------------------------------------
+Accessing Shared object in multiple goroutines without each goroutine interferring with the work of other one.
+Can be done using Mutexes and Channels:
+
+Mutex:
+//@todo: Add example
+
+
+Channel: 
+//@todo: Add example
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   
+   
+
+   
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+ 
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
