@@ -1,0 +1,31 @@
+This can be done via using A bastion hOst and a NAT gateway.
+[Fig:2:00 Serving Traffic To and From Private Web Servers]
+
+Bastion Host: 
+ A bastion host is an EC2 instance that sits in a public subnet and acts as a gateway for traffic
+ that is destined for the Ec2 instances sitting in private subnets.
+ Thus, all the traffic must pass through bastion host and this makes it a most crucial point in network. Hence such
+a host must be equipped with tight security rules.
+
+NAT Gateway:
+ A NAT gateway is designed to provide EC2 instances that live in the private subnet with a route to the internet
+ So, that they can download software packages and updates.
+
+ A NAT gateway will prevent any host residing outside VPC to initiate connection to a EC2 sitting in private subnet.
+ But, the EC2 sitting in private subnet can initiate connection to a host outside VPC using NAT.
+
+ So, A NAT gateway is required so that the instances in private subnets can communicate with open internet.
+
+ A NAT gateway alsosits in public subnet. However, it should be connected to private subnets route table.
+
+ NAT Instance: If an EC2 instance is configured with same functionality of NAT, it is called NAT instance. 
+
+ Diff b/w Bastion host and Nat gateway:
+ Bastion host is used for incoming traffic to an Ec2 sitting in private subnet.
+ NAT is used for outgoing traffic from EC2 instance.
+
+
+
+
+
+ 

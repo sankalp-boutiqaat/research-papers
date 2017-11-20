@@ -1,0 +1,68 @@
+CloudWatch:
+----------------------
+
+CloudWatch is a monitoring service provided by AWS. It is used to monitor services such as: EC2, ELB, S3.
+
+Cloudwatch provides following metrics:
+----------------------------------------
+
+EC2 CPUutilization, EC2 CPUcreditusage, S3 no. of objects, S3 bucket size, ELB Requestcount, ELB unhealthy host count.
+
+Cloudwatch provides two types of metrics:
+-----------------------------------------
+1. Basic: This is free!!. Metrics are updated at 5 minute period.
+2. Detailed: Not Free, Metrics is updated in 1 minute.
+
+Note: Cloudwatch alarms can be created to send alert notifications to SNS.
+
+CloudWatch EC2 Monitoring:
+---------------------------------------
+
+Each EC2 instance has a System status Check and a Instance Status Check, both are provided by CloudWatch along with ec2 monitoring.
+
+If either of the status checks gets failed, means thare is a problem with our EC2 instance.
+
+Fixing System status checks:  These checks are out of our control as they get failed due to some harware/network issue at AWS datacenter.However,
+we can try our luck by stopping and restarting the EC2 instance, as this will make the EC2 instance to run on a different server and if the problem 
+was related to the specific server which was assigned to our EC2 instance it will most probably be resolved.
+
+Fixing Instance Checks: These checks are well in our control and are caused by software misconfiguration. Generally rebooting the system will solve the issue.
+ However, if an instance check is failing due to failed system check, you need to resolve the system check first.
+
+For an EC2 instance there are two types of Metrics:
+-----------------------------------------------------
+1. Harware/Host Related metrics: Such metrics include:
+                   CPU utilization
+                   Network IO
+                   CPU credit usage
+                   DISK IO
+  Such metrics can be directly provided by CloudWatch.
+
+2. OS level Metrics: Such metrics include:
+                     Memory Utilization
+                     Disk Swap
+                     Disk Space
+ Such metrics require 3rd party softwares to be installed on EC2, so that cloudwatch can collect them.
+
+
+
+
+
+    
+
+
+
+
+
+
+ 
+
+ 
+
+
+
+
+
+
+
+

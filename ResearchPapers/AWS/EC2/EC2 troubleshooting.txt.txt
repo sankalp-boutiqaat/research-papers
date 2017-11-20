@@ -1,0 +1,23 @@
+Troubleshooting:
+
+1. I cannot connect to my EC2 using SSH.
+  -> Check if correct ports are open on security group attached to EC2. port for ssh is 22.
+
+2. I cannot attach an EBS volume to my EC2.
+   -> EBS volume must reside in the same availibility zone as EC2 else you cannot attach it.However, you can take a snapshot
+      of the volume and create a new EBS volume with that snapshot that resides in same availibity zone as EC2.
+   -> EBS volume can only be attached to one EC2 at a time.
+
+3. I am not able to launch additional instances:
+   -> May be you have reached instance limit for your account.
+
+4. I am unable to download package updates.
+   -> This may be due to the fact that you have not assigned a public/elastic IP to your EC2.
+   -> OR, your EC2 does not belong to public subnet.
+
+5. AMI unavailable in other regions.
+   -> AMI's are only available in the regions that they are created.
+   -> However, an AMI can be copied to other regions.
+
+6. Getting "Capacity error" when trying to launch an instance in a placement group
+   -> Stop and restart all the instances in placement group. 

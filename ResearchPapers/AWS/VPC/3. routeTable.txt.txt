@@ -1,0 +1,39 @@
+Routing Table:
+
+A routing table consists of set of rules called routes. These rules are used to determine how a network packet is to be routed.
+
+Note: The default VPC already has "main" route table.
+
+Note:
+  -> unlike an IGW, a VPC can have multiple route tables attached at any given point of time.
+  -> A route table cannot be deleted if it has any subnet associated to it.
+
+A route table's route comprised of two main components:
+1. Destination: This is the CIDR block range of the target where the data is to be routed.
+2. Target: This is the name of the target where data is to be routed.
+
+Destination                  Target
+ 172.31.0.0./16             local
+ 0.0.0.0/0                  igw-5t65r4e3
+
+A route to Internet Gateway needs to be attached to Route Table, incase that route table needs to route traffic to internet.
+By default all route tables have route to communicate internally between instances inside a VPC or other route tables. This is the local route as in above example.
+
+
+
+Best Practice:
+---------------
+Best Practice is to not to modify default route tables and create a new route table incase you want new routes for your subnet.
+
+
+
+
+
+
+
+
+
+
+
+
+

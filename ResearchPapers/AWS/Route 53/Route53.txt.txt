@@ -1,0 +1,62 @@
+Route 53:
+--------------------------
+Route53 is a DNS hosting solution provided by AWS.
+
+Using Route53 you can register new domain names, such as sanksons.com.
+
+Route53 also provides a domain name resolution service, so that domains like sanksons.com can be translated to Ip addresses.
+
+Route53 can also provide healthchecking, by sending requests to your application to verify its reachable and healthy.
+
+Route 53 is commonly used with ELB, so that when a request for domain comes it can direct it to ELB, which can further distribute it to target groups
+and appropriate Ec2 instances.
+
+Route53 can also be used to manage internal domain names.Internal domain names are valid only inside a VPC.
+
+You can easily configure Route53 to failover to S3 bucket or a Cloudfront(CDN). In case it cannot route the request to primary resource.
+
+Route 53 Hosted zones:
+--------------------------
+For the DNS queries to be answered you need to create a hosted zone. A hosted zone must have same name as the domain name.
+A hosted zone contains all the rules(Record sets) that tells Route 53, what to do with a specific domain or sub domain request.
+
+Aws spins up 4 name servers per hosted zone to answer domain or subdomain related queries. 
+
+There are two types of hosted zones:
+1. Public:   This is used to answer public domain names.
+2. Private:  This is used to answer internal domain names which are valid only inside VPC.
+
+Read following articles to understand how DNS resolution works and How domain is registered.
+http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/welcome-domain-registration.html
+http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/route-53-concepts.html#route-53-concepts-hosted-zone
+
+Route 53 Record sets:
+------------------------------
+ Record sets live inside hosted zones and are the actual instructions that are followed to match a domain/subdomain to a IP.
+ A record set consists of following properties:
+ a:) Name: if the hosted zone is of example.com, then the name could be www.example.com, foo.example.com, www.foo.example.com or even example.com
+ b:) Record type: This can be one of:
+        1. A:     Used to point domain to IPV4 address
+        2. AAAA:  Used to point domain to IPV6 address
+        3. CNAME: used to point hostname to another hostname. In this case Route53 will act as aDNS resolver and will return IP of the pointed hostname.
+        4. MX:    Used for Mail exchange routing
+ c:) Alias: Can be used to give AWS resource name instead of IP. This is useful as IP's can change.
+            The resource name can be of S3 bucket, ELB or cloudfront(CDN).
+ d:) Routing Policy: 
+       Simple: Route traffic to specified endpoint.
+       Weighted: Route trafficto multiple endpoints based on weight assigned.
+       Latency: Route traffic to endpoint which has least latency for querying user.
+       Failover: Route traffic to secondary endpoint, if primary is unhealthy.
+       Geolocation: Route traffic to an endpoint based on geographic location of a user.
+  e:) Health CHeck: Monitor the health of application and trigger and action if required.
+
+
+ 
+
+ 
+
+
+ 
+
+
+      

@@ -1,0 +1,15 @@
+1. My ELB is not able to load balance b/w instances in different availibity zones.
+   -> Make sure "Enable Cross-Zone" load balancing option is enabled.
+
+2. My instances are healthy, but ELB does not count them as healthy.
+   -> Make sure Health check settings are correct. You have specified correct protocol, port and path.
+   -> Also, make sure the security groups allow ELB pings to pass on to instances.
+
+3. The ELB is configured to listen on port 80, but traffic is not making to the instances that belong to ELB.
+   -> Make sure port 80 is open on the security group assigned to instances and ELB.
+
+4. Access logs on webserver show IP address ofthe ELB not the source traffic.
+   -> Enable store Access logs in S3 setting of ELB.
+
+5. Unable to add instances from a specific subnet to ELB.
+   -> Check if the subnet you are talking about has been added to ELB configuration. 

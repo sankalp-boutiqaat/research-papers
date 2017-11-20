@@ -14,7 +14,7 @@ So, if the VPC is created in n. virginia, which have 4 Availibity zones namely A
 One subnet for each availibity zone will be created and assigned to it by default. Some thing like:
 A => s1, B=> s2, C=> s3, D=> s4 //where s1,s2,s3,s4 are subnets. 
 
-Suppose the VPC has following address range 172.31.0.0/16:
+Suppose our VPC has following address range 172.31.0.0/16:
 
 Means it has 65536 available host ips. It will be broken into 4 subnets as:
 
@@ -30,6 +30,7 @@ Public subnets have a route to internet while private subnets does not have a ro
 A private subnet is created as follows:
  1. Create a route table which does not have any route to IGW.
  2. Attach the subnet you want to make private to this new route table. 
+
 
 FIG: vpc video6 4:19
 

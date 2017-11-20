@@ -1,0 +1,17 @@
+Auto Scaling Group:
+---------------------------
+
+Auto scaling is a feature provided by AWS that automates the process of increasing/decreasing number 
+of EC2 instances available for an application.
+
+Autoscaling is done based on the cloudwatch metrics.
+
+Autoscaling needs two type of configuartions:
+
+1. Launch Configuration:  The configuration template that will be used when launching a new EC2 instance. It contains 
+   ---------------------   information about AMI, instance type, user-data, storage, security groups etc.
+
+2. Group Configurations:  VPC and Availibility zones in which new instance is to be launched.
+   --------------------   Min-Max allowed instances
+                          Cloudwatch criterias to trigger instantiation of new instance or termination of a instance.
+

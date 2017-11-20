@@ -1,0 +1,82 @@
+EC2 Storage:
+--------------------------------------------
+
+The are two types of storage that can be used with an EC2 instance:
+ - Elastic Block Store (EBS)
+ - Instance Store
+
+1. Elastic Block Store(EBS): 
+-------------------------------
+
+ -> EBS volumes are Network Attached, means they are not physically attached to an EC2 instance but are accessible through Network media.
+ -> EBS volumes are PERSISTENT, means they can live beyond the life cycle of the EC2 instance they are attached too. However, you can choose to delete attached
+    EBS volume upon EC2 termination.
+ -> EBS volumes can easily be detached from one EC2 instance and attached to another. However, One EBS volume cannot be attached to more than one EC2 instance
+    at any given time.
+ -> You can also create snapshots of an EBS volume. These snapshots can be mounted to other EBS volumes.
+ 
+Note: EBS volumes are the most used volumes in AWS. Most of the instances support only and only EBS volume and no Instance storage.
+Note2:Every EC2 instance has a root volume by default, this root volume is also and EBS and not an instance storage.
+Note3: At any given time, you can attach as many EBS volumes to an EC2 instance as you wish.
+
+EBS Performance:
+-----------------
+The performance of EBS volume is measured in IOPS (i.e input/output operations per second).
+So, 4 IOPS means, you can perform 4 input/output operations in one second.
+However, there is a catch here as placed by AWS, which says one operation cannot be of more than 256KB. So, if you perform 1 input operation of 500KB and 1 output
+operation of 400KB. It will be counted as 4 operations instead of being counted as 2 operations. SO BEWARE!!
+
+EBS Initializations:
+----------------------
+There is no problem with new EBS volumes. However, if a EBS volume is created from a snapshot it requires initialization process. During initialization process
+the performace of EBS degrades to about 50%.
+The initilaization process occurs when each block from EBS is read for first time. So, instead of directly attaching the EBS to production EC2 first manually read
+as many blocks as possible and then attach the EBS volume to production EC2, so that the initialization process gets completed before the volume is attached to 
+production EC2.  
+
+Types of EBS volumes:
+-----------------------------------
+1. General Purpose SSD (GP2): provides 3 IOPS/GB, this means if you chose 8 GB of SSD storage, you can perform 24 IOPS
+                              if you chose 100 GB of storage, you can perform 300 IOPS. Dont forget that one operation means 256KB of data.
+   Minimum volume size is 1 GB, max volume size is 16TB.
+
+2. Provisioned IOPS SSD: As the name suggests, along with choosing the size of SSD, you can also chose the amount of IOPS you require.
+                         So, if you chose 8 GB of SSD storage and chose 500 IOPS. Then you can perform 500 IOPS.
+   Minimum voloume size is 4 GB, max volume size is 16 TB.
+   Max IOPS that can be set is 20,000 IOPS.
+
+3. Magnetic: This is the cheapest and least performant storage option.
+             Min storage size is 1 GB, max is 1 TB.    
+
+EBS optimized instances: There may be cases when a provisioned EBS volume of 400 IOPS, is not able to deliver 400 IOPS. Such case may arise due to bandwidth congestion
+------------------------  as EBS is on network and requires available bandwidth to function properly. The solution is to have EBS optimized EC2 instance which has dedicated EBS throughput.
+NOTE: AWS provides only certain EC2 instance types with EBS optimization enabled.
+
+
+2. Instance Store Volumes:
+------------------------------------------------
+
+-> These volumes are physically attached to the EC2 instance.
+-> The data on the volume is considered as ephemeral. i.e the data is lost when the EC2 is terminated or shutdown.
+   However, data survives the reboots.
+
+---------------------------------------------------------------------------------------------------------
+
+EBS SNAPSHOTS:
+---------------------
+EBS snapshots are point in time backups of a EBS volume that are stored in S3.
+
+EBS snapshots are incremental in nature, i.e each successive snapshot stores only the changes that are made from the previous snaphot. Thus reducing our S3 storage
+costs.
+Note: Even though the storage is incremental, you can still delete the base snapshot or any other in-middle snapshot and still you will be able to restore data using 
+any  of the remaining snapshots.
+So, for example if the snapshots were taken in following order: S1 -> S2 -> S3 -> S4 -> S5
+and I delete snapshots S1, S3 and S5. Still I will be able to restore data using S2 or S4.
+
+Snapshots should be taken during non-peak hours as it degrades performance of EBS volume during snapshotting process.
+  
+
+ 
+   
+
+   

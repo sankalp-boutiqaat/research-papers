@@ -1,0 +1,7 @@
+Cloud Trail:
+---------------------
+
+Cloud trail is a AWS account monitoring service. What it does is it logs all the requests that have been made to AWS resources
+through console, CLI or SDK by any user.
+
+Its just like an AUdit log, which can be used to address security issues and see which user has performed what actions.

@@ -1,0 +1,6 @@
+1. Auto-scaling is continuously starting and terminating an instance within very short intervals of time. what to do?
+   -> This may be due to the fact that the policies you have set for scale-up and scale-down are very close to each other.
+   -> Something like scaleup when cpu usage is 50%, scale down when cpu usage is 45%.
+
+2. Auto scaling is not occuring even though I have correctly setup the policies.
+   -> Check if the "max" number of instances have been reached. 

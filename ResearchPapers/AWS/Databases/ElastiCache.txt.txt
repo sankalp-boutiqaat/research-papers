@@ -1,0 +1,10 @@
+ElastiCache:
+-----------------------
+
+ElastiCache is a fully managed Cache solution provided by AWS.
+Since, its fuly-managed you dont have access to unlying OS and service automatically scales up and down itself.
+
+Elasticache can useone of the following at backend:
+- Redis 
+- Memcache.
+

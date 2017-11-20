@@ -1,0 +1,13 @@
+DynamoDB:
+----------------------
+
+DynamoDB is a fully-managed NoSql Solution provided by AWS.
+It is Schemaless and uses key-value store.
+
+You need to specify the throughput required and Dynamo DB does the rest.
+
+Being fully managed means:
+- Service automatically handles the Scaling and Shrinking of underlying hardware based on needs.
+- Service is high- Available and fault-tolerant as the data is synchronized within all Availibity zones of the Region you chose.
+
+

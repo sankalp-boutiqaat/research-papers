@@ -1,0 +1,24 @@
+Simple Queue Service:
+---------------------------------
+
+SQS is a messaging Queue provided by AWS. Can be seens as an alternative for RabbitMQ.
+The Queues are fully managed and distributed.
+
+Messages can be pushed to SQS by using an Http endpointand can be retrieved by using an Http endpoint through POLLING.
+NOTE: SQS does not push messages to worker, worker needs to poll messages from SQS.
+
+NOTE: When polling, Since the queue is distributed SQS needs to search multiple servers for messages.
+
+NOTE: A message cannot be of more than 256KB in size.!!BEWARE
+
+Types of Queue:
+
+1. Standard Queue: Each message is delivered atleast once, but does not guarantee the order in which messages will be delivered.
+2. FIFO: Each message is delivered only once and in First come First served fashion.
+
+
+There can be two types of polling:
+1. Short Polling: In this SQS searches only a subset of servers for messages and can return with 0 or less than demanded messages.
+2. Long Polling: SQS searches in all servers for the messages and wait for (1-20) seconds if no message is present in the queue before returning empty handed.
+
+ 

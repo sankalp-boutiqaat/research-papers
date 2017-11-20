@@ -1,0 +1,25 @@
+AWS Lambda:
+------------------------
+
+Lambda is a serverless compute platform. This means that in order to execute code you dont need to provision an EC2 instance.
+You just need to create a Lambda function and drop your code in it.
+
+Lambda functions are automatically scalable i.e you dont need to worry about the resources needed for your code to execute. Based on the code
+requirements AWS will provision the required resources itself.
+
+Lambda's are highly available, fault tolerant, scalable, elastic and cost-efficient.
+
+Payment is calculated based on the time (in milliseconds) consumed by your code to execute. So, if your code takes 1 second to execute i.e 1000 milliseconds, then you pay
+for 1000 ms.
+For, 10 iterations of your code you will pay for 10 * 1000 = 10000 milliseconds.
+
+Lambda currently supports following languages:
+Nodejs
+Java 
+C#
+Python
+
+General Use Cases:
+Generally lambda are used to respond to events occurring in AWS, such as:
+ - If something is to be done when an object is added to S3 bucket.
+ - or, A new dynamodb row is added. etc.       

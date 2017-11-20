@@ -1,0 +1,24 @@
+VPC Flow Logs:
+----------------------
+
+Flow Logs allow you to capture IP traffic passing from your AWS network.
+
+You can configure Flow Logs to capture traffic only for a specific Network Interface or for a specific subnet or only for a single Network Interface.
+You can also configure to capture only accepted traffic, only Rejected traffic or ALL traffic.
+
+Flow logs are not captured as a stream, infact the data is stored in buffer and is fluched to visible logs only at intervals of 10 mins.
+
+Loga shown in Flow logs are made of 5-tuple:
+1. Source IP
+2. Source Port
+3. Dest IP
+4 DEST PORT
+5 protocol.
+
+Following traffic is not captured by FlowLog:
+----------------------------------------------
+1. DHCP traffic
+2. Traffic between an EC2 and DNS server.
+3. Any request for EC2 instance meta-data (by calling 169.254.169.254)
+ 
+  

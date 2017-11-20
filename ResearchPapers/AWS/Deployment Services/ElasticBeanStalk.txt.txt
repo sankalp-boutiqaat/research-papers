@@ -1,0 +1,5 @@
+Elastic Bean Stalk:
+-----------------------------
+
+Where cloud formation is for complex Infrastructures, Bean Stalk is for simple Applications which does not require 
+many services to be configured. Mainly single-tier applications.  

@@ -1,0 +1,40 @@
+Relational database service:
+-------------------------------------
+RDS is a relational database service that is fully managed by AWS. You dont have access to underlying Operating System like in EC2.
+However, you can choose the Instance type based on your requirements.
+
+Databases supported by RDS:
+------------------------------
+MySQL, MariaDB, PostgreSQL, Oracle, MS SQL server.
+AWS AURORA
+
+NOTE: Aurora is a fork of mysql developed by AWS and is fully compatible with mysql. Has better performace and is cheaper too.
+
+Multi-Availibity zone, Secondary server configuration:
+-------------------------------------------------------
+RDS can be setup with a multi availibility zone configuration. Such that the primary server runs on one avilibility zone and secondary 
+server runs on different availibity zone. In such a configuration, whenever Primary server fails Secondary automatically kicks in
+to take its place.
+NOTE: Secondary server is always on standby and does not server any request till its made Primary.
+NOTE: Data Replication is Synchronous in this case.
+NOTE: AWS switches the Secondary to primary by modifying the IP associated with DNS record of RDS instance to point to secondary server. So, applications dont need to 
+have any change and the switch is made without applications even being noticing
+
+
+Read-Replicas:
+-------------------------------------------------
+You can also setup Read-replicas to reduce load from Primary server. 
+Data to a Read-Replica can be replicated using Primary or Secondary or Another Read-Replica. Data replication is Asynchronous.
+Replication lag can be monitored in CloudWatch metrics.
+NOTE: Read replicas can only serve Read Requests
+
+Snapshots:
+---------------------------------
+You can configure to take automatic snapshots of database at specific intervals.
+Snapshots are taken from secondary server. If no secondary is configured they will be taken from Primary.
+ 
+
+
+
+ 
+ 

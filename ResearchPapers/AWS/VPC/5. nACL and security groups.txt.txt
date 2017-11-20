@@ -37,3 +37,24 @@ Note:
     i.e a subnet cannot be associated with two NACL's
  -> NACL controls the traffic in/out of subnet once inside the subnet AWS resources may have their own controlling rules.
 
+NAcl's are stateless, so return traffic must be allowed through an Outbound rule.
+For example: In order for a HTTP server to function, the NACL should allow incoming traffic to port 80 as well as allow all outgoing traffic
+from port 80.
+
+
+
+Security Groups:
+----------------------------
+
+Security are very similar to NACL's, they are also used to allow/deny traffic. HOwever, securitry groups are used on the instance level instead of at subnet level.
+As, one NACL can havle multiple subnets under its hood, A single security group can have multiple instances under its hood.
+
+Security groups also have inbound and outbound rules just like NACL.
+
+One more important difference b/w security group and NACL is how security rules work:
+ - Security groups only support allow rules, i.e you cannot specify any deny rules. If something is not explicitely allowed, it will be considered as denied.
+ - Security groups are stateful, so return traffic is automatically allowed.
+ - All rules are evaluated before deciding whether to allow a traffic. Thus no rule priority.   
+
+
+

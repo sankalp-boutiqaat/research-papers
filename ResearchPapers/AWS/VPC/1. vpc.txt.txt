@@ -1,0 +1,62 @@
+Virtual Private Cloud (VPC):
+
+As the name sugests, it is a private cloud inside AWS's mega cloud, which is dedicated only to you. 
+
+The term `virtual` means that the seperation/isolation from other private clouds is only at software level and not hardware based.
+
+You can create your own virtual network inside a VPC and you will have full controll over it.
+Like: creation of subnets, configuration of routing tables and network gateways.  
+
+
+
+At a very basic level, VPC can be conceptualized as a private HOME Network. Any home network that talks to internet has following components:
+
+1. Modem.    : Provides gateway to internet.
+2. Router.   : Provides communication between home devices and also routes traffic to external devices through modem.
+3. Firewall  : controls the incoming and outgoing traffic from computers.
+4. Computers : end Receiver or sender of traffic. 
+[Fig: VPC, video2 5:09]
+  
+
+Comparing the components of a home network with the components of a VPC, we can see how similar both are:
+
+      VPC                                        Home network
+
+  Internet Gateway                                  Modem
+  Route Table                                       Router
+  Network ACL                                       Firewall
+  EC2 Instance                                      Computers
+[FIG: VPC, video2 8:03]
+
+Limitations of VPC:
+------------------------
+A VPC is limited to a single Region and cannot span over multiple regions. But can span over Multiple Avalibility zones.
+
+Default VPC:
+----------------------
+When you create a AWS account a default VPC is created for you. Including components which are required to make it functional:
+      1. Internet Gateway (IGW) to talk to internet
+      2. A Route table with predefined routes to default subnets.
+      3. A network access control list.
+      4. Subnets.
+The default VPC is created so as to provide easy interface to user without troubling him much with the configuration of different network layers involved in VPC.
+Thus default VPC has everything set as allowed by default, this means:
+ - All subnets in default VPC are pre-configured to be public and have route to internet. 
+ - Any instance launched in these default subnets have pre-assigned public IP and can talk to internet.
+
+
+NOTE: AWS provides a DNS server for your VPC, so that each instance in your VPC network can have a hostname and is able to communicate with
+other instances wintin the VPC through that hostname.
+
+//@todo: below limits should be placed in some others section.
+Limits on VPC:
+-------------------
+1. You cannot have more than 5 VPC in a particular Region.
+2. You cannot have more than 5 active Internet Gateways in a Particular Region.
+3. Cannot have more than 50 VPN connections per region.
+4. Cannot have more than 200 route tables/Region.
+5. Cannot have more than 5 Elastic Ips/region.
+6. 500 Security groups per VPC. 
+
+
+

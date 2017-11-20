@@ -1,0 +1,17 @@
+Simple Notification Service:
+-------------------------------------
+
+SNS provides a way to send Notifications within and outside AWS environment.
+
+SNS consists of a three main components:
+1. Publisher: One who send message/notification. This can be a Human, S3 event, CloudWatch Alarm, DynamoDB etc.
+2. Subscriber: One who receives notification/message. This can be Email, SMS, SQS, lambda, an HTTP endpoint etc.
+3. Topic: When a Publisher sends a message, it does not directly sends it to subcriber but it sends it to a Topic.
+          And any subcribers that have subscribed to that topic receives the message.
+
+             message               message
+ Publisher ------------->   Topic -----------> Subscriber1, Subscriber2
+
+
+SNS can be easily integrated with CLoudwatch to setup a full-environment monitoring solution, that notifies Administrators
+of capacity Issues, downtime etc.

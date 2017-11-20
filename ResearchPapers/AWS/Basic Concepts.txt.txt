@@ -1,0 +1,133 @@
+
+1. Cloud benefits:
+a:) Availability
+     => data is available from everywhere and anytime.
+b:) Fault Tolerent
+     => incase a failure occurs, data is not lost. 
+             &&
+     => the application is still functional even though few of its parts are broken. 
+c:) Scalability 
+     => Automataic increase of instances when load increases.
+d:) Elasticity
+     => Automatic increase/decrease of instances when load increases/decreases.
+
+Regions and availibity zones:
+A region constitutes of one or many availability zones(datacenters).
+Availibility zones within same Region generally contains redundant copies of data so as to avoid data loss incase whole 
+datacenter is on fire.
+So, if a Region R has 3 availability zones A,B,C. Then a file F1 can most probably be found on more than one availibity zone. 
+NOte: take figure from VPC, video1 , 3:05 
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                       
+
+
+
+
+
+
+
+
+
+
+vpc:
+subnets:
+NACL:
+Intergnet gateway:
+Route table:
+Security group:
+
+
+
+
+
+
+
+

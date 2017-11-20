@@ -1,0 +1,5 @@
+RedShift:
+------------------------
+RedShift is a Service provided for Big-Data Analysis and data Warehousing solution.
+
+It can handle Peta-Byte Scale data.

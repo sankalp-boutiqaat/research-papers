@@ -1,0 +1,50 @@
+Elastic Load Balancer (ELB):
+-------------------------------------
+
+Load balancing is a very common method of distributing incoming traffic among servers.
+
+An Elastic load balancer is an AWS service which can distribute the traffic among multiple EC2 instances. Thus, reducing
+the load on each instance. The distribution is done in round-robin fashion.
+
+An ELB can distribute the traffic to EC2's residing in different subnets and different availibility zones. Thus ELB service
+is not limited to availibity zones.
+
+An ELB has its own DNS record set, thus can be directly accessed from internet.
+
+ELB automatically detects the unhealthy instances and stop sending the traffic to those instances.
+
+ELB's are generally used with Auto Scaling Group to provide high-availibility, elasticity and fault-tolerant infrastructure.
+
+There are two types of load balancers as provided by AWS:
+1. Classic load balancer   : Is a normal balancer which routes traffic to EC2 machines based on the round-robin fashion.
+2. Application load balancer : It follows slightly advanced routing technique, where you can choose based on URL path params, hostname
+       and HTTP headers to which target group request is to be transferred. 
+A target group can contain multiple EC2 machines and traffic will be routed to them in round-robin fashion. 
+
+
+        ELB(classic)                                      
+  ___________|___________
+ |     |       |        |
+ |     |       |        |
+ |     |       |        |
+EC2    EC2     EC2     EC2
+
+
+
+
+
+            ELB(Application)
+       videos          Photos
+      ____________|_____________
+     | round-robin              | round-robin
+ ______________           _______________   
+|              |         |               |
+| EC2      EC2 |         | EC2       EC2 |
+|______________|         |_______________|  
+ 
+Traget group for          Target group for photos 
+    videos  
+
+Note: A single EC2 can be assigned to more than one target groups.
+
+

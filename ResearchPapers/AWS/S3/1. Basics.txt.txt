@@ -1,0 +1,222 @@
+Simple Storage Service(S3):
+----------------------------
+
+This is a service provided by AWS for storing large and static files/objects.
+
+Each file/object needs to be kept inside a specific bucket. Thus, a bucket needs to be created before we can store our first file.
+A file can be directly placed inside a bucket or can be wrapped in a nested folder structure.
+
+When creating a Bucket we have to chose on which AWS Region the bucket needs to reside in. All the objects inside the bucket will also
+reside in that particular region. 
+Objects are duplicated over availibity zones within the Region to provide high-availibity and fault-tolerance but never duplicated across 
+Regions. 
+
+Read Consistency:
+1. For new objects, S3 supports "read-after-write" consistency. Which means that objects becomes immediately available after creation.
+2. For updates and deletion, S3 supports "eventual consistency". Which means that the change will not be visible immediately.
+
+S3 Buckets:
+------------
+ - Buckets are the main storage container of S3, they can contain files and folders.
+ - Each bucket must have a unique name across all of AWS. THIS IS TOO MUCH!!!
+ - Only 100 buckets can be created within an AWS account at any time.
+
+S3 Objects:
+------------
+
+S3 objects are stored in key value pairs. Where key denotes the name for the object and value contains the objects data.
+- Each object needs to be associated with a storage class which determines, objects durability,availibility and cost.
+- By default all objects are private, but they can be made publicly accessible via URL.
+- Min size of Object is 0 bytes and max is 5TB
+- Objects can automatically switch from one storage class to another based on life cycle policies.
+- Objects can be stored within folders.
+- Objects can be encrypted by AWS using AES-256. When using this, AWS encryptes the data before uploading and automatically decrypts the data after downloading.
+
+S3 Folders:
+------------
+Folders are used for grouping objects. In AWS, folders are only logical seperation unlike general filesystems.
+Thus, S3 has a flat structure, However, logical grouping can be done by making use of folders.  
+
+S3 Permissions:
+-------------------
+By default, a Bucket and all objects in it are private and can only be accessed by the user which created the bucket.
+Howvever, Permissions can be granted to other users or group of users by attaching correct access policies to them.
+
+Bucket policies: This is a way of managing access to objects inside a bucket. Where the policy is attched to bucket itself and is applicable to only
+that bucket. Some examples of these policies include:
+- Allow anonymous user to only read objects.
+- Do not allow access, if the request if from IP 213.213.213.213
+- Allow Sam to delete objects.
+
+ACL Policies: These policies can be applied to buckets as well as objects. 
+     Using this ACL:
+       - we can make an object accessible to public.
+       - We can even grant permissions to users in other AWS accounts.
+
+
+S3 Storage Class:
+---------------------------------------
+
+Every object in S3 has a storage class assigned to it. A storage class decides Durability and Availibity of an object in S3.
+
+There are four storage classes:
+
+1. Standard (default): 
+This is the best and most expensive storage class as it provides highest durability and availibity. 
+Durability -> 99.999999999% (eleven nines)
+Availability -> 99.99%
+
+2. Reduced Redundancy option (RRS):
+  You can chose this option if you dont mind your object getting corrupted. It has less durability than standard and thus is cheaper.
+Durability -> 99.99%
+Availibility-> 99.99%
+
+3. Infrequent Acesss(Standard->IA):
+  You can choose this option if you dont need to access object very frequently and did not bother about "object not found" errors.
+  It has less availibity but good durability and is cheaper than both standard and RRS.
+Durability -> 99.999999999% (eleven nines)
+Availibility -> 99.90%
+
+4. Glacier: This is the most cheapest option out of the above. But needs to be used only when retrieval of data is far less frequent.
+ex: Storage of Archival logs, which only needs to be retrieved once or twice a month.
+Provides Durability of eleven nines (99.999999999%), but retrieval is very slow can even take hours.
+Note: Donot use Glacier for storing backups as when you will need it it may take hours to fetch data.:( 
+Glacier now offers three options:
+ - Expedited:  data can be fetched in 1-5 minutes
+ - Standard:   data can be fetched in 3-5 hours
+ - Bulk:       data can be fetched in 5-12 hours 
+   
+
+S3 Versioning:
+----------------
+
+S3 versionining is a feature to manage versions of an object. By default, versioning is disabled.
+Once enabled, versioning cannot be disabled it can only be suspended.Upon suspension, new versions of object are not created however, older versions
+reside as it is.
+NOTE: Versioning is a Bucket level property, when enabled it applies to all objects residing in the bucket. You cannot enable versioning for one object in bucket
+and disable for other one. So, if versioning is enabled, its enabled for all objects, if its disabled it disabled for all objects, if its suspended its suspended
+for all objects.
+
+Versioning can be used along with lifecycle policies. An example could be:
+As soon as a new version for object is created move previous version to Infrequent access class.
+
+S3 Life Cycle Policies:
+-------------------------
+Life Cycle policies are a way of automating the process of migrating S3 objects from one storage class to another storage class.
+Life cycle policies can also be used to delete an object.
+The migration/deletion can be triggered via an event or may be time specific.
+
+Life cycle policies can be applied to an Object and as well as to bucket.
+
+Ex Scenario: 
+ - I have a file that I am going to access every day for the next 30 days.
+ - After 30 days, I may only need to access the file only once a week for the next 60 days.
+ - After which, I will probably never access the file again but want to keep it just in case. 
+So, the life cycle policy should be -> keep the file in standard storage for 30 days. After 30 days move the file to Infrequent Access.
+After total of 90days, move the file to Glacier storage. 
+
+S3 Events:
+------------------------------
+
+S3 events are a way of triggering notifications to SNS, SQS or lambda functions when something happens in S3 bucket. An event could be:
+ - New object created
+ - Object deleted
+ - An object stored in RRS is lost (this can be used to recreate object upon loss)
+
+
+Static Website hosting using S3:
+--------------------------------------
+There is readymade option in S3 which helps in making a bucket act as a static website.
+
+Cross Origin Resource Sharing (CORS):
+-----------------------------------------
+
+Generally, a web application on domain1.com cannot use resources of domain2.com as this is prohibited by internet standards.
+However, this can be achieved via enabling cross origin resource sharing on domain2.com.
+
+In AWS terms, this means that if you have two websites A and B hosted on two different buckets B1 and B2. Since, both the buckets will have
+different domain names associated, you will not be able to use resources of B in A and A in B.
+For this to happen you need to enable cross origin resource sharing on S3 bucket permissions.
+
+Moving Data In and Out of S3:
+--------------------------------
+There are 5 ways of moving data to and from S3:
+
+1. Single Operation Upload: A single operation upload is the most basic type of upload where you upload the file in single operation.
+                            You can use this feature to upload files upto 5GB of size. However, It is sugested that any file of size greater
+than 100MB should be uploaded using multipart upload technique. 
+
+2. Multi-Part Upload: Multipart upload allows you to break a large file into smaller chunks and then these chunks can be uploaded concurrently.
+                      After all chunks are uploaded, AWS will merge these chunks into one large file.
+If the transmission of a chunk fails, you can simply re-upload that particular chunk without affecting other chunks.
+This technique is highly suggested for files having size greater than 100MB and is mandatory for files greater than 5GB in size.
+Maximum file size allowed is 5TB.
+
+3. AWS Import/Export: This is used for moving large amounts of data in and out of AWS using a traditional HDD owned by you.
+                      In Case you want to move your on-premise data to AWS, you can simply put the data in extrnal Harddrives and ship(courier) them to AWS.
+                      AWS will copy the data to S3, EBS or Glacier within one business day of hardrive retrieval.
+   This technique can be used for data upto 16TB per job.
+   So, if you have 50TB of data it will be counted as 4 jobs.
+
+4. Snoball:  This technique is same as AWS Import/Export with the only exception that in this case, AWS provides their own storage medium for transferring data.
+             So, AWS will ship their own storage medium to you and you need to copy your data to it and ship it back to AWS.
+             Also, since the capacity of storage media provided by AWS is in large petabytes, you can use this to transfer more than 500 petabytes of data in one go.
+
+5. Storage Gateway: This is used to make connection between on-premise datacenter and Amazon s3.
+    a: Gateway-Cached volumes: AWS creates a storage volume and you need to mount this storage volume onto your on premise server.
+         Now, Any data written to this mounted volume will be instantly migrated to S3. So, your application should now write data to this volume.
+         However, this might increase the latency as when the application will need data the data will need to fetched first from S3 as the storage 
+         volume does not have data. To remove this problem frequently accessed data is cached on storage volume itself.
+
+    b: Gateway-Stored volume: Same as gateway-cached except that instead of migrating the data to S3 it copies the data to s3. So, original data always
+        remain inside on-premis servers. Data is copied by taking snapshots at fixed time intervals, these snapshots are incremental.
+          
+
+
+
+
+ 
+
+
+  
+
+ 
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+    

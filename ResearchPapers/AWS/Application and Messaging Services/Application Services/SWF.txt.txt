@@ -1,0 +1,6 @@
+Simple WorkFlow Service:
+--------------------------------
+
+SWF allows you to write your application as a workflow.
+
+A workflow is a series of tasks which can execute independently bu requires input from previous step/task.

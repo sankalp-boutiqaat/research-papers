@@ -1,0 +1,12 @@
+API Gateway:
+----------------------------
+
+API Gateway is a fully managed service provided by AWS.
+
+You can use this service to provide REST API's to your clients. You cannot write your business logic in API gateway, the busness
+logic needs to be written in a Lambda function, an EC2 instance or an on-premise server and API Gateway can be used
+to translate the response of business logic in REST format.
+
+API GAteway cache:
+---------------------
+The API responses can also be cached for certain period of time to reduce number of hits to backend servers. Can be seen as varnish cache.
