@@ -4,9 +4,9 @@
   (done) allowed tokens during printing (%v,%d,%s etc), when to use what.
    type switch example
    (done) understanding buffer package
-   understanding bufio package
+   (done) understanding bufio package
    understanding fmt package.
-   reading and writing files.
+   (done)reading and writing files.
 
 2. (done) New() vs make().
 3. (done) Array and slices
@@ -18,7 +18,7 @@
 
 
 4. Maps.
-
+    (done)
 
 5. Structs.
      (done) Size calculation for slice, string and bool 
@@ -64,28 +64,6 @@ How to implement C library in go??
 
 
 
-
-
-
-
-
-(done)sockets?
-internetdomain sockets vs unix sockets.
-(done) blocking sockets?
-(done) non-blocking sockets?
- (partial) select, poll, epoll??
-raw sockets??
-baclog queue ?? where its maintained and how??
-what if the data exceeds the buffer size of read? do i need to resend rest of da ta again?
-https://www.ulduzsoft.com/2014/01/select-poll-epoll-practical-difference-for-system-architects/
-https://en.wikipedia.org/wiki/Berkeley_sockets
-seems good:
-http://beej.us/guide/bgnet/output/html/multipage/advanced.html#blocking
-http://veithen.github.io/2014/01/01/how-tcp-backlog-works-in-linux.html
-https://jvns.ca/blog/2017/06/03/async-io-on-linux--select--poll--and-epoll/
-   
-Answers:
-accept(), recv() are blocking calls. However, send is not a blocking call.    
 
 
 
