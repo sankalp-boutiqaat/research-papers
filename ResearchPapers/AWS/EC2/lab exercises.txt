@@ -1,0 +1,18 @@
+1. 
+a. Launch an EC2 instance using Amzon Linux AMI. 
+b. Create and assign security group that allows only ssh traffic.
+c. Login into instance using ssh.
+
+2. 
+a. Login into the instance created in lab1.
+b. Update the AWS Cli using command: 
+     `pip install --upgrade --user awscli`
+c. Now create AMI from this instance.
+d. Launch a new instance using the AMI created in above step.
+e. ssh into the newly created instance and verify that the awscli package is already installed.
+
+3.
+a. Take Snapshot of one of the EBS volume.
+b. Delete the EBS volume of which snapshot has been taken.
+c. create a new EBS volume from the snapshot.
+d. attach this EBS volume to an EC2 and verify that data is recovered.       
