@@ -1,0 +1,15 @@
+1.
+a. Create a VPC (10.0.0.0/16)
+b. Create an Internet gateway and attach it to VPC.
+c. Create two route tables, One we will use with Private subnets and another with public subnets.
+   [If a subnet does not have route to Internet its called private.]
+d. Create following subnets:
+     Subnet1(public) : 10.0.1.0/24 
+     Subnet2(public) : 10.0.2.0/24
+     Subnet3(private): 10.0.3.0/24
+     Subnet4(private): 10.0.4.0/24  
+   
+   Associate public subnets to public route table to truly make them public.
+   Associate private subnets to private route table to truly make them private.
+
+   
