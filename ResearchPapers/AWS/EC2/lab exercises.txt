@@ -16,3 +16,25 @@ a. Take Snapshot of one of the EBS volume.
 b. Delete the EBS volume of which snapshot has been taken.
 c. create a new EBS volume from the snapshot.
 d. attach this EBS volume to an EC2 and verify that data is recovered.       
+
+4. 
+a. Create a new VPC.
+b. Create an IGW for new VPC.
+c. Attach IGW to VPC.
+d. Create 4 subnets, 2 (private) and 2 (public) [1 private and 1 public in one AZ, another private and public in another AZ]
+e. Check if the NACL associated to this VPC is correctly configured.
+f. Create 2 Route tables, 1 for public subnets  and 1 for private subnets
+g. Launch 2 EC2 instance. One in each private subnet. [donot forget to allow HTTP and SSH traffic] 
+h. [Bastion host]Launch one EC2 instance in public subnet and allow SSH traffic on it.
+i. Use SSH tunneling to reach EC2 located in private subnet through bashtion host. [-A option allows agent forwarding]
+j. Try to install apache webserver on private EC2 just logged in.
+       `sudo yum install htpd`  [this should timeout]
+k. Create a NAT gateway and place it in public 2 subnet.
+l. Now, add a route to route table attached to private subnet so that it could reach NAT gateway for traffic 0.0.0.0/0
+m. Check that `httpd` can be installed on both EC2 machines now.
+n. Add an classic ELB to serve traffic from these EC2 web servers. [ELB can only serve traffic from EC2 residing in public subnets
+   However, if there are public subnets in same availibity zones we can use them.
+]
+
+
+
