@@ -17,6 +17,8 @@ b. Delete the EBS volume of which snapshot has been taken.
 c. create a new EBS volume from the snapshot.
 d. attach this EBS volume to an EC2 and verify that data is recovered.       
 
+do below exercise only after finishing vpc and elb and autoscaling.
+
 4. 
 a. Create a new VPC.
 b. Create an IGW for new VPC.

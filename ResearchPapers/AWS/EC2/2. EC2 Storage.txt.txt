@@ -8,10 +8,13 @@ The are two types of storage that can be used with an EC2 instance:
 1. Elastic Block Store(EBS): 
 -------------------------------
 
- -> EBS volumes are Network Attached, means they are not physically attached to an EC2 instance but are accessible through Network media.
- -> EBS volumes are PERSISTENT, means they can live beyond the life cycle of the EC2 instance they are attached too. However, you can choose to delete attached
+ -> EBS volumes are Network Attached, means they are not physically attached to an EC2 instance but are accessible through 
+ Network media.
+ -> EBS volumes are PERSISTENT, means they can live beyond the life cycle of the EC2 instance they are attached too. 
+ However, you can choose to delete attached
     EBS volume upon EC2 termination.
- -> EBS volumes can easily be detached from one EC2 instance and attached to another. However, One EBS volume cannot be attached to more than one EC2 instance
+ -> EBS volumes can easily be detached from one EC2 instance and attached to another. 
+ However, One EBS volume cannot be attached to more than one EC2 instance
     at any given time.
  -> You can also create snapshots of an EBS volume. These snapshots can be mounted to other EBS volumes.
  
@@ -23,7 +26,8 @@ EBS Performance:
 -----------------
 The performance of EBS volume is measured in IOPS (i.e input/output operations per second).
 So, 4 IOPS means, you can perform 4 input/output operations in one second.
-However, there is a catch here as placed by AWS, which says one operation cannot be of more than 256KB. So, if you perform 1 input operation of 500KB and 1 output
+However, there is a catch here as placed by AWS, which says one operation cannot be of more than 256KB. So, if you perform 1 
+input operation of 500KB and 1 output
 operation of 400KB. It will be counted as 4 operations instead of being counted as 2 operations. SO BEWARE!!
 
 EBS Initializations:

@@ -39,13 +39,15 @@ When you create a AWS account a default VPC is created for you. Including compon
       2. A Route table with predefined routes to default subnets.
       3. A network access control list.
       4. Subnets.
-The default VPC is created so as to provide easy interface to user without troubling him much with the configuration of different network layers involved in VPC.
+The default VPC is created so as to provide easy interface to user without troubling him much with the configuration of 
+different network layers involved in VPC.
 Thus default VPC has everything set as allowed by default, this means:
  - All subnets in default VPC are pre-configured to be public and have route to internet. 
  - Any instance launched in these default subnets have pre-assigned public IP and can talk to internet.
 
 
-NOTE: AWS provides a DNS server for your VPC, so that each instance in your VPC network can have a hostname and is able to communicate with
+NOTE: AWS provides a DNS server for your VPC, so that each instance in your VPC network can have a hostname and is able to 
+communicate with
 other instances wintin the VPC through that hostname.
 
 //@todo: below limits should be placed in some others section.

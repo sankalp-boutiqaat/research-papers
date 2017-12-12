@@ -12,4 +12,12 @@ d. Create following subnets:
    Associate public subnets to public route table to truly make them public.
    Associate private subnets to private route table to truly make them private.
 
-   
+e. Now, Create 2 NACLS one for each AZ.
+   Can a NACL expand over multiple AZ? YES :)
+f. NACL 1 should allow HTTP traffic as well as SSH traffic.
+   [OUTBOUND SSH traffic can take any ephemeral port so need to allow ephemeral ports too.]
+   NACL 2 should allow HTTP, SSH traffic as well as RDP (used by RDS) traffic
+g. Assign NACL 1 to subnet1 and 3.
+h. Assign NACL 2 to subnet 2 and 4.   
+
+i. Create 4 security groups, Allow HTTP and SSH traffic on it.

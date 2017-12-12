@@ -9,6 +9,8 @@ a:) Inbound rules: Applies for incoming traffic to subnets.
 b:) Outbound rules: Applies for outgoing trafifc from subnets.
 [FIG: VPC video5 2:07]
 
+NOTE: NACLS can expand over multiple AZ's.
+
 Rules are evaluated based on rule numbers, the rule with lower rule number gets priority over higher one.
 As soon as a traffic type matches a rule that rule is applied to for the traffic type neglecting all lower priority rules.
 
@@ -19,8 +21,10 @@ Rule no.            type           port          Action
  90                 HTTP            80           DENY
  100                 ALL            ALL          DENY
 
-In this example, when a HTTP traffic will come on port 80, it will be allowed entry in subnet, as the RULE 80 will match and get evaluated
-and all the other rules will be ignored. However, if a HTTP traffic will come on port 8080 it will not be allowed, as it will match up
+In this example, when a HTTP traffic will come on port 80, it will be allowed entry in subnet, as the RULE 80 will match 
+and get evaluated
+and all the other rules will be ignored. However, if a HTTP traffic will come on port 8080 it will not be allowed, as it will m
+atch up
 RULE 100 which states to block all traffic.
 
 Rule no.            type           port          Action
@@ -46,13 +50,17 @@ from port 80.
 Security Groups:
 ----------------------------
 
-Security are very similar to NACL's, they are also used to allow/deny traffic. HOwever, securitry groups are used on the instance level instead of at subnet level.
+Security are very similar to NACL's, they are also used to allow/deny traffic. HOwever, 
+securitry groups are used on the instance level instead of at subnet level.
 As, one NACL can havle multiple subnets under its hood, A single security group can have multiple instances under its hood.
+
+NOTE: Single EC2 can be assigned to multiple security groups.
 
 Security groups also have inbound and outbound rules just like NACL.
 
 One more important difference b/w security group and NACL is how security rules work:
- - Security groups only support allow rules, i.e you cannot specify any deny rules. If something is not explicitely allowed, it will be considered as denied.
+ - Security groups only support allow rules, i.e you cannot specify any deny rules. 
+ If something is not explicitely allowed, it will be considered as denied.
  - Security groups are stateful, so return traffic is automatically allowed.
  - All rules are evaluated before deciding whether to allow a traffic. Thus no rule priority.   
 

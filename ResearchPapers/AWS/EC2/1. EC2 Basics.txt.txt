@@ -1,3 +1,4 @@
+\
 Elastic Compute Cloud (EC2): Also known as, virtual server based computing.
 
 EC2 instances are just like Virtual Machines.
@@ -25,17 +26,22 @@ EC2 buying options:
 *Hourly Pricing: If the instance is run for 27 Minutes and 30 Seconds, you will be charged for full one hour.
      
  - Reserved Instances:
-       - Such instances are just opposite in nature to On-Demand instances. You need to specify the period in advance for which you require the instance. 
+       - Such instances are just opposite in nature to On-Demand instances. You need to specify the period in advance for which you 
+       require the instance. 
          The period is generally of 1 year or 3 year.
        - The payment can be made in 3 ways: Full Advance, Half Advance, No Advance.
        - This is the least Flexible but cheaper method to acquire an instance. 
         
 
  - Spot Instances: 
-       - You need to acquire spot instances from aws marketplace. Aws marketplace is a place where AWS makes unused EC2 instances available to be used by anybody.
-       - However, this is ofcourse not free. You need to bid for the instance and the instance will be commissioned to you only when the Spot price for the instance
+       - You need to acquire spot instances from aws marketplace. Aws marketplace is a place where AWS makes unused EC2 
+       instances available to be used by anybody.
+       - However, this is ofcourse not free. You need to bid for the instance and the instance will be commissioned to you 
+       only when the Spot price for the instance
          dips below your Bid price.
-       - There is also a catch that if the Spot price rises above your Bid price then the instance will be de-commissioned and removed from your account. No matter you are using it or not. Means, there is a high chance that you are in the middle of something important and the instance just gets removed from you. 
+       - There is also a catch that if the Spot price rises above your Bid price then the instance will be de-commissioned 
+       and removed from your account. No matter you are using it or not. Means, there is a high chance that you are in the 
+       middle of something important and the instance just gets removed from you. 
        - So, Spot insances are useful only for R&D type of situations.
 
 Consider the following scenario to better undertand, Spot instances:     
@@ -58,12 +64,14 @@ An AMI is a preconfigured package that is required to launch an EC2 instance. An
 
 Note: An AMI is very similar to docker images. The relation between AMI and EC2 is same as that between docker image and container.
 
-You can create your own AMI's or Pick a one from AWS community and marketplace. Since, you can create your own AMI's, it becomes very easy 
+You can create your own AMI's or Pick a one from AWS community and marketplace. Since, you can create your own AMI's, 
+it becomes very easy 
 to have a preconfigured deployable image of the Application.
 
 Virtualization:
 -------------------
-As we know, an EC2 is just a virtual machine. So, there needs to be a hypervisor sitting between EC2'2 and actual server hardware to manage computing resources.
+As we know, an EC2 is just a virtual machine. So, there needs to be a hypervisor sitting between EC2'2 and actual server hardware 
+to manage computing resources.
 AWS makes use of  XEN Hypervisorto do the same.
 
 Note: Using the 'Tenancy' option during instance creation, you can choose if you want a dedicated hardware for your EC2.
@@ -112,7 +120,8 @@ Elastic IP address:
   - Some common uses of Elastic IP addresses are:
          - I forgot to check auto-assign public IP during EC2 instance creation. What to do now?
             ANS: No problem. Just create a Elastic IP address and assign to your EC2 instance.
-         - My application internally calls url http://212.33.44.55/index.php, but the EC2 instance having IP 212.33.44.55 is dead. what now??
+         - My application internally calls url http://212.33.44.55/index.php, but the EC2 instance having IP 212.33.44.55 is dead. 
+         what now??
             Ans: If it was a Elastic IP, just assign it to another EC2 and you are done.
   - Elastic IPs first needs to be created before they can be used. 
   - You cannot randomly choose any Ip address as your Elastic IP address, AWS assigns it to you.

@@ -2,7 +2,8 @@ Internet Gateway:
 
 An internet gateway is a combination of harware plus software which provides your network access to internet.
 
-Note: IGW is horizontally scaled so it imposes no bandwidth constraint, it is as well redundant and higly available so it imposes no availability risks.
+Note: IGW is horizontally scaled so it imposes no bandwidth constraint, it is as well redundant and higly available so it 
+imposes no availability risks.
 
 Note:
  -> Only 1 Internet gateway can be attached to a VPC at a given time.

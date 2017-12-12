@@ -17,7 +17,10 @@ Destination                  Target
  0.0.0.0/0                  igw-5t65r4e3
 
 A route to Internet Gateway needs to be attached to Route Table, incase that route table needs to route traffic to internet.
-By default all route tables have route to communicate internally between instances inside a VPC or other route tables. This is the local route as in above example.
+By default all route tables have route to communicate internally between instances inside a VPC or other route tables. T
+his is the local route as in above example.
+
+
 
 
 

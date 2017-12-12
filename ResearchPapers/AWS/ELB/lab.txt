@@ -1,0 +1,19 @@
+1. Classic ELB.
+
+b. Create a classic load balancer [load balancers also have security groups assigned allow port 80 on it]
+c. Setup health checking for our load balancer. [TCP over 80]
+d. Donot assign any ec2 instance to it, we will use autoscaling to assign instances. 
+
+
+2. Autoscaling.
+a. Create autoscaling launch configuration
+b. Setup bash script in launch configutaion to install http server.
+c. Create a security group to be assigned to each EC2 instance upon instantiation.
+d. Select the option use load balancer. this will allow for autoscaling group ec2 servers to be serviced by ELB.
+e. once the autoscaling instantiate any instance, that instance is visible in EC2 dashboard.
+
+Test the above architecture bt manually terminating an ec2. in this case autoscaling should automatically instantiatea new 
+instance to replace terminated one.
+
+
+
