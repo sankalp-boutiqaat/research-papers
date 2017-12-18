@@ -123,6 +123,9 @@ Socket System Calls:
                         NOTE: These needs to be called on new socket descriptor returned from accept() call not on listening socket.
                         NOTE: recv() is a blocking call and will block till an EOF is encountered.	
 
+7. close() :=> Closes the socket connection and sends EOF.
+						
+						
 //@todo make a good figure to illustrate above client and server steps described above.						
 						
 						
@@ -148,220 +151,64 @@ NOTE: we cannot use EOF, as EOF occurs only if remote end closes connection.
 Write() -> Does not block. But what happens when server is not ready to read???check this.
 
 
-Byte ordering
-------------------------------
-Each memory address can store only one byte at max. 
-So, if the data size is less than 1 byte than the data can be easily stored in a single address location.However,
-if the data size exceeds 1 byte, the data needs to be stored in multiple address locations where each address location cannot hold more than 1 byte.
-There are two main techniques of doing this: 
-a:) Big Indian (MSB first) approach => In this Most significant byte is stored first and then the least significant byte.
-b:) Little Indian (LSB first) approach. => In this Least significant byte is stored first and then the Most significant byte.
-Fig: https://en.wikipedia.org/wiki/Endianness
+close() vs shutdown() syscalls behavioral differences:
+--------------------------------------------------------
+The difference between close() and shutdown() is that, upon calling close() the socket is closed for both read/write operations.
+However, when calling shutdown() you can specify whether you need to close the connection only for write operations or read operations or both.
 
-NOTE: in MSB -> 1001010 <-LSB
-Since Ipv4 addresses are 32bit(4byte) integers and port numbers are 16 bit(2byte) integers lets see this with an example.
-TODO: Hex sounds cool, see below how simple its to convert bin-hex and vice verca. There is hexconverion table at:
-      http://www.rapidtables.com/convert/number/how-binary-to-hex.htm
-	  Figure out more cool stuff that can be done with hex. 
+Another major difference b/w the two is that, upon calling close() on a file descriptor only that particular file descriptor is closed and
+any copies of that file descriptor remains in function as it is.
+ex: fd2 = dup(sockfd);
+    close(sockfd);
+//In this case, you can perform operations using fd2 even though sockfd is closed.
+However, for ex:
+     fd2 = dup(sockfd);
+     shutdown(sockfd); 	
+//In this case you cannot perform operations on either of fd2 or sockfd.
 
-We will be using hexa(0x) notations in our example as it allows us to represent 4bits in one single digit.
-COnsider port number: 6100  
-Binary  16bits      : 00010111.11010100
-Hex                 :  1   7     D   4   = 17.D4
-BigEndianStorage    : 17 -> MemX, D4 -> MemX+1
-LittleIndian        : D4 ->MemX, 17 -> MemX+1
+Note: Shutdown() does not closes the file descriptor, it only restricts further operations on it. SO, even though you have called shutdown() it is mandatory 
+to call close() inorder to eventually close the file descriptor.  
 
-Consider IP address: 127.255.255.1
-Binary             : 01111111.11111111.11111111.00000001
-Hex                :  7    F    F   F   F    F    0   1 = 7F.FF.FF.01
-BigEndian          : 7F -> MemX, FF -> MemX+1, FF -> MemX+2, 01 -> MemX+3
-LittleEndian       : 01 -> MemX, FF -> MemX+1, FF -> MemX+2, 7F -> MemX+4
+sendfile() syscall:
+-------------------------------------------------------------
+Incase you need to transfer contents of a file through socket and the file is stored in disk, you will need to do something like this:
+    while ((n = read(diskfilefd, buf, BUZ_SIZE)) > 0)
+         write(sockfd, buf, n);
+This is not a very optimized solution for large files, as each loop iteration requires atleast two system calls to be executed.	
+ - read() := syscall reads the chunk from kernel buffer -> user space
+ - write():= syscall writes the data to kernel buffer.
+Following is the visualization of the above scenario:
+pg: 1261
+sendfile() syscall provides a way to do all of the above described task in single syscall:
+      sendfile(in, out)
+Following is the visualization of the same:
+pg: 1261	  
+ 
+tcpcork option?
 
--> OK fine, but why are we learning this?
-The problem is that some of the system architectures use Big endian while some uses Little endian. SO, when the multibyte data is transfered from 
-one host to another it could easily get malformed if both the systems uses different ordering schemes. 
-To resolve above issue, someone has done a good job and finalized that all the data passing over network should use BigEndian ordering. So, incase the host uses Little Endian ordering
-it has to first convert the data to Big Endian ordering before passing it to the network. 
-NOTE: BigEndian ordering is also called Network byte order as all networking protols uses it. Little endian is also called as intel order as most of the intels processors are little endian.
 
-Following are the functions for converting byte order from host order to network order and vice versa. Incase host order == network order, these functions perform no action.
-So, its advisable to always use these functions when receiving or sending data to network. This helps the application to function irrespective of the byte order used by host system.
 
-hton() -> convert from host order to network order(used when sending data).
-ntoh() -> convert from network order to host order(used when receiving data).
+
 
 ---------------------------------------------------------------------------------------------------------------
+//todo: write about dns functions
+//todo: create an iterative server that distributes random integers to its clients.
 
-pg 1212.
 
 
+Types of Socket Servers:
+-------------------------------
 
+Socket servers can be placed into different categories based on how they handle client connections:
 
+1. Iterative Server: 
+      - process one client at a time.
 
- 
+2. Concurrent Server:
+      - process multiple clients via creating new process/thread for each client connection.
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Topics:
-How is the server chosen when getaddrinfo() returns multiple ips.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+1265
 
 
 
@@ -382,8 +229,6 @@ How is the server chosen when getaddrinfo() returns multiple ips.
 
 
 #############################################################################################s
-Ques: Little endian and Big endian, and how they affect Ip and ports.
-
 
 SEE section 61.
 system limits:
@@ -391,7 +236,10 @@ https://unix.stackexchange.com/questions/12985/how-to-check-rx-ring-max-backlog-
 Scoket Backlog Q size => Imp as if Q is full connections need to wait and may be discarded too. /proc/sys/net/core/somaxconn
 MTU => data is broken into frames of this size by network interface before sending to physical layer. Can be seen in ifconfig.MTU is in bytes
 Ephemeral port range: /proc/sys/net/ipv4/ip_local_port_range 
-
+Topics:
+How is the server chosen when getaddrinfo() returns multiple ips.
+Ans: First is chosen if first doesnot work it goes to second one.
+[`dnsmasq` automatically round robins b/w returned ips, so even if dns result is cached round robin works]    
 
 
 

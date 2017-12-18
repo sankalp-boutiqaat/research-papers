@@ -1,0 +1,62 @@
+# check all listening services.
+netstat -telnup
+#get number of connections on a particular port/service
+
+
+#get max file descriptors vs available file descriptors.
+#socket backlog Q size and how much is consumed.
+#MTU limit
+#ephemeral port range and how many have been consumed.
+#getbandwidth details.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
