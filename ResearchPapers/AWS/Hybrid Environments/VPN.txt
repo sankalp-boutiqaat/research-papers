@@ -1,0 +1,34 @@
+Virtual Private Network:
+---------------------------------------
+A virtual private network allows you to extend a subnet from one geographic location to another geographic location
+having two seperate Neworks.
+Extending the subnet allows the network at location 'A' to communicate internally with all the resources at location 'B'. This
+is essentially extending the on-premise network to the cloud, or the cloud to the on-premise network.
+
+For AWS, this allows us to communicate with all resources (like an EC2 instance) without the need for 
+public IP address and and IGW. It also provides an additional security as the traffic sent using VPN in encrypted.
+
+Fig: video 1:10
+
+Virtual Private Gateway(VPG):
+------------------------------
+A VPG acts as a connector on AWS side of the VPN connection. It is similar to a IGW.
+
+Note:
+Only one VPG can be attached to a VPC at any given time.
+Both, A VPG and IGW can be attached to a VPC at same time.
+
+
+Customer Gateway:
+------------------
+A customer gateway is a hardware device/software application at the on-premise location which acts as a connector on on-premise side.
+Both VPG and Customer Gateway are required for a VPN connection.
+
+NOTE: In your AWS account, there is a section "Customer gateway". This is where you need to input the public IP
+address of the customer gateway installed at on-premise server. SO, that AWS can know where the customer gateway is located.
+
+NOTE: Once the VPG and customer gateway is setup, you need to create a link between the two. This is done from the VPN
+Connections link in AWS account.
+NOTE: When setting up a VPN, the route table for the subnet (you wish to extend) must include 
+new routes which directs traffic of on-premise servers to VPG.
+------------------------------------------------------------------------------------------------------------------------

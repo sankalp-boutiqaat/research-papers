@@ -1,0 +1,15 @@
+VPC Peering:
+---------------------------
+VPC peering means connecting two VPC networks to each other. So that Resources in VPC A can communicate
+with resources in VPC B using private IP addresses.
+
+VPC peering can only occur if both the VPC are in same Region i.e cross region VPC peering is not possible.
+However, VPC's residing in two different user accounts can use VPC peering to communicate provided they are in same region.
+
+Transitive VPC peering is not allowed. This means that if a VPC peering is created b/w VPC A and VPC B.
+An a seperate VPC peering connection is created b/w VPC B and VPC C. Then dont think that VPC A is connected to VPC C.
+
+if, A==B and B==c, then A!=C
+
+NOTE: Two VPC's can only be peered if they are in same region and have non-overlapping CIDR Block range.
+Fig: 3:21

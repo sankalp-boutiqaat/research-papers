@@ -30,7 +30,7 @@ g. Launch 2 EC2 instance. One in each private subnet. [donot forget to allow HTT
 h. [Bastion host]Launch one EC2 instance in public subnet and allow SSH traffic on it.
 i. Use SSH tunneling to reach EC2 located in private subnet through bashtion host. [-A option allows agent forwarding]
 j. Try to install apache webserver on private EC2 just logged in.
-       `sudo yum install htpd`  [this should timeout]
+       `sudo yum install httpd`  [this should timeout]
 k. Create a NAT gateway and place it in public 2 subnet.
 l. Now, add a route to route table attached to private subnet so that it could reach NAT gateway for traffic 0.0.0.0/0
 m. Check that `httpd` can be installed on both EC2 machines now.

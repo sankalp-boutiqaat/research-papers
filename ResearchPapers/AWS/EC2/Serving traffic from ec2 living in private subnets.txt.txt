@@ -6,8 +6,12 @@ Bastion Host:
  that is destined for the Ec2 instances sitting in private subnets.
  Thus, all the traffic must pass through bastion host and this makes it a most crucial point in network. Hence such
 a host must be equipped with tight security rules.
+fig:
+https://cloudacademy.com/blog/wp-content/uploads/2015/11/aws-bastion-host-1.png
 
 NAT Gateway:
+fig: https://cdn-images-1.medium.com/max/581/1*HOFwVT31PVBkxYQVhOUxRA.png
+
  A NAT gateway is designed to provide EC2 instances that live in the private subnet with a route to the internet
  So, that they can download software packages and updates.
 

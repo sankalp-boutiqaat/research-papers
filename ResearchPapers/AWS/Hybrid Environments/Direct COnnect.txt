@@ -1,0 +1,44 @@
+AWS Direct Connect:
+-----------------------
+
+AWS direct connect is a service that provides dedicated Network connection b/w your on-premise network and AWS network.
+This is done through an authorized Direct Connect Provider (i.e Verizon or other ISP's)
+
+It is similar to VPN except that in VPN the data needs to travel through several 3rd party routers and in direct connect andedicated
+transfer line is provided.
+Fig:1:00
+
+The Dedicated line provided by Direct connect Partner will be for a specific Region and can be used with only
+that particular region. However, if there are multiple VPC's within that region, all of them can make use of the dedicated line.
+
+
+Direct Connect benefits:
+-------------------------------
+1. Reduce Network costs:  Data transferred over Direct connect is billed at lower rate by Amazon.
+2. Low Latency and High Consistency: As its a dedicated transfer line.
+3. Dedicated private network connection b/w on-premise and AWS network: data does not need to travel over multiple 3rd party routers.
+
+
+Fig: 3:57
+
+Cross Connect:
+------------------------------------
+The physical connection b/w the Direct connect partner and your on-premise network.
+
+Private Virtual Interface:
+-----------------------------
+Using Private virtual interface, communication b/w the on-premise and AWS resources can be done only using 
+private IP addresses of the servers as Direct connect is not and INternet Provider. It jus provides a dedicated 
+private connection which works like VPN.
+
+For best practice, setup two Direct connect  conections, one for active-active and one for active-failover.
+You can also use VPN connections as a backup when Direct connect is not available. 
+
+
+Public Virtual Interface:
+-------------------------------------
+A public Virtual Interface, allows you to use Direct connect connection to connect to public endpoints like :
+S3 and DynamoDB.
+Even though you are accessing public endpoints, connection maintains consistency and low latency as it will use Direct
+connect line.
+

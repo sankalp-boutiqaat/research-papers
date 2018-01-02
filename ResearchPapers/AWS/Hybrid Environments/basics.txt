@@ -1,0 +1,39 @@
+A hybrid environment is one where resources located on on-premise datacenter can communicate with resources located on
+AWS and vice-versa.
+
+This can be done using, one of the following approaches:
+1. Virtual Private Network
+2. AWS Direct Connect
+3. AWS Storage Gateway : same as described in s3.
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,39 @@
+(Elastic Map Reduce) EMR:
+------------------------------
+Fig: 00:34
+
+EMR is a Big data solution provided by AWS. By default it uses Hadoop framework but can be changed to use any of the following frameworks:
+Apache Spark
+HBase
+Presto
+Flink
+
+EMR is just a fleet of EC2 instances and we have access to underlying Operating system i.e this service is not
+fully managed by AWS.
+
+EMR Workflow:
+-------------------
+1. data stored in S3, Redshift, Dynamo, RDS is passed to EMR.
+2. This data is Mapped to cluster of Master/S;ave nodes for processing.
+3. Now this mapped data is processed using computations defined by your custom code logic.
+4. This processed data is reduced to single output, which is returned back.
+
+EMR components:
+-------------------
+1. Master Node:
+    - This is the node responsible for distribution of data and tasks to Slave nodes.
+    - It tracks the status of tasks given to slave nodes.
+    - Monitors health of cluster.
+2. Slave Nodes:
+    - Executes the given tasks and store data in Hadoop Distributed File system (HDFS).
+
+For actual Mapreduce functioning check Mongodb Notes.    
+
+
+
+
+
+
+
+
+

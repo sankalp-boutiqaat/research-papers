@@ -8,11 +8,13 @@ A file can be directly placed inside a bucket or can be wrapped in a nested fold
 
 When creating a Bucket we have to chose on which AWS Region the bucket needs to reside in. All the objects inside the bucket will also
 reside in that particular region. 
-Objects are duplicated over availibity zones within the Region to provide high-availibity and fault-tolerance but never duplicated across 
+Objects are duplicated over availibity zones within the Region to provide high-availibity and fault-tolerance 
+but never duplicated across 
 Regions. 
 
 Read Consistency:
-1. For new objects, S3 supports "read-after-write" consistency. Which means that objects becomes immediately available after creation.
+1. For new objects, S3 supports "read-after-write" consistency. W
+hich means that objects becomes immediately available after creation.
 2. For updates and deletion, S3 supports "eventual consistency". Which means that the change will not be visible immediately.
 
 S3 Buckets:
@@ -30,7 +32,8 @@ S3 objects are stored in key value pairs. Where key denotes the name for the obj
 - Min size of Object is 0 bytes and max is 5TB
 - Objects can automatically switch from one storage class to another based on life cycle policies.
 - Objects can be stored within folders.
-- Objects can be encrypted by AWS using AES-256. When using this, AWS encryptes the data before uploading and automatically decrypts the data after downloading.
+- Objects can be encrypted by AWS using AES-256. When using this, AWS encryptes the data before uploading 
+and automatically decrypts the data after downloading.
 
 S3 Folders:
 ------------
@@ -42,7 +45,8 @@ S3 Permissions:
 By default, a Bucket and all objects in it are private and can only be accessed by the user which created the bucket.
 Howvever, Permissions can be granted to other users or group of users by attaching correct access policies to them.
 
-Bucket policies: This is a way of managing access to objects inside a bucket. Where the policy is attched to bucket itself and is applicable to only
+Bucket policies: This is a way of managing access to objects inside a bucket. 
+Where the policy is attched to bucket itself and is applicable to only
 that bucket. Some examples of these policies include:
 - Allow anonymous user to only read objects.
 - Do not allow access, if the request if from IP 213.213.213.213
@@ -91,9 +95,11 @@ S3 Versioning:
 ----------------
 
 S3 versionining is a feature to manage versions of an object. By default, versioning is disabled.
-Once enabled, versioning cannot be disabled it can only be suspended.Upon suspension, new versions of object are not created however, older versions
+Once enabled, versioning cannot be disabled it can only be suspended.Upon suspension, new versions of object are not created 
+however, older versions
 reside as it is.
-NOTE: Versioning is a Bucket level property, when enabled it applies to all objects residing in the bucket. You cannot enable versioning for one object in bucket
+NOTE: Versioning is a Bucket level property, when enabled it applies to all objects residing in the bucket. 
+You cannot enable versioning for one object in bucket
 and disable for other one. So, if versioning is enabled, its enabled for all objects, if its disabled it disabled for all objects, if its suspended its suspended
 for all objects.
 
@@ -134,7 +140,8 @@ Cross Origin Resource Sharing (CORS):
 Generally, a web application on domain1.com cannot use resources of domain2.com as this is prohibited by internet standards.
 However, this can be achieved via enabling cross origin resource sharing on domain2.com.
 
-In AWS terms, this means that if you have two websites A and B hosted on two different buckets B1 and B2. Since, both the buckets will have
+In AWS terms, this means that if you have two websites A and B hosted on two different buckets B1 and B2. 
+Since, both the buckets will have
 different domain names associated, you will not be able to use resources of B in A and A in B.
 For this to happen you need to enable cross origin resource sharing on S3 bucket permissions.
 

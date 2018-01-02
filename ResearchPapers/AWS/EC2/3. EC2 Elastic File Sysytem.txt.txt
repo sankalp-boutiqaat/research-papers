@@ -1,14 +1,19 @@
 Elastic File System (EFS):
 -----------------------------
 
-As the name suggests, it provides a elastic storage option for EC2. i.e the size of storage automatically increases and decreases based on usage.
+As the name suggests, it provides a elastic storage option for EC2. i.e the size of storage automatically 
+increases and decreases based on usage.
 
-One major advantage that EFS has over EBS volumes is that, EFS can be attached to multiple EC2 machines atthe same point of time. Thus, the data stored on 
+One major advantage that EFS has over EBS volumes is that, EFS can be attached to multiple EC2 machines atthe same point of time. 
+Thus, the data stored on 
 EFS can be shared with multiple EC2 instances without any problem.
 
-EFS storage can expand upto petabytes with a very low latency and you pay only for the amount of storage you are using. Thus, EFS provides a high performant storage option.
+EFS storage can expand upto petabytes with a very low latency and you pay only for the amount of storage you are using. 
+Thus, EFS provides a high performant storage option.
 
-EFS can span over all availibity zones within a VPC. So, this is a big advantage as Two EC2's placed in different availibilty zones can access same data.wow!
+EFS can span over all availibity zones within a VPC. 
+So, this is a big advantage as Two EC2's placed in different availibilty zones can access same data.wow!
 
-EFS is also accessed via EC2 using network connection like EBS. However, EFS needs to be mounted on a folder in EC2 for usage, unlike EBS.
+EFS is also accessed via EC2 using network connection like EBS. 
+However, EFS needs to be mounted on a folder in EC2 for usage, unlike EBS.
   

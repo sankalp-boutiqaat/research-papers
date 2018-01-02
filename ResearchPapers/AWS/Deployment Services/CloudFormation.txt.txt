@@ -3,7 +3,8 @@ CloudFormation:
 
 Cloudformation allows you to deploy your INFRASTRUCTURE and a CODE. 
 
-You can basically specify your applications architecture in a Json file and cloudformation will provision the resources as necessary by reading the JSON file
+You can basically specify your applications architecture in a Json file and cloudformation will provision the resources
+ as necessary by reading the JSON file
 as specified by you.
 
 Benefits:
