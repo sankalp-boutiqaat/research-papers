@@ -121,7 +121,9 @@ Socket System Calls:
 
 6. send() and recv() :=> These syscalls are used to send and receive data from stream sockets. For datagram sockets use receivefrom() and sendto()
                         NOTE: These needs to be called on new socket descriptor returned from accept() call not on listening socket.
-                        NOTE: recv() is a blocking call and will block till an EOF is encountered.	
+                        NOTE: recv() is a blocking call and will block till an EOF is encountered.
+ NOTE: read/write syscalls and send/recv syscalls both fundamentally does the same thing. The only difference is that send/recv calls provide some specific
+  features that can be enabled by passing appropriate flags to function calls.However, incase no flag is passed they behave exactly same as read/write calls. 
 
 7. close() :=> Closes the socket connection and sends EOF.
 						
@@ -184,8 +186,10 @@ sendfile() syscall provides a way to do all of the above described task in singl
 Following is the visualization of the same:
 pg: 1261	  
  
-tcpcork option?
-
+//todo: tcpcork/tcpnodelay socket option? //Seems a good option need to read few blogs:
+http://baus.net/on-tcp_cork
+//todo: what is nagle algorithm and how its related to these options.??
+//todo: flags accepted by send/recv call.
 
 
 

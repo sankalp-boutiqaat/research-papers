@@ -30,7 +30,7 @@ S3 objects are stored in key value pairs. Where key denotes the name for the obj
 - Min size of Object is 0 bytes and max is 5TB
 - Objects can automatically switch from one storage class to another based on life cycle policies.
 - Objects can be stored within folders.
-- Objects can be encrypted by AWS using AES-256. When using this, AWS encryptes the data before uploading and automatically decrypts the data after downloading.
+- Objects can be encrypted by AWS using AES-256. When using this, AWS encryptes the data after uploading and automatically decrypts the data before downloading.
 
 S3 Folders:
 ------------
