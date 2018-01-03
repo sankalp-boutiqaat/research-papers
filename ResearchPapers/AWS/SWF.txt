@@ -1,0 +1,10 @@
+https://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dg-intro-to-swf.html
+
+Terms:
+workflow
+Activity
+Activity task
+Task
+worker
+Decider
+decision tasks
