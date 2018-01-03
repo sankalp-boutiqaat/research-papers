@@ -3,15 +3,19 @@ EC2 Placement Groups:
 If you want your EC2 machines to be placed as close to each other as possible, So that the network latency
 between them is minimum then placement group is the option for you.
 
-You can create a placement group and add new EC2 instances to it. All the instances within a single placement group are kept in same datacenter.
+You can create a placement group and add new EC2 instances to it. 
+
+All the instances within a single placement group are kept in same datacenter.
 
 Instances inside a placement group share 10Gbit network connection. So, if you chose an EC2 instance to be part of a placement group
 it should be of the family which allows atleast 10Gbit bandwidth.
 
  - Two placement groups cannot be merged together but they can be connected via low latency network.
  - If am instance is stopped and then started again, it will still be a member of the placement group.
- - Placement group needs to be chosen at the time of creating an instance. Once the instance is launched it cannot be aded to the placement group later.
+ - Placement group needs to be chosen at the time of creating an instance. 
+ Once the instance is launched it cannot be aded to the placement group later.
  - It is recomended that if you require n EC2 instances in a placement group you launch all n of them in a single request. 
 
-Note: If adding a new instance to a placement group gives error "insufficient capacity". You need to stop all instances of that group and start them again.  
+Note: If adding a new instance to a placement group gives error "insufficient capacity". 
+You need to stop all instances of that group and start them again.  
   

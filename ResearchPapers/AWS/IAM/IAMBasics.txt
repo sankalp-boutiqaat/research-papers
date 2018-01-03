@@ -1,18 +1,115 @@
+Identity and access Management:IAM
+---------------------------------------------
+- This is where you manage your AWS users, groups, roles and their access to various AWS resources (such as EC2, S3, Dynamo).
+- IAM is global to all regions i.e if a user is created, its visible in all regions.
 
+The use of IAM is to manage:
+-----------------------------
+- Users
+- Groups
+- Roles
+- IAM Access Policies
+- API Keys
+- Manage Password Policy for Users.
+- Manage Multi Factor Authentication for user accounts.
+
+When a new IAM user is created it has NO/ZERO access to any AWS service by default. This is an "implicit" deny rule set on all AWS users 
+and required permissions needs to be explicitely granted.
+
+For every AWS root account, following tasks needs to be completed as per Best-Practice:
+- Delete root access Key
+- Active MFA on root account
+- Create Individual IAM users
+- Apply IAM password policy for users.
+- Create groups to assign permissions to users.
+
+To perform daily routine Administration tasks one should log in from IAM user account and not from AWS root account.
+Also, "Principal of Least privilege" must be used when assigning permissions to IAM users.
+
+IAM Users:
+-----------------------------------------------
 Users:
 These users can login into AWS console and perform actions based on the access (policies) provided to them.
 
-Groups: 
+Every new IAM user has an implicit deny-all policy attached to it. Thus, donot have access to any AWS resource by default.
+   Access needs to be ranted to these users via attaching correct access policies.
+Each user has its own unique set of credentials, which should be never stored/passed to an EC2 machine.
+Both, Group policies as well as individual policies can be applied to a user at the same time.
+
+IAM GROUPS:
+---------------------------------------------------
 A group consists of one or more users. 
 Access rights can be attached directly to a group and it will be applicable to all the users belonging to that group.
 
-Policies: 
+IAM Policies:
+------------------------------------
 These are access rights which can be assigned to a user, group or role.
 
-Roles: 
+- A policy is a json document that contains one or more permissions.
+- An explicit DENY rule always override an ALLOW rule. No matter which one was applied first and which one was applied later.
+    This allows to quickly attach a deny-all policy to users when restricting access.
+- IAM provides pre-built policy templates. Some most common ones are:
+    Administrator Access => Full Access to all AWS users.
+    Power User Access => Admin access except it does not allow for USER/GROUP access.
+    Read only access => User can only view resources.
+- Muliple policies can be attached to a user/group at same time.
+- New policies can be created using Policy generator ar can be written from scratch.
+
+IAM ROLES:
+----------------------------------------
 Roles comes in picture, when an AWS service needs to access another AWS service. 
 Suppose, an EC2 instance wants to access a S3 bucket. In such a scenario, we need to provide correct access rights to EC2 instance so it can 
 access S3 bucket. However, access rights (policies) cannot be directly assigned to a service, the solution is to assign the access rights (policies) to something called 
 Role and then this Role is attached to the service.
 
 Roles are just like groups, the difference is that they get assigned to a AWS service (like EC2) instead of users.
+NOTE: Only one role can be assigned to an EC2 machine at any time. Role assigned to EC2 machine can be chnaged even after the creation of 
+EC2machine.
+
+IAM Security Token Service:
+--------------------------------------
+The problem with IAM policies is that they provide permanent access to resources. BUt what if we need to grant access only for a specific
+period of time such as 1-2 hours.
+ In such a scenario IAN STS is a solution.
+ STS allows you to create temporary security credentials that allows entities to access AWS resources only for a short period of time, till
+ the credential is valid.
+ A STS credential consists of three parts:
+   - Security Token
+   - Access key ID
+   - Access key
+
+IAM API keys:
+------------------------------------
+API keys are required to make programmatic calls to AWS from:
+- AWS CLI
+- AWS SDK
+- Direct HTTP calls.
+
+NOTE: A user API key is available only once during the user creation process. You need to store the Access key at that moment only.
+Later on the access key is not available for view/download.
+You will only be able to create new access key.
+
+NOTE: Roles donot have access keys alloted.
+
+
+
+
+
+
+
+
+
+
+     
+
+
+
+
+
+
+
+
+
+
+
+

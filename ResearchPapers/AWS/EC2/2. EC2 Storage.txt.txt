@@ -32,16 +32,19 @@ operation of 400KB. It will be counted as 4 operations instead of being counted 
 
 EBS Initializations:
 ----------------------
-There is no problem with new EBS volumes. However, if a EBS volume is created from a snapshot it requires initialization process. During initialization process
-the performace of EBS degrades to about 50%.
-The initilaization process occurs when each block from EBS is read for first time. So, instead of directly attaching the EBS to production EC2 first manually read
-as many blocks as possible and then attach the EBS volume to production EC2, so that the initialization process gets completed before the volume is attached to 
+There is no problem with new EBS volumes. However, if a EBS volume is created from a snapshot it requires initialization process. 
+During initialization process the performace of EBS degrades to about 50%.
+The initilaization process occurs when each block from EBS is read for first time. 
+So, instead of directly attaching the EBS to production EC2 first manually read
+as many blocks as possible and then attach the EBS volume to production EC2, 
+so that the initialization process gets completed before the volume is attached to 
 production EC2.  
 
 Types of EBS volumes:
 -----------------------------------
 1. General Purpose SSD (GP2): provides 3 IOPS/GB, this means if you chose 8 GB of SSD storage, you can perform 24 IOPS
-                              if you chose 100 GB of storage, you can perform 300 IOPS. Dont forget that one operation means 256KB of data.
+                              if you chose 100 GB of storage, you can perform 300 IOPS. 
+                              Dont forget that one operation means 256KB of data.
    Minimum volume size is 1 GB, max volume size is 16TB.
 
 2. Provisioned IOPS SSD: As the name suggests, along with choosing the size of SSD, you can also chose the amount of IOPS you require.
@@ -52,8 +55,10 @@ Types of EBS volumes:
 3. Magnetic: This is the cheapest and least performant storage option.
              Min storage size is 1 GB, max is 1 TB.    
 
-EBS optimized instances: There may be cases when a provisioned EBS volume of 400 IOPS, is not able to deliver 400 IOPS. Such case may arise due to bandwidth congestion
-------------------------  as EBS is on network and requires available bandwidth to function properly. The solution is to have EBS optimized EC2 instance which has dedicated EBS throughput.
+EBS optimized instances: There may be cases when a provisioned EBS volume of 400 IOPS, is not able to deliver 400 IOPS. 
+Such case may arise due to bandwidth congestion
+------------------------  as EBS is on network and requires available bandwidth to function properly. 
+The solution is to have EBS optimized EC2 instance which has dedicated EBS throughput.
 NOTE: AWS provides only certain EC2 instance types with EBS optimization enabled.
 
 
@@ -70,9 +75,11 @@ EBS SNAPSHOTS:
 ---------------------
 EBS snapshots are point in time backups of a EBS volume that are stored in S3.
 
-EBS snapshots are incremental in nature, i.e each successive snapshot stores only the changes that are made from the previous snaphot. Thus reducing our S3 storage
+EBS snapshots are incremental in nature, i.e each successive snapshot stores only the changes that are made from the previous snaphot.
+ Thus reducing our S3 storage
 costs.
-Note: Even though the storage is incremental, you can still delete the base snapshot or any other in-middle snapshot and still you will be able to restore data using 
+Note: Even though the storage is incremental, you can still delete the base snapshot or any other in-middle snapshot and still 
+you will be able to restore data using 
 any  of the remaining snapshots.
 So, for example if the snapshots were taken in following order: S1 -> S2 -> S3 -> S4 -> S5
 and I delete snapshots S1, S3 and S5. Still I will be able to restore data using S2 or S4.

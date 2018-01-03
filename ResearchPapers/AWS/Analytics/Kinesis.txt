@@ -1,0 +1,47 @@
+Kinesis:
+--------------------
+
+Fig: 00:31
+
+Kinesis is a realtime data processing service, that can continuosly capture large amounts of data
+from multiple sources and can power real-time streaming Dashboards.
+
+The data from the Kinesis can be passed to other AWS services as well, like:
+EMR
+S3
+Redshift
+Lamdba
+Custom Application.
+
+Note: Data is passed to multiple of these services simultaneously, i.e both EMT and S3 can be working on same data at the same time.
+
+
+
+
+Kinesis is composed of following components:
+---------------------------------------------
+Stream:
+  - This is the tunnel to which data is posted and from which data is retrieved.
+  - Data is kept in stream for upto 24 hours by default, this can be extended to upto 7 days.
+Producers: 
+  - These are devices that collect data to be passed on to kinesis stream.
+  - Sample Producers can be IOT sensors, Mobile Devices etc.
+  - You can have thousands of producers for a Kinesis Stream.
+Consumers
+  - These are the applications/ services that consume data from stream.
+  - Multiple consumers can consume same data at same time.
+  - Sample consumers can be S3, Redshift, EMR, custom application etc.
+Shards (processing power):
+  - This is the processing power required by Kinesis cluster.
+  - More data you want to process, more shards you need to add.
+  - Each shard can process 2MB of readData/second and 1MB of write data/second.  
+
+Sample Usages of Kinesis:
+----------------------------
+1. Gaming: Collect Player actions and feed them into Gaming application to provide more user specific challenges.
+2. Analytics: Collect Realtime data from IOT sensors and build predictions.
+3. Application Alerts:  Put Real time appliction logs in Kinesis and build an appication to check if everything is working fine as per logs.
+
+
+
+

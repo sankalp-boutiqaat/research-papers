@@ -1,0 +1,9 @@
+Create VPC peering connection.
+
+1. Create two new VPC A nd B.
+2. launch one ec2 instance in each of VPC with public IP.
+3. Check if we can connect to each ec2 through our terminal.
+4. Now, check if we can ping using private IP of instance in one VPC to another instance in seperate VPC.(this should not work)
+5. Create VPC peering b/w two VPC.
+6. Modify route tables to route VPC A data to VPC A and VPC B data tp VPC B.
+7. Now check that step 4 is working or not. 

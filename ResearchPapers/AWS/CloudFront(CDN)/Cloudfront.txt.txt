@@ -2,12 +2,15 @@ Cloudfront:
 -----------------
 
 CloudFront is a CDN service provided by AWS. It has servers(Edge locations) distributed all over the world. 
-When a request for static content is made, it will first be checked with nearest Edge location and if the content is foung it will be returned to user.
+When a request for static content is made, it will first be checked with nearest Edge location and if the content 
+is foung it will be returned to user.
 If Not, the content will be fetched from another Edge location or from origin and will be delivered to user.
 
-CloudFront can be integrated with Route53. An example could be http://cdn.example.com. We could register a recordset to route to Cloudfront
+CloudFront can be integrated with Route53. An example could be http://cdn.example.com. 
+We could register a recordset to route to Cloudfront
 incase cdn.example.com is called.
 
-Its better to create a new object for new version of a file instead of invalidating all the caches for that object. As invalidating takes time and has its own cost.
+Its better to create a new object for new version of a file instead of invalidating all the caches for that object. 
+As invalidating takes time and has its own cost.
 
 You can decide the caching period of objects.   
