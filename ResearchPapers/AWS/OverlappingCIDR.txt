@@ -3,6 +3,21 @@ Overlapping CIDR block ranges:
 
 Two CIDR block ranges are said to be overlapping if there exists atleast 1 IP address that exists in both the CIDR Block ranges.
 
+ex:
+ Lets consider following CIDR Block ranges:
+ 192.168.1.23/24                            192.168.1.23/16
+ 
+ For 192.168.1.23/24:                         For 192.168.1.23/16:
+   MinIp: 192.168.1.0                           MinIp: 192.168.0.0
+   MaxIP: 192.168.1.255                         MaxIP: 192.168.255.255
+
+The two CIDR block ranges are overlapping as there exists one or more IP's that exists in both CIDR blocks.
+  sample: 192.168.1.12, 192.168.1.201, 192.168.1.222
+
+Lets take bit complex example, consider following ranges:
+  
+    192.168.1.23/18  
+
 
 
 
