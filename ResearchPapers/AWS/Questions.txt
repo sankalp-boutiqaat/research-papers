@@ -7,3 +7,4 @@
 7. Can I attach multiple Security Group to one EC2.
 8. Try to detach Ebs volume from one EC2 and attach it to another.
 9. Difference b/w EC2 termination n Shutdown.
+10. Can Reserved Instances be migrated to different Region?

@@ -1,0 +1,8 @@
+1. RDS: A read replica can be promoted to a master.
+2. SNS: Can send push Noifications to IOS/Android.
+3. A SWF workflow and task can last for 1 year.
+4. PORT SCANNING on EC2 machines is disabled and requires AWS permissions to do so.
+5. Elastic IP can be used in one specific VPC only.
+6. Reserved Instances can be migrated from one AZ to another.
+7. SWF workflow can include tasks to be performed by on-premise servers and humans.
+8. HSM appliance should be located near EC2 machines to reduce cost. 
