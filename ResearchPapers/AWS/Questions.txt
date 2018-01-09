@@ -1,0 +1,9 @@
+1. Get Billing Info for all services.
+2. Check how EBS volumes data can be transferred to different AZ and Region.
+3. What is origin Access Identity?
+4. Do we need to explicitely attach IGW to vpc or simply setting route to IGW is fine.
+5. What is KPL in Kinesis.
+6. Check all the limits applicable on Resources.
+7. Can I attach multiple Security Group to one EC2.
+8. Try to detach Ebs volume from one EC2 and attach it to another.
+9. Difference b/w EC2 termination n Shutdown.
