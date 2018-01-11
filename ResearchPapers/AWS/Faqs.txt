@@ -1,4 +1,5 @@
 1. RDS: A read replica can be promoted to a master.
+        You can have reserved RDS instances.
 2. SNS: Can send push Noifications to IOS/Android.
 3. A SWF workflow and task can last for 1 year.
 4. PORT SCANNING on EC2 machines is disabled and requires AWS permissions to do so.
@@ -6,3 +7,11 @@
 6. Reserved Instances can be migrated from one AZ to another.
 7. SWF workflow can include tasks to be performed by on-premise servers and humans.
 8. HSM appliance should be located near EC2 machines to reduce cost. 
+
+
+CloudFront:
+1. Cloudfront caches each object for 24 hours in case no TTl is supplied in headers. The minimum expiration time in 0 sec.
+2. Cloudfront: The transfer from Edge location to client begins as soon as first byte is received from origin server or Regional Caches.
+3. S3 origin does not support Regional Edge caches. They are supported only for custom origins like: HTTp server.
+4. Only GET Requests are cached and served by edge locations. PUT/POST/PATCH/OPTIONS/DELETE etc are served directly via origin servers.
+5. 

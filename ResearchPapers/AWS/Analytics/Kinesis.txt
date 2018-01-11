@@ -16,8 +16,6 @@ Custom Application.
 Note: Data is passed to multiple of these services simultaneously, i.e both EMT and S3 can be working on same data at the same time.
 
 
-
-
 Kinesis is composed of following components:
 ---------------------------------------------
 Stream:
@@ -34,13 +32,59 @@ Consumers
 Shards (processing power):
   - This is the processing power required by Kinesis cluster.
   - More data you want to process, more shards you need to add.
-  - Each shard can process 2MB of readData/second and 1MB of write data/second.  
+  - Each shard can process 2MB of readData/second and 1MB of write data/second.
+Partition Keys:
+   - partition keys decide to which shard data block needs to be routed.
+   - Partition key is supplied by producers along with data.
+Sequence numbers:
+   - Each data block is assigned a sequence number to uniquely identify it.
+   - This is assigned by Kinesis stream.       
 
 Sample Usages of Kinesis:
 ----------------------------
 1. Gaming: Collect Player actions and feed them into Gaming application to provide more user specific challenges.
 2. Analytics: Collect Realtime data from IOT sensors and build predictions.
 3. Application Alerts:  Put Real time appliction logs in Kinesis and build an appication to check if everything is working fine as per logs.
+
+Kinesis vs SQS:
+-----------------
+Kinesis and SQS both are very similar to each other but share some important differences.
+- Kinesis maintains ordering of records, this feature is supported only by FIFO SQS.
+- Kinesis provides a way for multiple applications to consume same data and in same order.
+- Kinesis is better option than SQS when aggregation task is to be performed on data. 
+
+Kinesis Agent:
+---------------
+Kinesis Agent is something like datadog agent. You can install it on linux sever and it will act as a producer to send data to kinesis stream.
+
+Kinesis Producer Library(KPL) & Kinesis Client Library(KCL):
+--------------------------------------------------------------
+KPL is the SDK used by producers to post data to kinesis stream.
+KCL is the SDL used by consumers to consume data from kinesis stream.
+
+Resharding:
+--------------
+Resharding is the process of increasing or decreasing the number of shards.
+Also, known as shard split and shard merge operations.
+
+
+Faqs:
+-------
+1. Data streams synchronously replicates data across 3 availability zones.
+2. Max datablock size is 1MB.
+3. A single shard can support only 1000 PUT requests/second.
+4. A single shard can process 2MB of readData/second and 1MB of write data/second.
+5. Max. of 10 shards are allowed per region.
+
+
+
+
+
+
+
+
+
+
 
 
 
