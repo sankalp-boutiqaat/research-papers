@@ -15,3 +15,62 @@ CloudFront:
 3. S3 origin does not support Regional Edge caches. They are supported only for custom origins like: HTTp server.
 4. Only GET Requests are cached and served by edge locations. PUT/POST/PATCH/OPTIONS/DELETE etc are served directly via origin servers.
 5. 
+
+2. Can EBS volumes be transferred to different AZ and Region?
+    - EBS volumes are specific to a availability zone. i.e an EBS volume existing in availability zone A can only be assigned to 
+      a EC2 instance residing on the same availability zone.
+      In case, you want to assign the EBS volume to an EC2 running in different AZ, you first need to create a 
+      snapshot of the EBS volume. Then from that snapshot you need to create a new EBS volume which resides in the required AZ.
+
+      Incase, you want to assign the EBS volume to an EC2 residing in entirely different region.
+      You need to create a snapshot of the EBS volume, then the snapshot can be copied to the required region.
+      Then from that snapshot you need to create a new EBS volume and assign it to the required EC2.
+
+3. What is origin Access Identity?
+    - A special user assiged to Cloudfront that has access to S3 objects.
+
+4. Do we need to explicitely attach IGW to vpc or simply setting route to IGW is fine.
+    - YES. This is absolutely necessary. Simply setting the route to IGW will send all data to BLACKHOLE, if the IGW is not
+    attached to a VPC.   
+
+5. Can a EBS volume be detached from one running EC2 instance and attached to another.
+   - NO. If its a root volume of the EC2 instance it cannot be detached.
+   - YES. If its not a root volume for the EC2 instance.
+
+6. Can Reserved Instances be migrated to different Region?
+   - NO.Reserved instances can be moved between availability zones of same region. But, they cannot be moved to other Region.
+
+7. Can we modify Instance Type of Reserved Instance?
+   - YES. Convertible Reserved Instances allow you to modify instance type of the Reserved Instances.
+
+9. Difference b/w EC2 termination and EC2 Stop.
+    - These 2 features are very very similar to each other, with only certain notable differences.
+       - EC2 Stop option is only available for instances whihc have EBS volume as its root volume.
+       - Stopping an EC2 does not delete the EBS volumes attached to the instance. However, termination provides this option.
+    - NOTE that both options completely deletes the virtual machine assigned to you.
+             
+10. What will happen incase a EMR cluster is terminated?
+      - All the provisioned EC2 nodes master/slave for the cluster will be terminated.
+      - All the cluster data stored in S3 will be deleted.
+
+11. Do I need to manually terminate the EMR cluster?
+     - No. The cluster and all its resources are automatically destroyed once jobs finish processing.
+     However, you can choose to not to do so and then you will need to manually terminate cluster.              
+
+12. Do EMR cluster nodes makes use of multi-AZ?
+    - No. All the nodes in a cluster is launched in single AZ.
+
+13. Can my EMR recover if master/slave node is down?
+   - No. Incase the master node is down, AWS cannot recover it for you. You need to manually restart it.
+   - But if only the slave node is down it can automatically fix it.
+
+14. Can I SSH into my EMR nodes?
+   - You can SSH into Master node directly. For Slave nodes, you first need to SSH into master and then in Slave.
+
+15. EMR: Can I modify number of Slave Nodes in a Running CLuster?
+   - There are two types of slave nodes:
+       Core Nodes: These execute JObs as well as store data in HDFS.
+       Task Nodes: These only execute jobs.
+   - Core Nodes can only be increased. Task Nodes can be increased as well as decreased.
+
+16.                  

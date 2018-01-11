@@ -1,39 +1,22 @@
 1. Get Billing Info for all services.
-    IAM:
-    VPC:
-    ELB:
-    AutoScaling:
-    CloudFront: Charges for each request received on Edge locations.Request can be GET/POST/PUT etc.
+    IAM: No Price.
+    VPC: No Price.
+    ELB: 
+      - No. of Hours ELB was running
+      - Amount of data transferred by ELB.
+    AutoScaling: No price.
+    CloudFront: Charges for each request received on Edge locations. Request can be GET/POST/PUT etc.
     Kinesis:
       - No. of running shards.
-      - no. of Data PUT requests made to kinesis stream, where 256KB is the size considered. 
+      - no. of Data PUT requests made to kinesis stream, where 256KB is the size considered.
+    EMR: 
+       
 
-2. Check how EBS volumes data can be transferred to different AZ and Region.
-    - EBS volumes are specific to a availability zone. i.e an EBS volume existing in availability zone A can only be assigned to 
-      a EC2 instance residing on the same availability zone.
-      In case, you want to assign the EBS volume to an EC2 running in different AZ, you first need to create a 
-      snapshot of the EBS volume. Then from that snapshot you need to create a new EBS volume which resides in the required AZ.
 
-      Incase, you want to assign the EBS volume to an EC2 residing in entirely different region.
-      You need to create a snapshot of the EBS volume, then the snapshot can be copied to the required region.
-      Then from that snapshot you need to create a new EBS volume and assign it to the required EC2.
-
-3. What is origin Access Identity?
-    - Done, check cloudfront section.
-
-4. Do we need to explicitely attach IGW to vpc or simply setting route to IGW is fine.
-    - Yes this is absolutely necessary. Simply setting the route to IGW will send all data to BLACKHOLE, if the IGW is not
-    attached to a VPC.
-
-5. What is KPL in Kinesis.
-    - Done, check kinesis section.
 6. Check all the limits applicable on Resources.
+
 7. Can I attach multiple Security Group to one EC2.
 
-8. Try to detach Ebs volume from one EC2 and attach it to another.
-    - Root volumes cannot be detached from running EC2 machines.
-    - Other EBS volumes can be detached and attached to other EC2 in same AZ.
+does it delete only root EBS on termination or all associated EBS?
 
-9. Difference b/w EC2 termination n Shutdown.
-
-10. Can Reserved Instances be migrated to different Region?
+facts about govCloud?

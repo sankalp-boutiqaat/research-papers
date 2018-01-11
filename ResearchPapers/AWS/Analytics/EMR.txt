@@ -14,7 +14,7 @@ fully managed by AWS.
 EMR Workflow:
 -------------------
 1. data stored in S3, Redshift, Dynamo, RDS is passed to EMR.
-2. This data is Mapped to cluster of Master/S;ave nodes for processing.
+2. This data is Mapped to cluster of Master/Slave nodes for processing.
 3. Now this mapped data is processed using computations defined by your custom code logic.
 4. This processed data is reduced to single output, which is returned back.
 
