@@ -10,7 +10,13 @@
       - No. of running shards.
       - no. of Data PUT requests made to kinesis stream, where 256KB is the size considered.
     EMR: 
-       
+    API Gateway:
+      - No. of API calls
+      - Amount of data transferred out.
+    ElasticBeanStalk: No Price. Only the provisioned resources are charged.
+    Cloudformation: No Price. Only the provisioned resources are charged.
+
+           
 
 
 6. Check all the limits applicable on Resources.

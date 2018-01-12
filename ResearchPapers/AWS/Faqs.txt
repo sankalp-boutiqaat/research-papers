@@ -16,15 +16,6 @@ CloudFront:
 4. Only GET Requests are cached and served by edge locations. PUT/POST/PATCH/OPTIONS/DELETE etc are served directly via origin servers.
 5. 
 
-2. Can EBS volumes be transferred to different AZ and Region?
-    - EBS volumes are specific to a availability zone. i.e an EBS volume existing in availability zone A can only be assigned to 
-      a EC2 instance residing on the same availability zone.
-      In case, you want to assign the EBS volume to an EC2 running in different AZ, you first need to create a 
-      snapshot of the EBS volume. Then from that snapshot you need to create a new EBS volume which resides in the required AZ.
-
-      Incase, you want to assign the EBS volume to an EC2 residing in entirely different region.
-      You need to create a snapshot of the EBS volume, then the snapshot can be copied to the required region.
-      Then from that snapshot you need to create a new EBS volume and assign it to the required EC2.
 
 3. What is origin Access Identity?
     - A special user assiged to Cloudfront that has access to S3 objects.
@@ -33,9 +24,6 @@ CloudFront:
     - YES. This is absolutely necessary. Simply setting the route to IGW will send all data to BLACKHOLE, if the IGW is not
     attached to a VPC.   
 
-5. Can a EBS volume be detached from one running EC2 instance and attached to another.
-   - NO. If its a root volume of the EC2 instance it cannot be detached.
-   - YES. If its not a root volume for the EC2 instance.
 
 6. Can Reserved Instances be migrated to different Region?
    - NO.Reserved instances can be moved between availability zones of same region. But, they cannot be moved to other Region.
@@ -48,29 +36,166 @@ CloudFront:
        - EC2 Stop option is only available for instances whihc have EBS volume as its root volume.
        - Stopping an EC2 does not delete the EBS volumes attached to the instance. However, termination provides this option.
     - NOTE that both options completely deletes the virtual machine assigned to you.
-             
-10. What will happen incase a EMR cluster is terminated?
+
+#EBS FAQ's
+----------------
+1. Can EBS volumes be transferred to different AZ and Region?
+    - EBS volumes are specific to a availability zone. i.e an EBS volume existing in availability zone A can only be assigned to 
+      a EC2 instance residing on the same availability zone.
+      In case, you want to assign the EBS volume to an EC2 running in different AZ, you first need to create a 
+      snapshot of the EBS volume. Then from that snapshot you need to create a new EBS volume which resides in the required AZ.
+
+      Incase, you want to assign the EBS volume to an EC2 residing in entirely different region.
+      You need to create a snapshot of the EBS volume, then the snapshot can be copied to the required region.
+      Then from that snapshot you need to create a new EBS volume and assign it to the required EC2.
+
+
+2. Can a EBS volume be detached from one running EC2 instance and attached to another.
+   - NO. If its a root volume of the EC2 instance it cannot be detached.
+   - YES. If its not a root volume for the EC2 instance.
+
+
+#EMR FAQ's
+-----------------             
+1. What will happen incase a EMR cluster is terminated?
       - All the provisioned EC2 nodes master/slave for the cluster will be terminated.
       - All the cluster data stored in S3 will be deleted.
 
-11. Do I need to manually terminate the EMR cluster?
+2. Do I need to manually terminate the EMR cluster?
      - No. The cluster and all its resources are automatically destroyed once jobs finish processing.
      However, you can choose to not to do so and then you will need to manually terminate cluster.              
 
-12. Do EMR cluster nodes makes use of multi-AZ?
+3. Do EMR cluster nodes makes use of multi-AZ?
     - No. All the nodes in a cluster is launched in single AZ.
 
-13. Can my EMR recover if master/slave node is down?
+4. Can my EMR recover if master/slave node is down?
    - No. Incase the master node is down, AWS cannot recover it for you. You need to manually restart it.
    - But if only the slave node is down it can automatically fix it.
 
-14. Can I SSH into my EMR nodes?
+5. Can I SSH into my EMR nodes?
    - You can SSH into Master node directly. For Slave nodes, you first need to SSH into master and then in Slave.
 
-15. EMR: Can I modify number of Slave Nodes in a Running CLuster?
+6. EMR: Can I modify number of Slave Nodes in a Running CLuster?
    - There are two types of slave nodes:
        Core Nodes: These execute JObs as well as store data in HDFS.
        Task Nodes: These only execute jobs.
    - Core Nodes can only be increased. Task Nodes can be increased as well as decreased.
 
-16.                  
+#SWF:
+----------------------
+
+#Kinesis FAQ's
+-----------------------
+
+#API Gateway:
+-----------------------
+1. Can I use HTTPS endpoints ?
+   - You will be surprised to know that, API Gateway only supports HTTPS endpoints and does not support unencrypted HTTP endpoints.
+
+2. Can I use authorization with API's created in API Gateway?
+   - YES. You can either use "AWS signature version 4" or can use custom authorizer.
+
+3. How does "Aws signature version 4" work ?
+  - IN this, each request sent to API gateway is signed with the ACCESS ID and ACCESS KEY. This ID and Key can be of specific
+  user which has access to API gateway through IAM policies.
+
+4. How does "Custom Authorization" work ?
+  - For Custom Authorization, Lambda functions are used.
+  - API gateway checks upon receiving request that a custom authorizer is configured or not. If its configured, it 
+    send the request to Lambda function to authorize the request.
+
+5. If my Backend service is running on EC2, will the API Gateway make private calls to my Backend Service ?
+  - API Gateway never makes a Private call to backend service, no matter whether your service is running within a VPC or outside of it.
+  - IT Always make Public calls. Thus, your backend service must have Public endpoints exposed.
+
+6. How will I ensure that the Requests made to my backend are from API gateway ?
+  - API gateway generates a SSL certificate and make the Public key of the certificate avilable to you.
+    You can use this Public key to verify that the request has originated from API gateway.  
+
+7. I know API gateway provides caching option, but can I Invalidate cache manually?
+  - YES. API gateway exposes endpoints to invalidate cache, even for specific resources.
+
+#CloudFormation:
+---------------------------
+1. Can I use ELasticBeanstalk inside of Cloudformation template?
+  - YES.
+
+2. What will happen incase Cloudformation fails to create a certain resource. WIll I be left in a unstable state?
+  - NO. All the created resources upto the point will be DELETED.
+
+3. Can I create a entirely new VPC from cloudformation template?  
+  - YES.
+
+#ELasticBeanstalk:
+-----------------------------
+Nothing
+
+#LAMBDA:
+------------------------------
+1. Where is the AWS lambda code stored?
+  - Lambda code is stored in S3.
+
+2. Can I use child threads and processes in lamda function?
+   - YES. Almost all the OS specific features are available.
+
+3. My Lambda needs to access and store some data. Can I do that?
+   - YES. You can use webservices to do that.
+   - S3, Dynamo all provide access to data through web service.
+
+4. What are some restrictions applied on Lambda?
+   - Lambda's do not accept any Inbound Connections.
+   - Only TCP/IP Outbound connections are supported.
+   - PORT 25 is blocked.
+
+5. Can I use Environment variables with Lambda?
+   - YES. you can access as well modify them.
+
+6. How do I allocate resources to Lambda function?
+   - You can only chose the Amount of Memory required by your code to execute.
+   - Rest all the resources are automatically allotted based on the Memory size chosen.
+
+7. Will my Lambda function execute infinitely, if I write a never ending loop?
+   - NO.
+   - Max. time for execution is 300 Seconds.
+   - Default is 3 Seconds.
+
+8. How can I invoke a Lambda function using HTTPS?
+   - For this you make use of API gateway.
+   - API Gateway will provide you a HTTPS endpoint, which can execute lambda function.
+
+9. what will happen if my lambda code crashes when responding to an event.
+   - The code is retried thrice.
+
+10. What if it crashes even after retries?
+   - In such case, you can configure a "Dead Letter Queue".
+   - Events that gets failed even after retries will be put in this queue. This Can be a SQS queue or a SNS topic.
+   - If the Queue is not configured, event is discarded.       
+
+11. How do I access S3 object in my Lambda?
+  - To access AWS resources permissions needs to be granted using IAM.
+  - In this case, you need to create an IAM role that has access to the required S3 bucket.
+    Then, Lambda can assume that role in order to access S3 objects.
+
+12. Can I access my RDS sitting in private subnet from lambda function?
+  - Well, Lambda functions cannot access VPC resources through their private IP's. By default. But you can Enable this configuration.
+  - Enabling the configuration requires that you chose proper Subnet and Security Group for your Lambda as well.
+  - The tradeoff it brings is that, Lambda will not be able to access Open Internet as like before.
+  - If it needs to access open internet like before, you will need to Set Up NAT for it.
+
+13. Can My Lambda Access resources from two different VPC's?
+   - NO. It will only be able to access the resources of VPC you chose to place lambda in.
+
+14. Can I chose the OS on which lambda is to be run?
+   - YES.   
+
+
+
+
+
+
+
+
+
+
+
+

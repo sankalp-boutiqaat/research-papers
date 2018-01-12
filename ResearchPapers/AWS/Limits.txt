@@ -1,1 +1,15 @@
 - You can provision only 20 cluster nodes from your account.
+
+
+Cloudformation:
+------------------
+1. There is no limit on number of templates but you can have only 200 stacks.
+2. Description fields cannot be more than 4096 chars.
+3. You can have no more than 60 Params in template.
+
+
+Lambda:
+----------------
+1. You can upload max of 50MB zipped code file.
+2. There is a limit on number of lambda functions that can be executed concurrently per account.
+ 
