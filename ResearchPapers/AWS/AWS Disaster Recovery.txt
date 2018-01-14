@@ -78,39 +78,4 @@ At the time of disaster, the size of the resources are scaled up and out so that
 This is the next step to Warm-StandBy, the resources required by application are not only kept active but is also serving production
 load.
 When a disaster strikes, the rest of the traffic that was served by the on-premise infrastructure is also routed to this infrastructure.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   

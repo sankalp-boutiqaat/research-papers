@@ -26,3 +26,11 @@
 does it delete only root EBS on termination or all associated EBS?
 
 facts about govCloud?
+
+
+SQS: What is the max. queue limit?
+SQS: How can can message reside in queue?
+IAM: Can we have policies based on the tags assigned to resources?
+EC2: Revisit difference b/w shutdown, stop and terminat?
+Placement Group FAQ?
+
