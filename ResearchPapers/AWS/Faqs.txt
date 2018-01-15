@@ -275,6 +275,49 @@ Nothing
 23. Can I attach a Network Interface residing in one AZ to an EC2 running in another AZ?
    - NO. They can only be assigned to EC2 running in same AZ.    
 
+24. Will I be charged for a Elastic IP that is attached to Network Interface but interface is not attached to any EC2?
+   - YES.
+
+25. Can I detach primary interface(eth0) from EC2?
+   - NO. You can detach secondary interfaces but not primary.
+
+26. Can two VPC's living in different regions be peered together?
+   - YES.
+
+27. Can VPC's residing in two different AWS accounts be peered?
+   - YES.
+
+28. Can I use VPN connection to access resources of the VPC I am peered with?
+   - NO.
+
+29. Does VPC peering require IGW?
+   - NO.
+
+30. Difference b/w same Region and inter-region VPC peering?
+   - Traffic in Inter region peering is encrypted.
+   - Inter-Region VPC does not support IPv6 addresses.
+   - Network Load balancers, Elastic File System, AWS private link not supported in Inter-Region VPC.
+
+31. What if my peering connection goes down, will AWS send data over internet?
+   - It is High-Avaliable and reduntant network, so AWS says it cannot fail.
+   - Even though if it fails data will not be transferred over internet.
+
+32. If I peer VPC A to VPC B and I peer VPC B to VPC C, does that mean VPCs A and C are peered?   
+   - NO. Transitive peering is not supported.
+
+33. What is AWS Private link?
+   - Private link is a way to Access AWS services which are not VPC specific such as S3, DynamoDB over the private network 
+     provided by AWS.
+
+34. How does Private Link work?
+   - Firstly, you will need to create service endpoints for the service you wish to use over private link.
+     A service Endpoint is a Elastic Network Address containing private IP for the service to be used.
+     Any, traffic destined to this Private IP will be routed to corresponding Service over private link.
+     
+            
+
+
+
 
 
 

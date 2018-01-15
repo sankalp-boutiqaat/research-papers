@@ -16,6 +16,7 @@
     ElasticBeanStalk: No Price. Only the provisioned resources are charged.
     Cloudformation: No Price. Only the provisioned resources are charged.
     VPN: Billed based on hours its in "available" state.
+    VPC Peering: Only data transfer is charged.
     
 
            
