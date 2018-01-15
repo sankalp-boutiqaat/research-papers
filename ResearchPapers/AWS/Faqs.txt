@@ -189,6 +189,158 @@ Nothing
    - YES.   
 
 
+#VPC:
+---------
+
+1. What is a VPC endpoint?
+   - Provides private connection to services hosted in AWS, from inside of a VPC without using IGW, NAT, VPN etc.
+   - Can be used to connect privately to ELB, S3, DynamoDB.
+
+2. Can a EC2 sitting in public subnet, but not having public IP access internet without NAT or VPG?
+   - Need to check.
+
+3. How can EC2 access internet using VPN/VPG?
+    - The EC2 can route internet traffic to VPG, which can further route it to datacenter. From there it can access Internet.
+
+4. What is the difference b/w hardware and software VPN connection?
+   - The software VPN makes use of Internet Gateway for the connection.
+   - Hardware VPN makes use of VPG instead.
+
+5. What is the maximum throughput of a VPN connection?
+   - 1.25 Gbps (when using VPG) 
+   - If you are using multiple VPN connections to the same VPC. Then this is the combined limit.
+
+6. What IP address do I need to use for Customer gateway(CGW)?
+   - The Public IP address of the NAT device.              
+
+7. What is the CIDR block range assigned to default VPC?
+   - 172.31.0.0/16
+
+8. Max no. of hosts allowed by AWS?
+   - /16 = 2 ^ 16 = 65536
+
+9. Min no. of hosts allowed in VPC?
+   - /28 = 2^4 = 16
+
+10. Max number of subnets inside a VPC?
+   - 200
+
+11. Can I use all IP addresses from CIDR block range of subnet as host addresses?          
+   - NO. First 4 and last 1 IP is reserved by AWS.
+
+12. Can I assign multiple private IPs to an EC2 instance?
+   - YES.
+
+13. Can I change the private IP address of the running EC2?
+   -  You cannot change the primary private IP of EC2 till the lifespan of the EC2.
+   -  You can remove and attach secondary private IPs whenever you want.
+
+14. Can I attach the Ip address of a stopped EC2 to another EC2?
+   - NO. Ip address assigned to an EC2 can be used by another EC2 only when the previous one is terminated.
+
+15. Can I assign multiple Elastic Ips to single EC2?
+   - YES.
+   - However, communication to Elastic IPs are done only over IGW and not VPN or NAT.
+
+16. Does VPC support multicast or broadcast?
+   - NO.
+
+17. Can an EC2 in one region communicate with another EC2 in another Region?
+   - YES. They can use following means of communication:
+       - Can communicate through IGW.
+       - NAT gateway/instances
+       - VPN 
+       - AWS Direct Connect.
+       - Inter-region VPC peering.
+
+18. What are the ways in which my EC2 can communicate with S3?
+   - VPC Endpoints for private network access.
+   - IGW for access over internet.
+   - DIrect Connect
+   - VPN
+
+19. DOES AWS allows PING request?
+   - FOR EC2 YES.
+   - FOR Default gateway NO.
+
+20. How many Default VPC's can I have?
+   - You can have 1 default VPC per region.
+
+21. Can I delete a default VPC or subnet?
+   - YES. 
+
+22. Can I attach or detach Network Interfaces to EC2 while its running?
+   - YES.
+
+23. Can I attach a Network Interface residing in one AZ to an EC2 running in another AZ?
+   - NO. They can only be assigned to EC2 running in same AZ.    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

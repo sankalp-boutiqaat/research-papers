@@ -15,6 +15,8 @@
       - Amount of data transferred out.
     ElasticBeanStalk: No Price. Only the provisioned resources are charged.
     Cloudformation: No Price. Only the provisioned resources are charged.
+    VPN: Billed based on hours its in "available" state.
+    
 
            
 
@@ -27,10 +29,15 @@ does it delete only root EBS on termination or all associated EBS?
 
 facts about govCloud?
 
+-SQS: What is the max. queue limit?
+-SQS: How can can message reside in queue?
+-IAM: Can we have policies based on the tags assigned to resources?
+-EC2: Revisit difference b/w shutdown, stop and terminat?
+-Placement Group FAQ?
 
-SQS: What is the max. queue limit?
-SQS: How can can message reside in queue?
-IAM: Can we have policies based on the tags assigned to resources?
-EC2: Revisit difference b/w shutdown, stop and terminat?
-Placement Group FAQ?
+Check can I access internet when a EC2 with only private IP is placed in public subnet?
+Need to check the relation b/w ElasticIP and private IP.
+
+ 
+
 
