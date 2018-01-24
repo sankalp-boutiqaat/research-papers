@@ -17,6 +17,7 @@
     Cloudformation: No Price. Only the provisioned resources are charged.
     VPN: Billed based on hours its in "available" state.
     VPC Peering: Only data transfer is charged.
+    ECS: No Price. Only charged for Resources like (EC2 and EBS)
     
 
            

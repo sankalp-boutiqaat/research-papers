@@ -1,39 +1,50 @@
-1. RDS: A read replica can be promoted to a master.
-        You can have reserved RDS instances.
-2. SNS: Can send push Noifications to IOS/Android.
-3. A SWF workflow and task can last for 1 year.
-4. PORT SCANNING on EC2 machines is disabled and requires AWS permissions to do so.
-5. Elastic IP can be used in one specific VPC only.
-6. Reserved Instances can be migrated from one AZ to another.
-7. SWF workflow can include tasks to be performed by on-premise servers and humans.
-8. HSM appliance should be located near EC2 machines to reduce cost. 
 
+#General FAQ's
+-----------------
 
-CloudFront:
-1. Cloudfront caches each object for 24 hours in case no TTl is supplied in headers. The minimum expiration time in 0 sec.
-2. Cloudfront: The transfer from Edge location to client begins as soon as first byte is received from origin server or Regional Caches.
-3. S3 origin does not support Regional Edge caches. They are supported only for custom origins like: HTTp server.
-4. Only GET Requests are cached and served by edge locations. PUT/POST/PATCH/OPTIONS/DELETE etc are served directly via origin servers.
-5. 
+1. RDS: Can A Read replica be promoted to Master?
+  - YES.
 
+2. Can I have Reserved RDS instances as like Reserved EC2 Instances?
+  - YES.  
 
-3. What is origin Access Identity?
+3. Can I send Push Notifications to IOS and Android using SNS?
+  - YES.
+
+4. How Long can a SWF workflow/task last?  
+  - A SWF workflow and task can last for 1 year. 
+
+5. Can I scan Ports on EC2 machines?
+  - PORT SCANNING on EC2 machines is disabled and requires AWS permissions to do so. 
+
+6. Can I use Elastic IP created in one region in another region?
+  - Elastic IP can be used in one specific VPC only. 
+
+7. Can I migrate my Reserved Instance to another AZ?
+  - YES.
+
+8. Can a SWF workflow incluse tasks to be performed by On-Premise servers?
+  - SWF workflow can include tasks to be performed by on-premise servers and humans. 
+
+9. What is the best place to locate HSM appliance for an application? 
+  - HSM appliance should be located near EC2 machines to reduce cost. 
+
+10. What is origin Access Identity?
     - A special user assiged to Cloudfront that has access to S3 objects.
 
-4. Do we need to explicitely attach IGW to vpc or simply setting route to IGW is fine.
+11. Do we need to explicitely attach IGW to vpc or simply setting route to IGW is fine.
     - YES. This is absolutely necessary. Simply setting the route to IGW will send all data to BLACKHOLE, if the IGW is not
     attached to a VPC.   
 
+12. Can Reserved Instances be migrated to different Region?
+   - NO. Reserved instances can be moved between availability zones of same region. But, they cannot be moved to other Region.
 
-6. Can Reserved Instances be migrated to different Region?
-   - NO.Reserved instances can be moved between availability zones of same region. But, they cannot be moved to other Region.
-
-7. Can we modify Instance Type of Reserved Instance?
+13. Can we modify Instance Type of Reserved Instance?
    - YES. Convertible Reserved Instances allow you to modify instance type of the Reserved Instances.
 
-9. Difference b/w EC2 termination and EC2 Stop.
+14. Difference b/w EC2 termination and EC2 Stop and EC2 Shutdown.
     - These 2 features are very very similar to each other, with only certain notable differences.
-       - EC2 Stop option is only available for instances whihc have EBS volume as its root volume.
+       - EC2 Stop option is only available for instances which have EBS volume as its root volume.
        - Stopping an EC2 does not delete the EBS volumes attached to the instance. However, termination provides this option.
     - NOTE that both options completely deletes the virtual machine assigned to you.
 
@@ -81,11 +92,13 @@ CloudFront:
        Task Nodes: These only execute jobs.
    - Core Nodes can only be increased. Task Nodes can be increased as well as decreased.
 
-#SWF:
+#SWF FAq:
 ----------------------
+Take from doc.
 
 #Kinesis FAQ's
 -----------------------
+Take from doc.
 
 #API Gateway:
 -----------------------
@@ -187,7 +200,6 @@ Nothing
 
 14. Can I chose the OS on which lambda is to be run?
    - YES.   
-
 
 #VPC:
 ---------
@@ -313,8 +325,131 @@ Nothing
    - Firstly, you will need to create service endpoints for the service you wish to use over private link.
      A service Endpoint is a Elastic Network Address containing private IP for the service to be used.
      Any, traffic destined to this Private IP will be routed to corresponding Service over private link.
-     
-            
+
+#RDS:
+------------
+1. Can I choose when a maintenance is to be performed on my Db Instance?
+  - You can Schedule a Weekly maintenance window.
+
+2. Why does my backup storage costs more than allotted Db iNstance store?
+  - Backup's needs to be stored on different availability zone which requires geo-transfers.
+
+3. Can I move RDS reserved instance from one Region or AZ to another?
+  -  RI's are fixed to a single Region and cannot be moved.
+  -  You can change the AZ as per your wish though.
+
+4. Can a Read replica be a Reserved Instance?
+  - YES.
+
+5. Can I modify the Instance type of the Database Instance?
+  - Yes, you can modify the Instance type of a running instance and the changes will be applied immediately.
+  - The instance will Shutdown during this period.
+
+6. Do I need to manually create database backups or are they automated?
+  - RDS provides Automated Backups and this feature is enabled by default.
+
+7. How long does the backups are retained?
+  - Backup data is kept for 7 days and can be extended upto 35 days.
+  - This period is called as retention period.
+
+8. Can I turn off Automated backups?
+  - Configuring Retention Period to ZERO days, turns off automated backups.
+
+9. What is the difference b/w Automated backups and DB Snapshots?
+  - Db Snapshot: is a point in time snapshot of the database instance (stored in S3). Using Snapshot one can restore Db Instance 
+         to the point that snapshot was taken.
+  - Automated Backup: It performs a snapshot of full database daily at a Scheduled backup window. Any updates made to database after the 
+         time of snapshot are stored as transaction logs. 
+         This allows you to restore your database to any point in time and not only to the point at which snapshot was taken.
+
+10. What happens to these backups and snapshots, when the database Instance itself is deleted?
+  - All the automated backups and snapshots are deleted as well.
+  - Only manually created snapshots are retained. 
+
+11. Can I encrypt connection b/w my application and RDS instance?
+  - YES. RDS provides ssl support.
+
+12. Can my standby RDS be provisioned in different Region than primary?
+   - NO. They both needs to be in same Region but different AZ.
+
+13. After failover my primary is in different AZ than my other resources. Should I be worried about latency?
+   - NO. data transfer b/w AZ of same region is fast.
+
+14. Can I create a Read-Replica in the Region different from the one of Primary and Standby Instances?
+    - YES.
+
+15. How many Read Replicas can I have?
+    - 5 for MYsql and 15 for Aurora.
+
+16. Can I create a Read replica from another read-replica?
+   - Yes.
+
+17. Can a Read-Replica only accept read connections?
+   - Mostly. But you can configure them to allow for DDL statements, like index creation.
+
+18. Can I promote a Read-Replica to primary?
+   - YES.
+
+19. Can I take a snapshots from a READ-REPLICA?
+  - NO.
+
+20. Will a Read-Replica is deleted automatically, if its source DB is deleted?
+   - NO. The read replica will continue to respond to read requests.
+   - One of the read-replica will be promoted to act as primary.
+
+21. Is it mandatory to enable Automated Backup support in order to use Read-Replica feature?
+   - YES.
+
+#EBS:
+-------------
+1. Does the IO Size of my request affect the throughput I get from my EBS or HDD?
+    - YES. Each IO is breaked into chunks of 256KB, so if the IO size increases more chunks are to be created and
+       to user it will appear that less requests are processed.
+
+2. Can I access the EBS snaphots stored in S3 using regular S3 API?
+    - NO. you will need to use EC2 API for this.
+
+3. Do I need to unmount a EBS volume before taking a snapshot?
+    - NO. 
+    - But as a best practice, you should detach the volume before taking the snapshot and then reattach it.
+    - Incase its a root volume, shutdown the EC2 take snapshot and start it again.
+
+4. Does a snapshot of 16TB Volume takes more time than that of 1 TB volume?
+    - NO.
+
+                        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
