@@ -237,13 +237,29 @@ Socket servers can be placed into different categories based on how they handle 
 SEE section 61.
 system limits:
 https://unix.stackexchange.com/questions/12985/how-to-check-rx-ring-max-backlog-and-max-syn-backlog-size
-Scoket Backlog Q size => Imp as if Q is full connections need to wait and may be discarded too. /proc/sys/net/core/somaxconn
+
+TCP Socket Backlog Q size => Imp as if Q is full connections need to wait and may be discarded too. 
+ss -t -l => Send-Q shows the max size.
+Also, max size can be seen in /proc/sys/net/core/somaxconn
+ss -lti '( sport = :http )' => unacked column shows rejected requests due to backlog queue fill up.
+
+
 MTU => data is broken into frames of this size by network interface before sending to physical layer. Can be seen in ifconfig.MTU is in bytes
 Ephemeral port range: /proc/sys/net/ipv4/ip_local_port_range 
 Topics:
 How is the server chosen when getaddrinfo() returns multiple ips.
 Ans: First is chosen if first doesnot work it goes to second one.
-[`dnsmasq` automatically round robins b/w returned ips, so even if dns result is cached round robin works]    
+[`dnsmasq` automatically round robins b/w returned ips, so even if dns result is cached round robin works]   
+
+Good read on scalability.
+https://github.com/binhnguyennus/awesome-scalability 
+
+https://blog.packagecloud.io/eng/2016/06/22/monitoring-tuning-linux-networking-stack-receiving-data/
+
+TCP backlog working:
+http://veithen.github.io/2014/01/01/how-tcp-backlog-works-in-linux.html
+
+standard tcp states?
 
 
 
