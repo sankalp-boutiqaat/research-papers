@@ -184,8 +184,17 @@ pg: 1261
 sendfile() syscall provides a way to do all of the above described task in single syscall:
       sendfile(in, out)
 Following is the visualization of the same:
+
+
 pg: 1261	  
  
+
+
+
+
+
+
+
 //todo: tcpcork/tcpnodelay socket option? //Seems a good option need to read few blogs:
 http://baus.net/on-tcp_cork
 //todo: what is nagle algorithm and how its related to these options.??

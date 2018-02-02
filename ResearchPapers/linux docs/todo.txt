@@ -1,0 +1,5 @@
+- library functions vs system calls?
+
+- what does server see when client closes connection before response retrieval (timeout).
+
+- How does server verify that data has reached client? http
