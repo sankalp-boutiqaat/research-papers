@@ -169,3 +169,12 @@ EMR:
  - You can launch only 20 instances as a whole.
  
      
+RDS:
+----------------
+1. How many Database instances can I run from my account?
+  - 40
+2. How many Reserved Instances can I purchase?
+  - 40
+
+3. What is the max number of Databases that my Database Instance can host?
+  - No Limit.
