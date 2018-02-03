@@ -15,7 +15,10 @@ As invalidating takes time and has its own cost.
 
 You can decide the caching period of objects.   
 
-Origin Servers: Origin Servers are the actual source of the objects that needs to be disributed through Cloudfront.
+Components:
+------------------
+
+Origin Servers: Origin Servers are the actual source of the objects that needs to be distributed through Cloudfront.
 A origin server can be a S3 bucket or a custom HTTP Server.
 Cloud Front works only with HTTP and RTMP protocols.
 RTMP (Real Time Messaging Protocol) : Used in Adobe Flash.
@@ -23,8 +26,9 @@ RTMP (Real Time Messaging Protocol) : Used in Adobe Flash.
 If your origin server is S3, you need to make objects publicly accessible so that Cloudfront can access them. 
 We will see a wayaround in "Serving Private Content through Cloudfront".
 
-Configurations are maintained per distribution basis. So, for each distribution a seperate domain is allocated via cloudfront.The domain
-is of the format:
+Configurations are maintained per distribution basis. 
+So, for each distribution a seperate domain name is allocated via cloudfront.
+The domain name is of the format:
 http://d111111abcdef8.cloudfront.net/logo.jpg
 However, we can setup our custom domain with a CNAME record, so that we can point our custom domain to the domain provided by cloudfront distribution.
 This way, we can point something like:

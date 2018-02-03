@@ -4,19 +4,22 @@ AWS Direct Connect:
 AWS direct connect is a service that provides dedicated Network connection b/w your on-premise network and AWS network.
 This is done through an authorized Direct Connect Provider (i.e Verizon or other ISP's)
 
-It is similar to VPN except that in VPN the data needs to travel through several 3rd party routers and in direct connect andedicated
+It is similar to VPN except that in VPN the data needs to travel through several 3rd party routers and 
+in direct connect andedicated
 transfer line is provided.
 Fig:1:00
 
 The Dedicated line provided by Direct connect Partner will be for a specific Region and can be used with only
-that particular region. However, if there are multiple VPC's within that region, all of them can make use of the dedicated line.
+that particular region. 
+However, if there are multiple VPC's within that region, all of them can make use of the dedicated line.
 
 
 Direct Connect benefits:
 -------------------------------
 1. Reduce Network costs:  Data transferred over Direct connect is billed at lower rate by Amazon.
 2. Low Latency and High Consistency: As its a dedicated transfer line.
-3. Dedicated private network connection b/w on-premise and AWS network: data does not need to travel over multiple 3rd party routers.
+3. Dedicated private network connection b/w on-premise and AWS network: 
+data does not need to travel over multiple 3rd party routers.
 
 
 Fig: 3:57

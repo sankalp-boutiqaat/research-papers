@@ -6,7 +6,8 @@ It allows you to easily create and manage multiple docker containers on a cluste
 
 Why use ECS or containers?
 -------------------------------
-It allows for microservice service architecture where each task(microservice) is independently deployable, managable and Scalable.
+It allows for microservice service architecture where each task(microservice) is independently deployable, 
+managable and Scalable.
 
 How it works?
 -----------------------------
@@ -17,7 +18,8 @@ The role of this ECS agent is to start or stop docker container when asked.
 IMP: Containers are known as tasks in ECS terminology. 
 
 Each Task/container has a definition file associated to it, called as task definition file. 
-A task definition file is a JSON formatted file that contains information about how a task/container is to be started. It contains:
+A task definition file is a JSON formatted file that contains information about how a task/container is to be started. 
+It contains:
  - Which docker image to use.
  - On which repository image is located
  - Which ports will be used by container
