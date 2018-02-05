@@ -90,7 +90,7 @@ main(int argc, char *argv[])       /* Allocated in frame for main() */
   exit(EXIT_SUCCESS);
 }
 
-Creating New/Child Processes:
+Creating New/Child Processes: 
 ----------------------------
 A parent process can create new process by using the "fork()" system call. Such a process is called Child Process.
 The child process is a exact copy of the parent process, this copy includes: Parents Stack, Heap, Text Segment, Initialized Data Segment.
