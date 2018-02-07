@@ -3,3 +3,6 @@
 - what does server see when client closes connection before response retrieval (timeout).
 
 - How does server verify that data has reached client? http
+
+Good article, must read.
+https://www.toptal.com/back-end/server-side-io-performance-node-php-java-go

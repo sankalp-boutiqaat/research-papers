@@ -10,6 +10,10 @@ netstat -telnup
 #getbandwidth details.
 
 
+How to get the kernel version?
+uname -r
+
+
 
 
 

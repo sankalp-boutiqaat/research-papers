@@ -1,0 +1,123 @@
+Inotify is a mechanism that allows us to monitor events on files and directories.
+
+Following are some examples of events:
+  - A file is opened for reading.
+  - Content of a file is changed.
+  - File is deleted.
+  - file is moved to another directory
+  and many more.
+
+Steps for usage of inotify API:
+---------------------------------------
+
+1. First you need to create an inotify instance. This is done using "inotify_init()" call.
+inotify_init() : This call creates an instance of inotify and returns a file descripter pointing to it.
+     This file descripter is used in rest of the calls as an identifier for inotify object.
+
+
+2. Now you need to specify the files that needs to be watched for events, along with specifying the events to be watched for.
+   This is done using the "inotify_add_watch()" call. 
+
+3. Once you have specified the items to be watched for, you just need to call "read()" function on the inotify descriptor.
+   the read() call is a blocking call and will block till it does not have any event.
+
+4. When you are done with your job, just close the inotify descriptor and it will remove all associated descriptors.
+
+Inotify for directories:
+------------------------------
+inotify can as well be used to monitor a directory. In such a case, you will be notified about the events of directory
+as well as abou the files inside the directory. However, this is "not recursive". 
+So, if you want to monitor a whole directory subtree than you need to specify each directory in the watch list.
+
+Using select, poll, epoll:
+--------------------------------
+Apart from using the read() call, select, poll and epoll can also be used to monitor inotify descriptor.
+
+List of Events:
+--------------------------------
+Following are the list of Events that can be watched for:
+
+IN_ACCESS        : File was accessed.
+IN_ATTRIB        : File metadata was changed.
+IN_CLOSE_WRITE   : File opened for writing was closed.
+IN_CLOSE_NOWRITE : File opened in readonly mode was closed.
+IN_CREATE        : File/Directory created inside watched directory.
+IN_DELETE        : File/Directory deleted inside watched directory.  
+IN_DELETE_SELF   : Watched File/Directory was itself deleted.
+IN_MODIFY        : File was modified
+IN_MOVE_SELF     : watched file/directory is moved.
+IN_MOVE_FROM     : File moved out of watched directory.
+IN_MOVE_TO       : File moved into watched directory.
+IN_OPEN          : File was opened.
+
+inotify_add_watch() and inotify_rm_watch():
+---------------------------------------------
+"inotify_add_watch" has following signature:
+  int inotify_add_watch(int fd, const char *pathname, uint32_t mask);
+      fd       => file descriptor returned by inotify_init() call.
+      pathname => file/directory path to be monitored.
+      mask     => bitmask of events to be monitored.
+Return Value: A "Watch descriptor", this is used to identify this watch in return values of read() call.
+So, for two different files to be monitored we will have two different watch descriptors.
+
+"inotify_rm_watch" has following signature:
+ int inotify_rm_watch(int fd, uint32_t wd);
+   fd => file descriptor returned by inotify_init() call.
+   wd => Watch descriptor to be removed from watch.
+Return value: returns 0 on success and -1 on error.     
+
+Todo: take fig on page 377.
+
+A Code Example:
+-------------------------------
+
+Following is a code example in PHP. It shows how two files "a.txt" and "b.txt" can be monitored for changes.
+
+<?php
+
+if (!function_exists('inotify_init')) {
+	echo "It seems that inotify is not installed";
+	exit;
+}
+
+$fd = inotify_init();
+
+$wdA = inotify_add_watch($fd, "a.txt", IN_MODIFY);
+$wdB = inotify_add_watch($fd, "b.txt", IN_MODIFY);
+
+while (1) {
+  $eventData = inotify_read($fd); 
+  echo "Event Occurred:".PHP_EOL;
+  print_r($eventData);  
+}
+
+fclose($fd);
+?>
+
+
+OUTPUT:
+Event Occurred:
+Array
+(
+    [0] => Array
+        (
+            [wd] => 1
+            [mask] => 2
+            [cookie] => 0
+            [name] =>
+        )
+
+)
+
+CAUTION !!!: Some of the programs, such as VIM, deletes the original file during the process of performing write operation. 
+This leads the watch added on the file to be removed and throws event "IN_IGNORED". When writing programs such cases needs to be handled
+by re-adding the corresponding watch.
+
+
+
+
+
+
+
+
+     
