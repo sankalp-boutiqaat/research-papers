@@ -1,4 +1,4 @@
-https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-reserved-instances.html
+
 
 Reserved Instances are not physical instances, and they are not even instances, they are just On-Demand instances with billing discount applied to them.
 These On-Demand Instances must match certain attributes in order to benefit from the billing discount.

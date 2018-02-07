@@ -21,15 +21,25 @@
     
 
            
-
-
-6. Check all the limits applicable on Resources.
-
 7. Can I attach multiple Security Group to one EC2.
+   YES.
 
-does it delete only root EBS on termination or all associated EBS?
+8. does it delete only root EBS on termination or all associated EBS?
+  ONLY Root EBS volume is deleted by default. By default no other volumes are deleted.
 
-facts about govCloud?
+9. EC2: Revisit difference b/w shutdown, stop and terminate, reboot?
+   - Shutdown is only an intermediate step to which instance is migrated before being finally Stopped, Terminated or Rebooted.
+   - Rebooting an instance is just like OS reboot. It does not decommisions the whole of virtual machine thus, 
+     Ip addresses and physical host remains same.
+   - Stopping an instance decommissions whole of virtual machine.Thus upon starting again the instance can be 
+     given another IP and host machine.
+     However, intanceID remains same.
+   - Termination is the baap of all and everything is decommissioned in this process.   
+
+
+
+
+
 
 -SQS: What is the max. queue limit?
 -SQS: How can can message reside in queue?

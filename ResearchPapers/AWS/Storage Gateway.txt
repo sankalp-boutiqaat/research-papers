@@ -1,0 +1,135 @@
+Storage gateway:
+-----------------------
+
+1. What are typical usecases of storage gateway?
+   - Backup and archiving.
+   - Disaster recovery
+   - Moving data to S3
+
+2. How Many types of Storage Interfaces are provided by Storage gateway?
+   - Storage Gateway provides 3 types of interfaces:
+      a: File gateway Interface
+      b: Volume gateway Interface
+      c: Virtual gateway Tape Interface.
+
+3. What is a File Gateway Interface?
+   - File gateway allows your existing applications to use "cloud storage" without any modifications.
+     File gateway makes your S3 buckets mountable as NFS mount points.
+     Any data written to these mount point is transferred to S3 bucket.   
+
+4. What is Volume gateway?
+  - Volume gateway also allows your application to use cloud storage but it makes use of iSCSI
+    (internet small computer systems interface)
+
+5. What sort of encryption does storage gatway provides?
+  - All data transferred b/w Gateway and AWS is transfeered over SSL.
+
+File gateway:
+--------------
+
+6. What protocols are supported by File gateway?
+   - NFS v3 and NFS v4.1
+
+7. How does file gateway access my S3 bucket?
+   - File Gateway uses IAM role to access S3 bucket.
+
+8. How does my application access FIle gateway?
+  - You need to mount file gateway to the on-premise server.
+
+9. What is the relationship b/w files on on-premise server and objects on S3?
+  - Files and objects share a one to one relationship i.e for each file one object is ceated in S3.
+  - The value of the object is file's content.
+  - the key/name of object is the path of file.ex: dir1/file.html
+
+10. Can I create symbolic links in file gateway?
+  - NO. Symbolic and hard links are not supported.
+
+11. S3 does not provide ability to rename an object, how is this managed when I will rename a file?
+  - In such a case, old objects data is copied to the object with new name and then the old object is deleted.
+
+12. How do I set content-type for files uploaded to S3?
+  - File gateway can guess the MIME types of files based on their extensions and can use it to set contenttype for object
+    in s3.
+
+13. can I have multiple reader and writers using different file Gateway to access same S3 bucket?
+   - Multiple Readers can read from a single S3 bucket without any issues.
+   - Multiple writers can write to the same bucket but this may cause data corruption as one writer can
+      overwrite the changes of another one since both are managed by different gateways.
+
+14. How will I know, when my file is uploaded to S3?
+   - When you write files to file share, its first stored in the local cache of the gateway and is then written
+     asynchronously to the S3 bucket.
+     You can configure cloudwatch alerts to notify you of the S3 object creation.
+
+15. How large of a file can I store using file gateway?
+   - File gateway supports max file size of 5TB. Which is the max allowed size by S3.
+
+16. Can I use Versioning, life-cycle policies, cross-region replication, S3 events with file gateway?
+   - YES.
+
+17. Can I use storage gateway to read and write files to S3 Glacier?
+   - You can use Bucket lifecycle policies to store files in Glacier.
+   - However, reading a file stored in glacier using file gateway will generate an IO error.
+
+18. Can I use file gateway to write files to EFS?
+   - NO. File Gateway can only be used to write files to S3.
+
+19. How should I decide which one to use File Gateway or S3 API?
+   - You should Use File gateway, when you want to use Objects in s3 as regular files and need to perform
+     file related activities on them.
+   - You should use S3 API, when your application does not need to treat S3 objects as files.
+
+20. How does File gateway manage its cache?
+   - File gateway stores the data to be written to AWS in locak disk cache.
+   - It also keeps the frequently accessed data in disk cache, to provide faster reads.
+   Data is evicted from disk cache only when space is needed to accomodate more recently used data.
+
+Volume Gateway:
+------------------
+
+21. Can I access te volume data stored in S3 using S3 API's?
+   - NO. You need to use volume gateway.
+
+22. How Can I create a EBS volume based on the data stored in Volume Gateway?
+   - For this, you can take a snapshot of the volume gateway and use this snapshot as the basis of EBS volume.
+
+23. Can I use a EBS snapshot as the starting point of my Storage Gateway?
+   - YES. you can start a new storage gateway using a SNAPSHOT.
+
+24. Do I need to unmount storage Gateway volume before taking a snapshot?
+  - NO.
+
+25. Does the read/write performance be degraded till the time snapshot is in progress?
+   - NO.
+
+26. Can I schedule time of snapshots?
+   - YES.
+
+27. How long does it takes to complete a snapshot?
+   - The time dependent on the size of volume and internet speed.
+   - AWS compresses data for snapshot before sending to AWS.
+
+28. can I access my snapshots from the S3 API?
+   - NO. Snapshots are accessible only from EBS API and Storage gateway.         
+
+------------------
+
+
+1. What is the difference b/w file gateway and volume gateway?
+   - In both the case data is stored in S3.
+     BUT, File gateway's data can be accessed using S3 API's
+     However, Volume Gateways data can only be accessed using EBS API's and not S3 API's.
+   - Volume gateways perform compression before sending data to AWS.
+     File gateways do not perform any such compression.
+
+2. Can I use AWS Direct connect with Storage Gateway?
+   - YES.
+
+3. Can I use CloudWatch for monitoring gateway cache performance?
+   - YES.
+   
+       
+
+
+
+

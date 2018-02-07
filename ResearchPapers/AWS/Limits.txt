@@ -1,5 +1,142 @@
-- You can provision only 20 cluster nodes from your account.
+VPC:
+--------------------
+1. How many VPC's can I have in one Region?
+  - 5 (five)
 
+2. How many IGW can I have in one Region?
+  - 5 (five)
+
+3. How many VPN connections can I have in one Region?
+  - 50 (fifety)
+
+4. How many Route Tables can I have in one Region?
+  - 200 (two hundred)
+
+5. How Many Elastic IPs can I have in one Region?
+  - 5 (five)
+
+6. How many securty groups can I have in one Region?
+  - You can have 500 Security groups in one VPC.
+  - You can have 5 VPC in one Region.
+   So, 500 * 5 = 2500 security groups per region.
+
+EBS:
+--------------------
+
+1. What is the Max. data block size as seen by AWS.
+  - 256KB
+
+2. How many IOPS does a General Purpose SSD allows?
+  - 3 IOPS/GB
+
+3. What is the minimum volume size supported by General purpose EBS?
+  - 1 GB
+
+4. What is the max. volume size supported by General Purpose EBS?
+  - 16 TB
+
+5. What is the Max. IOPS allowed by Provisioned IOPS SSD?
+  -  20,000 IOPS
+
+6. What is the minimum volume size supported by provisioned IOPS?
+  - 4GB
+
+7. What is the max volume size supported by provisioned IOPS?
+  - 16 TB
+
+8. Minimum storage size of Magnetic Disk?
+  - 1 GB
+
+9. Maximum storage size of Magnetic disk?
+  - 1 TB
+
+10. How Much data can I store in EFS?
+  - Upto Petabytes.
+
+
+EC2:
+-----------------------
+
+1. What is the network bandwidth provided in Placement Groups?
+ - 10Gbps
+
+S3:
+-----------------------
+
+1. How many buckets can I create?
+ - 100 buckets/account
+
+2. What are the min and max size of object in S3?
+ - min: 0 bytes, max: 5 TB
+
+3. What is the expected retrieval time for Expedited, Standard and Bulk Glacier options?
+ - Expedited: 1-5 minutes
+ - Standard:  3-5 hours
+ - Bulk:      5-12 hours
+
+4. What are the min, max and suggested object sizes for single operation upload?
+ - Min: 0 bytes, Max: 5 GB, Suggested: less than 100 MB
+
+5. What are the min,max object sizes for Multipart upload?
+ - Min: 100 MB, Max: 5TB.
+
+6. How much data can AWS Import/Export feature take in single call?
+ - 16TB/Job
+
+SQS:
+-------------------
+
+1. What is the max message size of SQS?
+  - 256KB
+
+2. How long SQS can wait before returning when using long polling?
+  - 20 Seconds
+
+3. How long doe the messages are retrieved in Queue?
+ - 14 days. default is 4 days.
+
+4. What is the max. visibility timeout?
+ - 12 hours 
+
+5. How many messages can reside in queue?
+ - Infinite.
+
+6. Is there a limit on number of messages that can be parallely processed?
+ - YES. you can have 1,20,000 in flight messages at any time.   
+
+Route 53:
+-------------------
+
+1. How many name servers are present in one hosted zone?
+ - 4 (four)
+
+Cloudwatch:
+-------------------
+
+1. How Instant the metrics is received in Basic and Detailed metrics?
+ - Basic: 5 minute, Detailed: 1 minute.
+
+VPC Flow Logs:
+-------------------
+
+1. After how much time VPC flow logs are flushed to buffer?
+ - 10 minutes.
+
+Kinesis:
+-----------------
+
+1. How long can the data be retrived in stream?
+ - 7 days. Default is 24 hours.
+
+2. How much data can I write to single shard?
+ - 1 MB/second
+
+3. How much data can I read from single shard?
+ - 2 MB/second
+
+4. Is there a max limit on no. of shards I can have?
+ - You can have 500 shards for US East and West
+ - For other regions 200 Shards. 
 
 Cloudformation:
 ------------------
@@ -7,12 +144,31 @@ Cloudformation:
 2. Description fields cannot be more than 4096 chars.
 3. You can have no more than 60 Params in template.
 
-
 Lambda:
 ----------------
 1. You can upload max of 50MB zipped code file.
 2. There is a limit on number of lambda functions that can be executed concurrently per account.
  
+CloudFront:
+----------------
+
+1. Does CloudFront imposes any limit on network bandwidth?
+ - YES. A single distribution have 40Gbps bandwidth at max.
+ - A single distribution can support only 1 Lakh req/second.
+
+2. How long does a object is cached?
+ - cache is done for 24 hours by defaut.
+
+3. How many objects can be invalidated concurrently?
+ - 3000
+
+EMR:
+-------------------
+1. How many instances can I launch per cluster?
+ - There is no per cluster limit. Its worst than that.
+ - You can launch only 20 instances as a whole.
+ 
+     
 RDS:
 ----------------
 1. How many Database instances can I run from my account?
@@ -22,8 +178,3 @@ RDS:
 
 3. What is the max number of Databases that my Database Instance can host?
   - No Limit.
-
-
-
-
-

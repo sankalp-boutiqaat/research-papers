@@ -19,6 +19,9 @@ So, if a Region R has 3 availability zones A,B,C. Then a file F1 can most probab
 NOte: take figure from VPC, video1 , 3:05 
 
 
+HSM-KMS,SWF SQS
+
+
 
 
 
