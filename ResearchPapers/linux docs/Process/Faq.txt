@@ -1,0 +1,34 @@
+FAQ's:
+---------
+- How to get child processes of a given process ?
+  pstree -p 1794
+  o/p:
+apache2(1794)─┬─apache2(1936)
+              ├─apache2(1937)
+              ├─apache2(1938)
+              ├─apache2(1939)
+              └─apache2(1940)
+
+- How to get number of threads in a process ?
+  pstree -p 1406 (The curly braces indicates that its a thread and not a process)
+  o/p:
+  node(1406)─┬─{node}(1413)
+           ├─{node}(2223)
+           ├─{node}(2224)
+           ├─{node}(2225)
+           └─{node}(2226)
+
+- How to get parent process of a given process ?
+   cat /proc/PID/status | grep -i 'ppid'
+
+- How do I get the limits placed on a process ?
+   cat /proc/PID/limits
+
+- How do I get all file desriptors currently opened by process?
+  ls /proc/PID/fd
+
+- How do I get the limit on file desriptors that can be opened by a process ?
+  cat /proc/sys/fs/file-max  => gives the max file descriptors that can be opened by all processes throughout the system.
+
+- There is a limit on max number of threads that can be created throughout the system.
+  cat /proc/sys/kernel/threads-max (remember that each process has atleast one thread called main thread)

@@ -234,30 +234,4 @@ MultiThreaded vs Multiprocess:
 
 
 
-- pstree , with some utilities.
-    How do I get all child processes of a particular process.?
-    How do I get parent process of a given process?
-    How do I get all threads for a process?
-
-
-
-
-systemwide limit on number of processes?
-limit on number of processes that can be created by a single user?
-
-- Inter process communication.
-   - via Environment varibales.
-
-- process credentials.
-
-section 36 (process resources) seems interesting.
-
-
-
-
-
-
-
-
-
 
