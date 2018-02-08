@@ -13,7 +13,7 @@ However, if the data size exceeds 1 byte, the data needs to be stored in multipl
 
 - **Little Indian (LSB first) approach** => In this Least significant byte is stored first and then the Most significant byte.
 
-![Flow](https://en.wikipedia.org/wiki/Endianness)
+![Flow](https://en.wikipedia.org/wiki/File:Little-Endian.svg)
 
 > IN MSB -> 1001010 <-LSB
 
