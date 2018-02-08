@@ -2,15 +2,16 @@
 
 Each memory address can store only **1 byte** i.e **8bits** of data at max.
 
-So, if the data size is less than 1 byte than the data can be easily stored in a single address location.
-
+So, if the data size is less than 1 byte than the data can be easily stored in a single address location.  
 However, if the data size exceeds 1 byte, the data needs to be stored in multiple address locations where each address location cannot hold more than 1 byte of data.
 
 *There are two main techniques of doing this:*
  
-- **Big Indian (MSB first) approach** => In this Most significant byte is stored first and then the least significant byte.
+- **Big Indian (MSB first) approach** :  
+In this Most significant byte is stored first and then the least significant byte.
 
-- **Little Indian (LSB first) approach** => In this Least significant byte is stored first and then the Most significant byte.
+- **Little Indian (LSB first) approach** :  
+In this Least significant byte is stored first and then the Most significant byte.
 
 ![Big Endian vs Little Endian](http://www.emcu.it/C-for-Embedded/BI-LI.png)
 
