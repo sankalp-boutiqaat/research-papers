@@ -1,5 +1,6 @@
 What are Sockets?
-- Sockets are a method of Inter Process Communication that allows data to be exchanged b/w applications running on same host or different hosts.
+- Sockets are a method of Inter Process Communication that allows data to be exchanged b/w applications running on 
+same host or different hosts.
 - A Socket is simply a file descriptor which can be obtained using socket(), system call.
 ex:
 fd = socket();
@@ -9,10 +10,14 @@ fd = socket();
 	  c: Receiver IP.
 	  d: Receiver Port.
 	  e: Communication protocol(TCP/UDP)
+These should be unique, through out the system. i.e No two sockets can have exactly same tuple values.       
+
+There are several types of sockets, like: Unix Domain Sockets, Raw Sockets and Internet Sockets.
+But, we will be concentrating only on Internet Sockets as of now. As its the most widely used socket type.  
 
 Internet Sockets:
 --------------------------------------------------------------------------------------------------	  
-- There are two types of internet sockets:
+- The Internet Sockets can be divided into two types:
     1. Stream Sockets   AKA (SOCK_STREAM)
     2. Datagram Sockets	AKA (SOCK_DGRAM)
  
@@ -44,35 +49,52 @@ Datagram sockets make use of UDP/IP protocol stack.
 
 Some applications making use of Datagram sockets are: dhcp, ping
 
-
-Port Numbers:
+Ports:
 --------------------
-Port numbers are 16-bit numbers. They are used in conjunction with IP addresses as a socket identifier. (For both TCP and UDP)
+A socket on its own cannot communicate with outside world. It needs the help of something called ports to do so.
+The main usage of port is to allow multiple services to run on single system. We will see how ports helps us to do so in just a minute.
+Ports are identified by 16-bit numbers called Port Numbers.
+No two ports residing on the same system can share same port Number.  
+NOTE: All ports under 1024 are reserved for root user.
+They are used in conjunction with IP addresses as a socket identifier. (For both TCP and UDP)
 
 What if there were no ports and only Ip addresses?
-Ans: In such a case a socket can only be identified by 3-tuple i.e sourceIP:DestinationIP:Protocol. Thus, if two applications say mysql and apache needs to execute on same machine
-they cannot as both will have same protocol i.e TCP and will have same sourceIP to bind to. Thus, ports helps us to run multiple services on same machine by binding them to 
-different ports.  
-NOTE: All ports under 1024 are reserved for root user.
-Ephemeral ports: In case a client application does not explicitely binds itself to a port. Then, automatically a port is assigned to the application for sending request to server such
+Ans: 
+  In such a case a socket can only be identified by 3-tuple i.e sourceIP:DestinationIP:Protocol. 
+  Thus, if two applications say mysql and apache needs to execute on same machine
+  they cannot, as both will have same protocol i.e TCP and will have same sourceIP to bind to. 
+Thus, ports helps us to run multiple services on same machine by binding them to different ports.  
+
+Ephemeral ports: 
+  In case a client application does not explicitely binds itself to a port. 
+  Then, automatically an available port is assigned by kernel to the application for sending request to server such
 a port is called ephemeral port.
 Ephemeral port range can be obtained from file: /proc/sys/net/ipv4/ip_local_port_range 
 
+RelationShip b/w ports and sockets:
+---------------------------------------
+See Fig.
 
+Following are the system calls that we need to understand before checking out how a client/server can be created.
 
 Socket System Calls:
 --------------------------------------------------------------------------------------
-1. socket() :=> Creates a new Socket.
+1. socket() :=>
+   This system call is used to create a new socket and returns the file descriptor for the created socket. 
+   The call has following signature:
     `int socket(int domain, int type, int protocol);` 
  - domain can be:
-    AF_UNIX => For communication b/w applications on same host.
+    AF_UNIX => For communication b/w applications on same host. (i.e Unix Domain Sockets)
     AF_INET => communication using IPv4 addressing.
     AF_INET6 => communication using IPv6 addressing.
 
  - type specifies: Whether its a stream socket(SOCK_STREAM) or datagram(SOCK_DGRAM) socket.
- - protocol: This can simply be set to 0 and it will automatically chose correct protocol based on type specified.
+ - protocol: This can simply be set to 0 and it will automatically chose correct protocol based on type specified (TCP/UDP).
 
-2. bind() :=> Now, that you have got the socket. Next step is to specify the IP and Port to which you want to bind this socket. This is done using bind() system call.
+2. bind() :=> 
+  Now, that you have got the socket. 
+  Next step is to specify the IP and Port to which you want to bind this socket. This is done using bind() system call.
+   The call has following signature:
    `int bind(int sockfd, struct sockaddr *my_addr, int addrlen);`
     - sockfd => file descriptor obtained from socket() call.
     - sockaddr => IP:Port to bind.
@@ -82,47 +104,49 @@ Socket System Calls:
         has ended, however still the socket binded to port is hanging in kernel. Such a hogging port will automatically get cleared in a minute or so. But if you want to totally remove
         this situation you can add option 'SO_REUSEADDR' in socket options.		
 		
-3. connect() :=> Now, we have created a socket, binded that socket to an Ip:Port, its time to connect to remote host. This is done via connect() system call.
-                 Connect() syscall is used by clients in client-server paradigm.
+3. connect() :=> (Usedonly by clients) 
+   Now, we have created a socket, binded that socket to an Ip:Port, its time to use this binding and connect to remote host. 
+   This is done via connect() system call.
+   Connect() syscall is used by clients in client-server paradigm.
+   The call has following signature:
          `int connect(int sockfd, struct sockaddr *serv_addr, int addrlen);`
           - sockfd => file descriptor obtained from socket() call.
           - sockaddr => Ip:PORT address of remote host.
-      NOTE: We can also call connect() without making an explicit call to bind(). In such a case, connect will automatically call bind() internally and will choose a random port to bind socket to. 		  
-	  NOTE: connect() is a blocking call and will block incase servers backlog Q is full, till server inserts the connection in backlog Q. See accept().
+      NOTE: We can also call connect() without making an explicit call to bind(). 
+        In such a case, connect will automatically call bind() internally and will choose a random (ephemeral) port to bind socket to. 		  
+	  NOTE: connect() is a blocking call and will block incase servers backlog Q is full, 
+         till server inserts the connection in backlog Q. See accept().
 	  NOTE: For TCP sockets, connections are queued to baclog Q only after handshake is completed by kernel.
 	
-4. listen()	:=> Incase, we are building a server we need to listen for incoming connections. This is done via listen() system call.
-             `int listen(int sockfd, int backlog);`
+4. listen()	:=> (used only by servers)
+   Incase, we are building a server we need to listen for incoming connections on a port. This is done via listen() system call.
+   The call has following signature:          
+     `int listen(int sockfd, int backlog);`
 			 - sockfd  => file descriptor obtained from socket() call.
 			 - backlog =>  Size of queue in which connections will wait till they are marked as accepted. Default is 20.
 	  So, for the server to listen for incoming connections following is the system call sequencing:
 	       socket() -> bind() -> listen().
 		   NOTE: listen() syscall is always non-blocking.
 		   
-5. accept() :=> We don't want incoming connections to keep waiting in backlog, so we use accept() system call to pick a connection from backlog queue.
-                Along with picking a connection and returning it to us, the accept() call does some extra work too. It creates a new socket for the returned connection
-                and this new socket is used for any communication b/w the server and returned client connection.
-                The old socket keeps on listening for more client connections. We need to call accept() in loop so that the program picks next connection once previous is accepted.
-                Thus, if we have 10 active client connections we have 10+1 sockets. Where 1 (original) socket is listening for more clients and remaining 10 are serving I/O.
-				//@todo: better describe this with figure.
-           `int accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen);`
+5. accept() :=> 
+We don't want incoming connections to keep waiting in backlog, so we use accept() system call to pick a connection from backlog queue.
+Along with picking a connection and returning it to us, the accept() call does some extra work too. 
+It creates a new socket for the returned connection and this new socket is used for any communication b/w the server and returned client connection. while, The old socket keeps on listening for more client connections. 
+We need to call accept() in loop so that the program picks next connection once previous is accepted.
+Thus, if we have 10 active client connections we have 10+1 sockets. Where 1 (original) socket is listening for more clients and remaining 10 are serving I/O.
+ The call has following signature:				
+       `int accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen);`
                   - sockfd => original socket descriptor obtained using socket() call.
                   - sockaddr => you dont need to fill this, it will be filled with client Ip and POrt once accept is called. 
 				  
-				NOTE: Accept() does not opens up a new port on host. It just returns a new socket which uses the servers binded port for communication.
-
-
-                  127.0.0.1:3306 (sock) (server binded port)             
-                  client calling from 1.1.1.1:2202
-                  Accept() (sock1) -> [127.0.0.1:3306,1.1.1.1:2202,TCP]
-              NOTE: accept() is a blocking call and will block if backlog queue is empty.				  
-
-				
+NOTE: accept() does not opens up a new port on host. It just returns a new socket which uses the servers binded port for communication.
+NOTE: accept() is a blocking call and will block if backlog queue is empty.				  
 
 6. send() and recv() :=> These syscalls are used to send and receive data from stream sockets. For datagram sockets use receivefrom() and sendto()
                         NOTE: These needs to be called on new socket descriptor returned from accept() call not on listening socket.
-                        NOTE: recv() is a blocking call and will block till an EOF is encountered.
- NOTE: read/write syscalls and send/recv syscalls both fundamentally does the same thing. The only difference is that send/recv calls provide some specific
+                        NOTE: recv() is a blocking call and will block till first byte is received.
+ NOTE: read/write syscalls and send/recv syscalls both fundamentally does the same thing.
+  The only difference is that send/recv calls provide some specific
   features that can be enabled by passing appropriate flags to function calls.However, incase no flag is passed they behave exactly same as read/write calls. 
 
 7. close() :=> Closes the socket connection and sends EOF.
@@ -131,14 +155,9 @@ Socket System Calls:
 //@todo make a good figure to illustrate above client and server steps described above.						
 						
 						
-						
-STream Sockets:
----------------------------------------------
-Stream sockets can be active or passive.						
-						
 Active vs Passive socket:
 -----------------------------
-Active: Any socket that can initiate a connection to another socket is called active sockets. ex: sockets opened by client programs.
+Active: Any socket that can initiate a connection to another socket is called active sockets. ex: sockets opened by client programs and sockets created by accept() call.
 Passive: Any socket that can only listen to incoming requests from other sockets but cannot initiate a connection is called passive socket. ex: listening sockets 
 opened by server programs.
 
@@ -146,11 +165,16 @@ Blocking nature of calls:
 ----------------------------------
 Connect() -> blocks if backlogQ at server is full.
 Accept() -> blocks if backlogQ is empty i.e no client connection is waiting to be accepted. (Needs to be called in loop)
-Read() -> Blocks till atleast 1 byte is read from remote end.Needs to be called in loop in order to read full data. But the problem is how will it know that it has read full data
+Read() -> Blocks till atleast 1 byte is read from remote end.
+Needs to be called in loop in order to read full data. But the problem is how will it know that it has read full data
 and now needs to break out of loop as no more data will be sent via server. 
 For this, we can use a delimeter byte and upon encountering that byte we can assume that full data has been transfered.Generally \n is used as delimeter byte.
 NOTE: we cannot use EOF, as EOF occurs only if remote end closes connection.
 Write() -> Does not block. But what happens when server is not ready to read???check this.
+
+Client/Server Design:
+------------------------
+Below figure illustrates the lifecycle of communication b/w a single client and server.
 
 
 close() vs shutdown() syscalls behavioral differences:
@@ -177,42 +201,19 @@ Incase you need to transfer contents of a file through socket and the file is st
     while ((n = read(diskfilefd, buf, BUZ_SIZE)) > 0)
          write(sockfd, buf, n);
 This is not a very optimized solution for large files, as each loop iteration requires atleast two system calls to be executed.	
- - read() := syscall reads the chunk from kernel buffer -> user space
+ - read() := syscall reads the chunk from kernel buffer to user space
  - write():= syscall writes the data to kernel buffer.
 Following is the visualization of the above scenario:
 pg: 1261
 sendfile() syscall provides a way to do all of the above described task in single syscall:
       sendfile(in, out)
 Following is the visualization of the same:
-
-
 pg: 1261	  
  
-
-
-
-
-
-
-
-//todo: tcpcork/tcpnodelay socket option? //Seems a good option need to read few blogs:
-http://baus.net/on-tcp_cork
-//todo: what is nagle algorithm and how its related to these options.??
-//todo: flags accepted by send/recv call.
-
-
-
-
----------------------------------------------------------------------------------------------------------------
-//todo: write about dns functions
-//todo: create an iterative server that distributes random integers to its clients.
-
-
-
-Types of Socket Servers:
+Types of Server Designs:
 -------------------------------
 
-Socket servers can be placed into different categories based on how they handle client connections:
+Servers can be placed into different categories based on how they handle client connections:
 
 1. Iterative Server: 
       - process one client at a time.
@@ -273,6 +274,24 @@ standard tcp states?
 
 
 
+
+
+
+
+
+
+
+//todo: tcpcork/tcpnodelay socket option? //Seems a good option need to read few blogs:
+http://baus.net/on-tcp_cork
+//todo: what is nagle algorithm and how its related to these options.??
+//todo: flags accepted by send/recv call.
+
+
+
+
+---------------------------------------------------------------------------------------------------------------
+//todo: write about dns functions
+//todo: create an iterative server that distributes random integers to its clients.
 
 
 
