@@ -163,14 +163,14 @@ opened by server programs.
 
 Blocking nature of calls:
 ----------------------------------
-Connect() -> blocks if backlogQ at server is full.
+Connect() -> blocks. The kernel sends the SYN packet to server and blocks till a SYNC ACK is received. 
 Accept() -> blocks if backlogQ is empty i.e no client connection is waiting to be accepted. (Needs to be called in loop)
 Read() -> Blocks till atleast 1 byte is read from remote end.
 Needs to be called in loop in order to read full data. But the problem is how will it know that it has read full data
 and now needs to break out of loop as no more data will be sent via server. 
 For this, we can use a delimeter byte and upon encountering that byte we can assume that full data has been transfered.Generally \n is used as delimeter byte.
 NOTE: we cannot use EOF, as EOF occurs only if remote end closes connection.
-Write() -> Does not block. But what happens when server is not ready to read???check this.
+Write() -> write call blocks if the TCP send buffer is full. 
 
 Client/Server Design:
 ------------------------
@@ -204,25 +204,119 @@ This is not a very optimized solution for large files, as each loop iteration re
  - read() := syscall reads the chunk from kernel buffer to user space
  - write():= syscall writes the data to kernel buffer.
 Following is the visualization of the above scenario:
-pg: 1261
+Fig pg: 1261
 sendfile() syscall provides a way to do all of the above described task in single syscall:
       sendfile(in, out)
 Following is the visualization of the same:
-pg: 1261	  
+Fig pg: 1261	  
  
-Types of Server Designs:
--------------------------------
+Types of Server Designs (Traditional):
+---------------------------------------
 
 Servers can be placed into different categories based on how they handle client connections:
 
 1. Iterative Server: 
-      - process one client at a time.
+      - It is a server design that process one client request at a time.
+      - There is a single process, which waits for incoming connections, once a connection request is recieved it creates
+        a communication channel for that connection request using accept() syscall and then sends and receive data on that connection.
+        Once the communication is done it closes the connection and then only picks up the next request.
+        Thus, the second client needs to wait till the request of first client is fully answered.
+        Fig: needed. 
 
 2. Concurrent Server:
-      - process multiple clients via creating new process/thread for each client connection.
+      Since it is evident that Iterative server design is not very ideal approach to handle multiple client requests. We have concurrent server
+      approach, In this multiple clients are processed using the multiprocess or multi threading approach.
+      - There is a master process whose job is to listen for incoming connection requests. Upon obtaining a connection request, it creates
+      a child process/ thread to handle all communication for that particular request. And itself goes on to pick another connection request.
+      Thus all client requests are processed by seperate child process/threads.
+      Fig: needed.
+
+Modern Server Design:
+------------------------------------
+The Concurrent Server design was introduced to overcome the problems of Iterative design. But over the time, as the traffic grew
+and the need for more concurrency arrived it became evident that Concurrent server design is not sufficient. Because, forking a lot of threads/
+child processes takes up additional resources. 
+Eventhough, the threads takes up considerably less resources than child processes, they have their own set of problems, like: the locking
+needs to be done to use shared memory area which degrades performance.
+
+Thus a better approach was needed, and in search of it somebody decided to make use of Non-Blocking feature of syscalls.
+Till now we have learned that Accept() and Read() calls are blocking calls, but what if there is a way to make them NOT BLOCK.
+Yes, we can setup flags to make these calls Non-Blocking in Nature so that instead of blocking they returns with an error EAGAIN, if they have
+nothing to do.
+
+Using the Non-blocking feature following server design can be implemented.
+Fig: Need too make a figure to illustrate non-blocking feature and the problem it presents.
+
+However, such a design has its own problems. The major problem is that, how will you get to know that an incoming connection request has arrived
+or there is data to be read from socket. For this, you will need to continuosly loop over Accept() and Read() calls to keep checking for
+any state changes, this wastes cpu time as the cpu will be continuosly on load. The above figure illustrates this problem.
+
+The solution is to use select(), poll() and epoll() syscalls. The primary objective of these syscalls is to monitor multiple socket/pipe descriptors
+and notify for events such as: 
+ - When new connection arrives.
+ - When data is avilable for Reading.
+ - When buffer is ready to receive data 
+and so on.
+
+Lets see these calls in detail and observe the functional difference b/w them.
+
+select(), poll() vs epoll():
+------------------------------
+The select() and poll() system calls have been present on UNIX system for years. Thus most of the Unix and Linux systems support them.
+However, they have a scalibility problem. They can't monitor large number (several hundreds) of socket descriptors. 
+
+The epoll() system call can handle large number of descriptors but it is Linux specific and is not implemented by other Unix systems. Some of the systems
+implement a similar variant of this called "kqueue".
+
+Generally, people build systems in such a manner that they use epoll or kqueue by default and if system does not supports them, they fallback to 
+select or poll techniques.
+
+NOTE: There is a libevent library which provides an interface over these calls. It choses the best method to use as per the OS.  
+   http://libevent.org/
 
 
-1265
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
