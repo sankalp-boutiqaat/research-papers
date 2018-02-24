@@ -81,7 +81,7 @@ A frame contains functions local variables, return values and arguments.
 
 5. **Heap:** This is also a dynamicaly growing and shrinking area used to store variables.
 
-![Process Memory Layout](https://doc-14-bg-docs.googleusercontent.com/docs/securesc/ocmr2p55n30qghcdh868gukr4b79rr7n/k5vqn5remrffdbj4l6clc1jkb10qbgn0/1519452000000/06891064801342442300/06891064801342442300/1IaL5mC-5m0OkSCu2oSvHUu0ggCFngoju)
+![Process Memory Layout](https://lh4.googleusercontent.com/d5b1PWl9SgGWgczW3NGjdj9YW3r44KQXoata8LjlewfWJ0icqiO_wfNJpmQdDIhr74zueIZDf_QcBeDIqHxO=w1436-h780)
 
 Following is the code example for the same.
 
