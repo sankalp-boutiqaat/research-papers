@@ -154,7 +154,7 @@ data segments, stack, heap etc are loaded.
 
 The below figure illustrates, How a process running program "**A**" executes another program "**B**" using child process technique.
 
-![execve example](https://lh3.googleusercontent.com/zRUP-J4eabLBzEyN7fWGWflSpIRwn5Jue5F-2IIw4cLpbL4kJa1mBLtf9nQbq72gnCVxnxHOtpcy0U5a6BD_=w1440-h759)
+![execve example](https://lh4.googleusercontent.com/zR1oX76jf6r3IwcGhjnLlDgfV154xMs8g5cxfcd9oSO2p5Pkh7BXaugHQqdanWmVLoISvI8MK6Xf-t_f8lD5=w1440-h759)
 
 ## File Sharing between Parent and Child:
 
@@ -169,7 +169,7 @@ However, note that the data can be intermingled.
 If this is not the desired behaviour, then the application should be designed in such a manner that after the fork() parent and child uses
 different file descriptors.  
 This process is illustrated in below figure:  
-![File Sharing](https://lh6.googleusercontent.com/sLSS4-HlDVumyKWKYFDQBkPVNjEXzGwOhIPim5B9uQ3u3J7GaXPlSC_ukbR-foHF0E39D7R6mXExb5p-nOoG=w1440-h759-rw)
+![File Sharing](https://lh4.googleusercontent.com/oRucVqGIW6ZpbeA5YbL6zNi3fyfO7iCKEoBVls7Q4WjO6wigoVsJJrI6xs5c3_krJr7vRvQUuBjmUM-5aA87=w1440-h759-rw)
 
 
 ## Race Conditions after "fork()":
