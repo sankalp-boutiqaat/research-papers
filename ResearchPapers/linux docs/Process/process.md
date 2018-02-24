@@ -13,7 +13,7 @@ PID counter is reset to 300 and not 1. As most of the processes below PID 300 ne
 
 
 ## Concept of Virtual Memory:
-![Virtual Memory Layout](https://drive.google.com/file/d/1_EdQQa5kXzcStQ9WLuCaGPB62DvyTxLF/view?usp=sharing)
+![Virtual Memory Layout](https://lh4.googleusercontent.com/9CHLYizZaXekDRoskNEHrWHRY4_SROrCo6AsMR0BCuOzFDjGikdf_3IzIA13UuSwLrHrbCbacoU_BngXxzXo=w1436-h736)
 ![Virtual Memory Layout](https://photos.google.com/photo/AF1QipMA5q8EZp6-rkLU3N5yROxZYAHHS4gzfNeqgYCG)
 
 
