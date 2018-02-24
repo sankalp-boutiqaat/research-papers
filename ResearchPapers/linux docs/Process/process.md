@@ -14,6 +14,8 @@ PID counter is reset to 300 and not 1. As most of the processes below PID 300 ne
 
 ## Concept of Virtual Memory:
 ![Virtual Memory Layout](https://drive.google.com/file/d/1_EdQQa5kXzcStQ9WLuCaGPB62DvyTxLF/view?usp=sharing)
+![Virtual Memory Layout](https://drive.google.com/open?id=1G2vBhm7U_P-oGBqFM-3fzLkR7KWcxOaO)
+
 
 Virtual memory model was introduced to overcome the limitations of physical memory i.e RAM.  
 In this model each process is allocated a virtual memory space.  
