@@ -61,3 +61,6 @@ So, its advisable to always use these functions when receiving or sending data t
 
 - **hton()** -> convert from host order to network order(used when sending data).
 - **ntoh()** -> convert from network order to host order(used when receiving data).
+
+More Resources:
+[Wkipedia](https://en.wikipedia.org/wiki/Endianness)
