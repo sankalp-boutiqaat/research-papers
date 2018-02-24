@@ -62,7 +62,7 @@ If the Kernel is constantly evicting and loading new pages again and again its c
 
 ## Memory Layout of a Process:
 
-Each process is assigned a virtual memory space which is isolated from any other processes in the system.
+Each process is assigned a virtual memory space which is **isolated** from any other processes in the system.
 This virtual space is divided into segments. Each segment keeps different type of data related to the process.
 
 Following are the segments:
@@ -70,20 +70,21 @@ Following are the segments:
    be running the same program this segment is generally shared among multiple processes of same program.
    Also, this segment is kept as Read-Only so that process cannot modify its source code while executing.
 
-2. **Initialized Data Segment or Data Segment:** This is the place where GLOBAL and STATIC variables are stored.
-      ex: int primes[] = { 2, 3, 5, 7 };
+2. **Initialized Data Segment or Data Segment:** This is the place where GLOBAL and STATIC variables are stored.  
+```ex: int primes[] = { 2, 3, 5, 7 };```
 
-3. **UnInitialized Data Segment or BSS:** This place also keeps the GLOBAL and STATIC variables but the ones which are not initialized.
-      ex: char globBuf[65536];   
+3. **UnInitialized Data Segment or BSS:** This place also keeps the GLOBAL and STATIC variables but the ones which are not initialized.  
+```ex: char globBuf[65536];```   
 
-4. **Stack:** This is a dynamically growing and shrinking segment containing stack frames. Each function is allocated one stack frame.
-          A frame contains functions local variables, return values and arguments.
+4. **Stack:** This is a dynamically growing and shrinking segment containing *stack frames*. Each function is allocated one stack frame.  
+A frame contains functions local variables, return values and arguments.
 
 5. **Heap:** This is also a dynamicaly growing and shrinking area used to store variables.
 
-FIG: pg 119 seems similar, need a simplified version.
+![Process Memory Layout](https://doc-14-bg-docs.googleusercontent.com/docs/securesc/ocmr2p55n30qghcdh868gukr4b79rr7n/k5vqn5remrffdbj4l6clc1jkb10qbgn0/1519452000000/06891064801342442300/06891064801342442300/1IaL5mC-5m0OkSCu2oSvHUu0ggCFngoju)
 
-FIG: show code example for segments.
+Following is the code example for the same.
+
 ```
 main(int argc, char *argv[])       /* Allocated in frame for main() */
 {
