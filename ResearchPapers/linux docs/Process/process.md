@@ -114,7 +114,7 @@ main(int argc, char *argv[])       /* Allocated in frame for main() */
 ```
 
 ## Creating Child Processes: 
-A parent process can create new process by using the "***fork()***" system call. Such a process is called **Child Process**.  
+A parent process can create new process by using the ***fork()*** system call. Such a process is called **Child Process**.  
 The child process is a exact copy of the parent process, this copy includes: Parents Stack, Heap, Text Segment, Initialized Data Segment and all.
 
 ## Terminating a Process:
@@ -154,7 +154,7 @@ data segments, stack, heap etc are loaded.
 
 The below figure illustrates, How a process running program "**A**" executes another program "**B**" using child process technique.
 
-Fig:24-1 page number 515.
+![execve example](https://lh3.googleusercontent.com/zRUP-J4eabLBzEyN7fWGWflSpIRwn5Jue5F-2IIw4cLpbL4kJa1mBLtf9nQbq72gnCVxnxHOtpcy0U5a6BD_=w1440-h759)
 
 ## File Sharing between Parent and Child:
 
@@ -168,7 +168,9 @@ However, note that the data can be intermingled.
 
 If this is not the desired behaviour, then the application should be designed in such a manner that after the fork() parent and child uses
 different file descriptors.  
-This process is illustrated in below figure: (fig page 520)
+This process is illustrated in below figure:  
+![File Sharing](https://lh6.googleusercontent.com/sLSS4-HlDVumyKWKYFDQBkPVNjEXzGwOhIPim5B9uQ3u3J7GaXPlSC_ukbR-foHF0E39D7R6mXExb5p-nOoG=w1440-h759-rw)
+
 
 ## Race Conditions after "fork()":
 
@@ -176,7 +178,7 @@ Once a fork() is performed, whose code will be executed first? Is it child proce
 
 Its indeterminent that which one will run first, on multi processor systems both can run parallely. However, most of the time its the child
 that executes first.  
-This is controlled via following setting:     ```"/proc/sys/kernel/sched_child_runs_first"```
+This is controlled via following setting: ```"/proc/sys/kernel/sched_child_runs_first"```
 
 
 ## Monitoring childs:
@@ -217,7 +219,9 @@ Like processes, Threads are a mechanism that allows an application to perform mu
 A single process can have multiple threads running in it.  
 All of these threads can execute parallely the same program code. 
 They share all the memory segments with each other such as: Initialized Data, Uninitialized data, Text Segment and Heap. But have independent Stack data.  
-See fig: pg 618
+
+![Thread Memory layout](https://lh3.googleusercontent.com/k2QnLpCmwqArXCUfLES3VB6N_MA96f4RkbayBxXDL23S4w81xYmC04YVqLOMV2nYHPHKLlaCtwX-nV8lYLEt=w1440-h759-rw)
+
 
 > By default each process has one thread. This "**one**" thread is called as **Main Thread**.
 
