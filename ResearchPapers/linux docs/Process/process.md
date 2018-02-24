@@ -14,8 +14,6 @@ PID counter is reset to 300 and not 1. As most of the processes below PID 300 ne
 
 ## Concept of Virtual Memory:
 ![Virtual Memory Layout](https://lh4.googleusercontent.com/9CHLYizZaXekDRoskNEHrWHRY4_SROrCo6AsMR0BCuOzFDjGikdf_3IzIA13UuSwLrHrbCbacoU_BngXxzXo=w1436-h736)
-![Virtual Memory Layout](https://photos.google.com/photo/AF1QipMA5q8EZp6-rkLU3N5yROxZYAHHS4gzfNeqgYCG)
-
 
 Virtual memory model was introduced to overcome the limitations of physical memory i.e RAM.  
 In this model each process is allocated a virtual memory space.  
@@ -27,36 +25,40 @@ This transalation is done via the help of **Page Tables**. Like virtual memory, 
 Both *physical* and *virtual* memory are divided into small memory chunks called **PAGES**. Each PAGE in physical memory is allocated a unique identifier called **Page Frame Number (PFN)**.
 PAGES in virual memory are allocated **Virtual Page Frame Number (VPFN)**.
 
-### Demand paging & Page fault: 
-Demand Paging is a technique that helps in using the physical memory efficiently.  
-It says that instead of loading all the virtual pages in physical memory load only the virtual pages which are required by the program to function.  
+## Demand Paging & Page Fault:
 
-When the CPU tries to access a virtual page (VPFN), which is not present in the physical memory i.e does not have an associated PAGE TABLE entry 
-   (Like, VPFN 2 for process X in our figure) an exception is thrown by CPU which is called PAGE FAULT.
-     At the time of page fault the execution of the process is halted by CPU, till the point Kernel loads the respective page in physical memory and 
-     makes the corresponding page table entry. After the page table entry is made, the execution of the process resumes from the point the 
-     memory exception was thrown.
-     As it can take considerable time to load a page from disk to physical memory, CPU is free to execute any other process during that time.
+***Demand Paging*** is a technique that helps in using the **physical memory** efficiently.  
+It says that, instead of loading all the virtual pages in physical memory load only the virtual pages which are required by the program to function.  
 
-    An Example is, if we are running a database server which can be queried to fetch data, it does not makes sense to store all the fetched records in 
-   physical memory instead store only the first few records and insert more records when the cursor demands them.
+When the CPU tries to access a *virtual page* (VPFN), which is not present in the physical memory and thus does not have an associated PAGE TABLE entry (*Like, VPFN 2 for process X in our above figure*) an exception is thrown by CPU which is called ***PAGE FAULT***.  
+     
+At the time of page fault the execution of the process is halted by CPU, till the point Kernel loads the respective page in physical memory and makes the corresponding page table entry.  
+After the page table entry is made, the execution of the process resumes from the point the memory exception was thrown.
 
-#### Swapping and Thrashing: 
-   When the physical memory is full and a process requests a new page that is not already present in physical memory. The Kernel needs to make
-   space for the new page by evicting a less used page from physical memory.
+As it can take considerable time to load a page from disk to physical memory, CPU is free to execute any other process during that time.
+
+An example of this is, if we are running a database server which can be queried to fetch data, it does not makes sense to store all the fetched records in physical memory instead store only the first few records and insert more records when the cursor demands them.
+
+## Swapping and Thrashing: 
    
-   If the page to be evicted already exists on disk and no changes have been made to it then it is simply evicted. 
+When the physical memory is Full and a process requests a *new page* that is not already present in physical memory. The Kernel needs to make
+   space for the new page by evicting a *less used page* from physical memory.
+   
+   If the page to be evicted already exists on disk and no changes have been made to it then it is simply evicted.
+
    However, if the page does not exists on disk or the page has been loaded from disk but have some local modifications than we can't
     simply evict the page because when the process will require this page again then we will not be able to provide it as the contents 
-    would be lost, such a page is called "Dirty Page".
-    The Dirty Pages are stored in a separate area on disk called "SWap Space", so that when needed these pages can be pulled from swap area
-    and loaded to physical memory.
+    would be lost, such a page is called "**Dirty Page**".
 
-    If the Kernel is constantly evicting and loading new pages again and again its called "thrashing".  
+The Dirty Pages are stored in a separate area on disk called "**Swap Space**", So that when needed these pages can be pulled from swap area and loaded to physical memory.
+
+The process of evicting old pages and loading new pages is called ***Swapping***. However,
+If the Kernel is constantly evicting and loading new pages again and again its called ***Thrashing***.  
 
 > We generally have page size of 4096 bytes = 4Kbyte.
-> System Page Size configuration can be retrieved by running following bash command:
-        'getconf PAGE_SIZE'  
+
+> System Page Size configuration can be retrieved by running following bash command:  
+    ```getconf PAGE_SIZE```  
 
 ## Memory Layout of a Process:
 
