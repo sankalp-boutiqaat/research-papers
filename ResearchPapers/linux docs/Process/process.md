@@ -97,121 +97,136 @@ main(int argc, char *argv[])       /* Allocated in frame for main() */
 }
 ```
 
-## Creating New/Child Processes: 
-A parent process can create new process by using the "fork()" system call. Such a process is called Child Process.
-The child process is a exact copy of the parent process, this copy includes: Parents Stack, Heap, Text Segment, Initialized Data Segment.
+## Creating Child Processes: 
+A parent process can create new process by using the "***fork()***" system call. Such a process is called **Child Process**.  
+The child process is a exact copy of the parent process, this copy includes: Parents Stack, Heap, Text Segment, Initialized Data Segment and all.
 
 ## Terminating a Process:
-A process can be terminated using the exit(int status) library function which wraps over _exit(int status) system call.
-Generally, following convention is used, if "status" variable is 0, means the process has succesfully completed its task, A non Zero status illustrates that process encountered some error in its task.
+A process can be terminated using the ```exit(int status)``` library function which wraps over ```_exit(int status)``` system call.
 
-When a process terminates, all the file descriptors opened by it are closed. The virtual memory allocated to it is destroyed and any child processes
-now have "init" process as their parent process. 
+*Generally, following convention is used:*  
+if "status" variable is 0, means the process has succesfully completed its task, A non Zero status illustrates that process encountered some error in its task.
 
-**Exit handlers:** the "exit()" library function allows us to define two functions "on_exit()" and "at_exit()". These are used as pre-exit hooks 
-  for process. So, incase some additional cleanup task is to be done before process terminates these two functions are a go to.
+When a process terminates, all the file descriptors opened by it are closed.  
+The virtual memory allocated to it is destroyed and all child processes will now have "init" process as their parent process. 
+
+### Exit handlers: 
+
+The "exit()" library function allows us to define two functions "**on_exit()**" and "**at_exit()**".  
+
+These are used as pre-exit hooks for process. So, incase some additional cleanup task is to be done before process terminates these two functions are a go to.  
   However, these functions donot get called if the process skips exit() call and terminates by calling _exit() system call directly. Or the process
   is terminated abnormally by a SIGNAL.
 
-### "wait()" system call:
+### Wait() system call:
+
+    wait(&status)
+
 The wait() system call has two purposes:
- 1. If none of the child of this process has not terminated it will suspend the execution of the process, until one of the child terminates.
- 2. The wait(&status) call accepts a status parameter, which is used to track the termination status of child.   
+ 1. If *none* of the child of this process has yet terminated it will suspend the execution of the process, until one of the child terminates.
+ 2. The wait(*&status*) call accepts a status parameter, which is used to track the termination status of child.   
 
-### "execve()" system call:
+### Execve() system call:
 
-execve(pathname, argv, envp)
+    execve(pathname, argv, envp)
  
-The execve() system call loads a new program, specified with 'pathname' with the argument list supplied in "argv" and the environment
-list provided in "envp" into process virtual memory space. 
-In Such a case, the existing programs heap, stack, text and other segments are removed from virtual memory space and new program's
+The execve() system call loads a **new program**, specified with '*pathname*' with the argument list supplied in "*argv*" and the environment
+list provided in "*envp*" into process virtual memory space.   
+
+In Such a case, the existing programs heap, stack, text and other segments are **removed** from virtual memory space and new program's
 data segments, stack, heap etc are loaded.
 
-The below figure illustrates, How a process running program "A" executes another program "B" using child process technique.
+The below figure illustrates, How a process running program "**A**" executes another program "**B**" using child process technique.
 
 Fig:24-1 page number 515.
 
 ## File Sharing between Parent and Child:
 
-When a fork() is performed, the child receives duplicates of all the parent's file descriptors.
+When a fork() is performed, the child receives **duplicates** of all the parent's file descriptors.  
 These duplicates are such that even the file descriptor attributes are shared, 
-if either of the process changes the offset of read pointer it will be reflected in other process.
+if either of the process changes the offset of read pointer it will be reflected in other process.  
 @todo: Need a code example for this.
 
 Sharing the file descriptor in such a manner ensures that, when both the process are writing to file they don't overwrite each others data.
 However, note that the data can be intermingled.
 
 If this is not the desired behaviour, then the application should be designed in such a manner that after the fork() parent and child uses
-different file descriptors. This process is illustrated in below figure: (fig page 520)
+different file descriptors.  
+This process is illustrated in below figure: (fig page 520)
 
-## Race Conditions after fork():
+## Race Conditions after "fork()":
 
-Once a fork is performed, whose code will be executed first? Is it child process code that will be executed first or Is it parent process
-which will execute first?
-Ans: Its indeterminent that which one will run first, on multi processor systems both can run parallely. However, most of the time its the child
-that executes first.
-This is controlled via following setting: "/proc/sys/kernel/sched_child_runs_first"
+Once a fork() is performed, whose code will be executed first? Is it child process code that will be executed first or Is it parent process which will execute first?
+
+Its indeterminent that which one will run first, on multi processor systems both can run parallely. However, most of the time its the child
+that executes first.  
+This is controlled via following setting:     ```"/proc/sys/kernel/sched_child_runs_first"```
 
 
 ## Monitoring childs:
 
 wait(), waitpid() and other similar calls.
 
-## Orphan processes and Zombies:
+## Orphan Processes and Zombies:
 
 If the parent process terminates before the Child process has completed its job and terminated. Then the Child process is called
-an Orphaned process and is adopted via the "init" process in process hierarchy.
+an ***Orphaned process*** and is adopted via the "**init**" process in process hierarchy.
 
-Now, Consider the case, when the Child process has already terminated way before the parent process calls a wait() or waitpid() function 
-to retrieve the termination status of the Child. As we already know that upon process termination all the related information is also destroyed, so how
+Now, Consider the case, when the Child process has already terminated way before the parent process calls a *wait()* or *waitpid()* function 
+to retrieve the termination status of the Child.  
+As we already know that upon process termination all the related information is also destroyed, so how
 the kernel will be able to provide the termination status in such a case?
-To handle such cases, kernel destroys everything related to child process but retains an entry in process table for the child process. 
-This entry contains: processId, termination status and process resource usage statistics.
-Such a Child Process, which is already terminated but is waiting to be called by parent's wait() or waitpid() function is called a Zombie process. As
+
+To handle such cases, kernel destroys everything related to child process but retains an entry in process table for the child process. This entry contains:  
+**processId**, **termination status** and process **resource usage** statistics.  
+
+Such a Child Process, which is already terminated but is waiting to be called by parent's wait() or waitpid() function is called a ***Zombie process***. As
 its actually dead but still have some sort of life in it.
 
 One thing to note here is that, a Zombie process is very much like zombies in movies. i.e a Zombie process cannot even be killed via SIGKILL signal (silver bullet).
-The only way to kill a zombie process is, when te parent calls wait() or waitpid() family function on it.
+The only way to kill a zombie process is, when the parent calls wait() or waitpid() family function on it.  
 Incase, the parent process terminates before calling a wait() on a Zombie process, the zombie is adopted via "init" process which automatically calls
 wait() on the zombie and kills it.
 
-NOTE: Its mandatory to handle zombie processes when you are dealing with child processes in your application. Not doing so, will have the effect
+Its mandatory to handle zombie processes when you are dealing with child processes in your application. Not doing so, will have the effect
 that the entry from process table for the child process will not be removed and can easily eat up the process table. Thus, preventing you to create
 more processes.
 
-Handling Zombies: Zombies can be handled by using wait() family functions or by using SIGCHLD Signal. (Not diving in this as of now)
+**Handling Zombies**: Zombies can be handled by using wait() family functions or by using SIGCHLD Signal. (Not diving in this as of now)
 
 ## Threads:
 
-Like processes, Threads are a mechanism that allows an application to perform multiple tasks concurrently.
+Like processes, Threads are a mechanism that allows an application to perform multiple tasks **concurrently**.
 
-A single process can have multiple threads running in it. All of these threads can execute parallely the same program code. 
-They share all the memory segments with each other such as: Initialized Data, Uninitialized data, Text Segment and Heap. But have independent Stack data.
+A single process can have multiple threads running in it.  
+All of these threads can execute parallely the same program code. 
+They share all the memory segments with each other such as: Initialized Data, Uninitialized data, Text Segment and Heap. But have independent Stack data.  
 See fig: pg 618
 
-NOTE: By default each process has one thread. This "one" thread is called as Main Thread.
+> By default each process has one thread. This "**one**" thread is called as **Main Thread**.
 
-A new thread can be created by calling the "clone()" system call.
+A new thread can be created by calling the "**clone()**" system call.
 
 Notion of threads provide us with the ability to choose between "MutiThreaded" and "MultiProcess" application approach. 
 
+> Important!, On a multicore system two threads of same process can run parallely.
 
-## MultiThreaded vs Multiprocess:
 
-1. Information Sharing: Sharing of information between processes is bit difficult since parent and child does not share memory. In order to do so
-     we must use some sort of IPC.
-     Sharing information b/w threads is easy and fast. Its just a matter of copying data into shared memory segment(global variable or heap).
+## MultiThreaded vs MultiProcess:
 
-2. Creating Childs: Creating a new child process (using fork()) is much costlier than creating new threads (using clone()). Its almost 10 times
-      more costlier.
+1. **Information Sharing:** Sharing of information between processes is bit difficult since parent and child does not share memory. In order to do so we must use some sort of IPC.    
+Sharing information b/w threads is easy and fast. Its just a matter of copying data into shared memory segment(global variable or heap).
 
-3. Coding Complexity: It is comparitively easier to create multiprocess applications than multi threaded applications. As if not handled properly, one thing 
+2. **Creating Childs:** Creating a new child process (*using fork()*) is much costlier than creating new threads (*using clone()*). Its almost **10 times** more costlier.
+
+3. **Coding Complexity:** It is comparitively easier to create multiprocess applications than multi threaded applications. As if not handled properly, one thing 
       going wrong in any one of the threads can affect all the threads within the process since they all share same memory segments.
 
 ## System and Process Related Info: 
 
-Most of the System and Process related limits and settings are stored in /proc directory.
-/proc directory does not exists on the filesystem and is created by kernel on the fly, thus its a virtual file system. However, you can read 
+Most of the System and Process related limits and settings are stored in **/proc** directory.  
+
+```/proc``` directory does not exists on the filesystem and is created by kernel on the fly, thus its a virtual file system. However, you can read 
 and write to it using basic file IO commands.
 
 Some important files and directories to remember are:
@@ -225,13 +240,12 @@ Some important files and directories to remember are:
 - /proc/PID/task -> contains one subdirectory for each process.
 - /proc/sys -> contains system related limits and settings.
 
-NOTE: In order to edit/read contents of a file inside /proc directory do not use any editor it can jumble up things. Instead 
-     use following command structure:
-
+NOTE: In order to edit/read contents of a file inside /proc directory do not use any editor it can jumble up things. Instead use following command structure:
+```
      # echo 100000 > /proc/sys/kernel/pid_max
      # cat /proc/sys/kernel/pid_max
      100000 
-
+```
 
 
 
