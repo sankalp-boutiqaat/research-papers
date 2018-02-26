@@ -1,0 +1,144 @@
+The idea of vendor folder.
+-----------------------------
+
+The vendor folder was introduced in go version 1.5 to solve the following problem:
+
+Problem: 
+Suppose you are writing a package that makes use of package A and package B as dependency. Each of the package A nd B needs package C as its
+dependency. However, package A needs package C@v2 and package B needs C@v3. Now, this was not possible with the current architecture where all 
+depencies are kept under GOPATH.
+Solution:
+To solve the above problem "vendor" folder was introduced with the idea that each package will have a vendor folder at its root. ANd all the dependencies
+belonging to that particular package will reside in this vendor folder. Thus, for the above problem we will have structure something like this:
+mainpackage -> 
+   /vendor
+      /A
+        /vendor/c@v2
+      /B
+        /vendor/c@v3
+
+
+NOTE: SOme of the libraries has found their own way of solving this problem, they append the version along with the package name. This makes 
+version v2 as a totally different package from v3. An example of this is:
+   gopkg.in/go-playground/validator.v9
+   gopkg.in/go-playground/validator.v8 
+
+
+Nested vendor Folders VS Flattening.
+---------------------------------------
+Nested vendor Folder Approach is the one that we have just seen above. It solves the versioning issue for us but introduces another problem.
+Lets try to understand the problem by extending previous example itself.
+Now, suppose we have a package D as well, which is to be used in main package and is also used by package A. In such a case, we will have following
+directory structure:
+mainpackage
+   /vendor
+      /A
+        /vendor
+              /c@v2
+              /D
+      /B
+        /vendor/c@v3
+      /D 
+
+The problem is in GO, the packages residing at two different locations are considered totally different packages and it does not matter whether
+they are same package or not. So, in our example:
+   mainpackage/vendor/D and mainpackage/vendor/A/vendor/D are different packages. The problem with this is that, any object of D created in 
+   main package cannot be passed to package A as it does not recognize mainpackage/vendor/D as its dependency.
+
+To avoid this problem we generally use an approach called flattening. This approach says that only the main package will have the Vendor folder
+and all the dependencies will be kept inside it. So, the above directory structure will be flattened as:
+mainpackage
+   /vendor
+     /A
+     /B
+     /D
+     /C
+The problem with Flattening is that we will not be able to support different versions of package C ie c@v2 and c@v3.
+
+So, Which to choose?
+------------------------
+
+Most of the developers choose to go with Flattening approach. And it is the approach suggested by several dependency management tools like: glide and govendor.
+As to the problem of different versions of a package within same project, people say that its best to avoid such situations.
+
+
+Govendor:
+----------------------
+Govendor is a dependency management tool for Go. It uses the Flattening approach.
+
+
+Installing govendor:
+------------------------
+https://github.com/kardianos/govendor
+
+
+go vendor best practices.
+---------------------------
+- Always checkin vendor/vendor.json
+- Do not checkin dependencies source code (i.e vendor/*), if your project is meant to be used by other projects. 
+  An example could be, if you are writting a Mongo wrapper than its sure that your project is not the main project and is meant to be
+   used by other projects in such a case dont commit the source code for dependencies that your project is using.
+- Always checkin in  dependencies source code, if your project is a main project. A main project is one which is dependent on other projects but is
+  not meant to be inluded by any other project.
+  An example could be, if you are writing a http service for your organization.
+  Commiting dependencies helps because dependent Repositories can disappear.
+- Try to use semantic versioning.
+
+
+go vendor commands:
+------------------------
+
+```
+govendor init
+```
+This is usually the first command that one needs to call when starting a new project. Needs to be called from the root of project.
+It creates a "vendor" folder with a "vendor.json" file inside it.
+NOTE: It will not add any dependencies that your project may be using to vendor.json file or vendor folder automatically.
+
+```
+govendor fetch <librarypath>     //fetches the latest version.
+govendor fetch <librarypath>@=v1 //fetches a particular version only.
+```
+Fetch the library from network and puts it inside vendor folder. It also updates the entry in "vendor.json" file.
+
+```
+govendor sync
+```
+Uses the vendor.json file to download dependencies and place then in vendor folder.
+
+```
+govendor add <librarypath>
+govendor update <librarypath>
+```
+Pulls the library code from GOPATH and puts in vendor.
+
+```
+govendor add +external
+```
+Copies all the required packages from GOPATH to vendor folder. The package is required or not is chosen based on vendor.json file.
+
+
+```
+govendor remove +vendor
+```
+Removes all the packages from vendor folder.
+
+```
+govendor list
+```
+List all the packages that are being used by project. And also the packages that are in vendor directory but not used.
+
+```
+govendor list -v fmt
+```
+Check which all packages are using "fmt" package.
+
+
+
+Questions:
+-------------
+1. How to automatically create vendor.json?
+   - Could not find a way to do so. 
+
+2. what if my two dependencies use diffrent version of same package?
+   - You are out of luck with govendor.
