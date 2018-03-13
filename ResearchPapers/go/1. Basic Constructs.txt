@@ -1,11 +1,17 @@
+The Pure Basics:
+---------------------
+
 1. The language is case-sensitive.
+   ex: roll() and Roll() are different.
 
-2. All File names are in snake case. (i.e lower case, seperated via underscore.), no spaces or special characters allowed.  
+2. All File names are in snake case. (i.e lower case, seperated via underscore.), no spaces or special characters allowed.
+   ex: i_am_file.go  
 
-3. Statements does not need to end in semi-colon. Go compiler automatically inserts semicolons at the end of statements. However if multiple statements are written on one line,they must be separated by ; (semi colon)
+3. Statements does not need to end in semi-colon (;). Go compiler automatically inserts semicolons at the end of statements. 
+   However if multiple statements are written on one line,they must be separated by ; (semi colon)
 
 4. When a program executes, the first function to be called after initilaizations is the main() function.
-main() function has no arguments and no return values.
+   main() function has no arguments and no return values.
 
 
       ## Packages: ##

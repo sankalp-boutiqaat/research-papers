@@ -117,7 +117,6 @@ govendor add +external
 ```
 Copies all the required packages from GOPATH to vendor folder. The package is required or not is chosen based on vendor.json file.
 
-
 ```
 govendor remove +vendor
 ```

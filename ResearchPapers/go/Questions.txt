@@ -35,8 +35,6 @@ https://golang.org/cmd/go/#hdr-Description_of_testing_flags
 
 Netchan seems a complex topic, need to dive into it.
 
-checkout go dep tool for dependency management.??
-
 How to implement C library in go??
 
 

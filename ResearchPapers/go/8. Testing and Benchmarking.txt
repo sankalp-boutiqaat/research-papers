@@ -51,7 +51,7 @@ The benchmarking output of the above code will look like:
 158 ns/op ->  It took 158 nano seconds to complete one iteration of for loop.
 
 Note: In order to execute all the bechmarking functions, run following command
-    go test -test.bench=. ./...
+    go test -test.bench=. -benchmem ./...
 
 If a pre-setup function takes lot of time, we can reset the benchmarking timer to ignore the time taken during pre-setup.
 ex:
@@ -64,8 +64,11 @@ func BenchmarkBigLen(b *testing.B) {
 }
 
 Need to dive into profiling go code????
+
 Following is the article on pprof (Not diving in depthn on this as of now)
 http://blog.ralch.com/tutorial/golang-performance-and-memory-analysis/
+Another good read:
+https://github.com/golang/go/wiki/Performance
 
 
 
