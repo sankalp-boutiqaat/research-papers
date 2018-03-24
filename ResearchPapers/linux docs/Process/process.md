@@ -102,15 +102,15 @@ A frame contains functions local variables, return values and arguments.
 Following is the code example for the same.
 
 ```
-main(int argc, char *argv[])       /* Allocated in frame for main() */
-{
-  static int key = 9973;           /* Initialized data segment */
-  static char mbuf[10240000];      /* Uninitialized data segment */
-  char *p;                         /* Allocated in frame for main() */
-  p = malloc(1024);                /* Points to memory in heap segment */
-  doCalc(key);
-  exit(EXIT_SUCCESS);
-}
+    main(int argc, char *argv[])       /* Allocated in frame for main() */a'
+    {
+      static int key = 9973;           /* Initialized data segment */
+      static char mbuf[10240000];      /* Uninitialized data segment */
+      char *p;                         /* Allocated in frame for main() */
+      p = malloc(1024);                /* Points to memory in heap segment */
+      doCalc(key);
+      exit(EXIT_SUCCESS);
+   }
 ```
 
 ## Creating Child Processes: 
@@ -262,9 +262,9 @@ Some important files and directories to remember are:
 
 NOTE: In order to edit/read contents of a file inside /proc directory do not use any editor it can jumble up things. Instead use following command structure:
 ```
-     # echo 100000 > /proc/sys/kernel/pid_max
-     # cat /proc/sys/kernel/pid_max
-     100000 
+    # echo 100000 > /proc/sys/kernel/pid_max
+    # cat /proc/sys/kernel/pid_max
+        100000 
 ```
 
 
