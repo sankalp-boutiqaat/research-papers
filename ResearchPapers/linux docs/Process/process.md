@@ -97,7 +97,7 @@ A frame contains functions local variables, return values and arguments.
 
 5. **Heap:** This is also a dynamicaly growing and shrinking area used to store variables.
 
-![Process Memory Layout](https://lh4.googleusercontent.com/d5b1PWl9SgGWgczW3NGjdj9YW3r44KQXoata8LjlewfWJ0icqiO_wfNJpmQdDIhr74zueIZDf_QcBeDIqHxO=w1436-h780)
+![Process Memory Layout](http://sanksons.com/techimages/program_in_memory2.png)
 
 Following is the code example for the same.
 
@@ -154,7 +154,7 @@ data segments, stack, heap etc are loaded.
 
 The below figure illustrates, How a process running program "**A**" executes another program "**B**" using child process technique.
 
-![execve example](https://lh4.googleusercontent.com/zR1oX76jf6r3IwcGhjnLlDgfV154xMs8g5cxfcd9oSO2p5Pkh7BXaugHQqdanWmVLoISvI8MK6Xf-t_f8lD5=w1440-h759)
+![execve example](http://sanksons.com/techimages/execve.png)
 
 ## File Sharing between Parent and Child:
 
@@ -169,7 +169,7 @@ However, note that the data can be intermingled.
 If this is not the desired behaviour, then the application should be designed in such a manner that after the fork() parent and child uses
 different file descriptors.  
 This process is illustrated in below figure:  
-![File Sharing](https://lh4.googleusercontent.com/oRucVqGIW6ZpbeA5YbL6zNi3fyfO7iCKEoBVls7Q4WjO6wigoVsJJrI6xs5c3_krJr7vRvQUuBjmUM-5aA87=w1440-h759-rw)
+![File Sharing](http://sanksons.com/techimages/filesharingbwparentnchild.png)
 
 
 ## Race Conditions after "fork()":
@@ -220,7 +220,7 @@ A single process can have multiple threads running in it.
 All of these threads can execute parallely the same program code. 
 They share all the memory segments with each other such as: Initialized Data, Uninitialized data, Text Segment and Heap. But have independent Stack data.  
 
-![Thread Memory layout](https://lh3.googleusercontent.com/k2QnLpCmwqArXCUfLES3VB6N_MA96f4RkbayBxXDL23S4w81xYmC04YVqLOMV2nYHPHKLlaCtwX-nV8lYLEt=w1440-h759-rw)
+![Thread Memory layout](http://sanksons.com/techimages/threadmemory.png)
 
 
 > By default each process has one thread. This "**one**" thread is called as **Main Thread**.
