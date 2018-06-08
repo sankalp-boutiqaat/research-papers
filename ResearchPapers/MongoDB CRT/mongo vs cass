@@ -1,3 +1,0 @@
-1. JSON like data model vs column family data model.
-2. Strong consistency vs eventual consistency.
-3. Secondary indexes not supported by cassandra.

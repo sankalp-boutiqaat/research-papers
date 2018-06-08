@@ -1,0 +1,168 @@
+Terminology:
+
+1. Index (noun): Like database in our relational db.
+2. Index (verb): refers to indexing fields of a document.
+3. Document: A object that contains data in json format.
+4. Type : is a collection of documents. Same as a collection in mongodb.
+
+Indexing:
+  Act of storing data in elasticsearch is called indexing.
+
+So its all looks like this:
+Index(DB)  --------> Type (collection) ----> Document ---> field  
+Very confusing terminology .
+
+Relevance Score:
+ The search results are sorted based on relevance score.
+ A document that has higher matches gets higher relevance score.
+
+NOTE: IN elastic search ALL data in EVERY field is indexed by default.
+      Every field has a dedicated inverted index.
+      Multiple indexes can be used in single query.
+      
+       
+Document MetaData:
+----------------------
+
+1. _index: database where the document lives.
+2. _type: collection to which document belongs.
+3. _id: unique id of the document.
+4. _source: Actual content of document
+
+Checking if a document exists:
+------------------------------
+Use the HEAD method instead of GET request.
+https://www.elastic.co/guide/en/elasticsearch/guide/current/doc-exists.html
+
+Updating a document:
+-----------------------
+You cannot update a document in elasticsearch. You can only reindex a doc.
+What reindexing does is that it marks the old document as deleted and inserts the new document as version2. The old
+document is later deleted via a background job.
+
+There is an update API though which allows to make partial updates on the document.
+
+How Partial updates work?
+--------------------------
+Internally elastic serach does following:
+1. Read the old document.
+2. Apply the updates on the old document in memory.
+3. Store as new document with verion v2, leaving old document untouched.
+4. Old document is deleted via background job later.
+
+https://www.elastic.co/guide/en/elasticsearch/guide/current/partial-updates.html
+
+
+But I only want to create a document incase it does not already exists?
+------------------------------------------------------------------------
+In elastic search, A document is uniquely identified by the _id associated with the document.
+As we have seen that we can send this _id explicitely in the create request. Incase the document already exists
+its updated else its created.
+
+But now, we dont want to update an document only create. For such a case we can specify endpoint as:
+PUT /website/blog/123/_create
+Now, the document will only be created incase it doen not already exists.
+
+Deleting a document:
+---------------------
+As like updating, deleting also does not immediately deletes the document from the elasticsearch.
+It only marks the document as deleted and later deletes it through background job.
+NOTE: Marking a document as deleted also increases its version number.
+
+Using versioning for concurrency control:
+------------------------------------------
+https://www.elastic.co/guide/en/elasticsearch/guide/current/optimistic-concurrency-control.html
+
+
+Pagination Problem in Distributed Systems.
+------------------------------------------
+https://www.elastic.co/guide/en/elasticsearch/guide/current/pagination.html
+
+Querying data:
+----------------
+There are two ways in which data can queried.
+1. Lite Query: In this the search query is specified as a query string.
+2. DSL Query: This is a more flexible approach and query is passed as request body.
+
+NOTE: By default elastic search creates a new field by the name of _all in all documnets. This is a merged
+result of all the other fields in document. This feature can be disabled once you have gained control over your application.
+
+A sample Query:
+-----------------
+Following query illustrates, how a requirement of:
+1. The `name` field contains "mary" or "john"
+2. The date is greater than 2014-09-10
+3. The _all field contains either of the words aggregations or geo.
+can be achieved.
+```
++name:(mary john) +date:>2014-09-10 +(aggregations geo)
+```
+
+Mapping and Analysis:
+------------------------------------
+
+The fields in Elastic search can be broadly and most importantly categorized as "Exact Value Fields" and
+"Full Text Fields".
+
+Examples of Exact value fields are:
+Date, username, email.
+
+Examples of full text fields are:
+Description, hobbies.
+
+Tokenization and Normalization:
+----------------------------------
+https://www.elastic.co/guide/en/elasticsearch/guide/current/inverted-index.html
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+   
