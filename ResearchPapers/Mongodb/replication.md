@@ -54,3 +54,45 @@ Following are the collections present inside the Local database:
 - _`system.replset`_: stores replicaset config.
 - _`oplog.rs`_: stores the oplog.
 - _`replset.minvalid`_: contains information about initial replicaset sync.
+
+#### How Secondaries Replicate write ?
+
+Each secondary node has its own local oplog.
+
+
+
+
+##Deployment
+1. First Bootup 3 mongod instance:
+
+mongod --replSet "rs0" --port=12323 --dbpath=/data/replica/rs0/12323
+mongod --replSet "rs0" --port=12424 --dbpath=/data/replica/rs0/12424
+mongod --replSet "rs0" --port=12525 --dbpath=/data/replica/rs0/12525
+
+2. Then from the command line run 'mongo --port-12323' and run below command.
+
+rs.initiate( {
+   _id : "rs0",
+   members: [
+      { _id: 0, host: "localhost:12323" },
+      { _id: 1, host: "localhost:12424" },
+      { _id: 2, host: "localhost:12525" }
+   ]
+})
+
+Now, the replicaset is configured.
+
+rs.conf() : Displays replicaset config object.
+rs.status(): Displays replicaset status. This can be used to identify primary node.
+
+NOTE: In order to read from slave node, we need to execute command "rs.slaveOk()". This command is only valid for a single session.
+Thus each new session if wants to read from slave need to execute this first.
+
+
+Connecting to replicaset from mongoshell:
+
+we can connect to a replicaset using below command:
+mongo --host rs0/localhost:12424,localhost:12525  (no need to specify all the nodes)
+
+the above statement translates to:
+mongodb://localhost:12424,localhost:12525/?replicaSet=rs0
