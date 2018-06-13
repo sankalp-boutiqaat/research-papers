@@ -3,8 +3,8 @@
 Replication is necessary for all database systems because failures happen.
 
 MongoDB supports two types of Replication:
--  Master Slave Replication
--  Replica Sets
+-  _Master Slave Replication_
+-  _Replica Sets_
 
 Master-Slave replication and Replicasets both use same replication mechanism i.e A single primary node receives all the writes, and all the secondary nodes read and apply those writes to themselves asynchronously.
 
