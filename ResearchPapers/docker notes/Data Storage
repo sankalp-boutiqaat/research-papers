@@ -92,7 +92,7 @@ Start a container with a bind mount:
 docker run -d \
   -it \
   --name devtest \
-  --mount source=$(pwd)/target,target=/app \
+  --mount type=bind,source=$(pwd)/target,target=/app \
   nginx:latest
 
 
@@ -103,7 +103,7 @@ Read only bind mount:
 docker run -d \
   -it \
   --name devtest \
-  --mount source=$(pwd)/target,target=/app,readonly \
+  --mount type=bind,source=$(pwd)/target,target=/app,readonly \
   nginx:latest
 
 

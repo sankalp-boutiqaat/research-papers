@@ -25,16 +25,26 @@ It contains:
  - Which ports will be used by container
  - What data volumes will be used with containers.
 
+ECS Terminology:
+--------------------
+1. Task Definition: It is a blueprint that describes how a docker container should be launched.
+    It contains information like: exposed ports, docker image to be used, environment variables, 
+    memory and cpu requirements.
 
+2. Task: The actual running docker container is called a task. 
+      A task is also seen as a running instance of a task definition.
 
+3. Service: A group of tasks all running the same task definition is called a Service.
 
+4. Cluster: An ECS cluster is made of a fleet of EC2 instances. Which are capable of running Tasks.
 
+5. Container Instance: A single EC2 within the ECS Cluster is called a Container Instance.    
 
- 
+Check below image for a visual understanding of these terms.
+https://cdn-images-1.medium.com/max/1600/1*k29gxIwwhDaP-Ge-G-yXCQ.png
 
-
-
-
+Check following post for a practical of ecs:
+https://medium.com/boltops/gentle-introduction-to-how-aws-ecs-works-with-example-tutorial-cea3d27ce63d 
 
 
 

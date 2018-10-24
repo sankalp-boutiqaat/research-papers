@@ -1,3 +1,5 @@
+when to use bufio package?
+
 type Buffer struct {
 
   buf        []byte   // contains buffer contents in slice.

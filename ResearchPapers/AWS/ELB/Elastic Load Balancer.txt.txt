@@ -19,7 +19,8 @@ There are two types of load balancers as provided by AWS:
 1. Classic load balancer   : Is a normal balancer which routes traffic to EC2 machines based on the round-robin fashion.
 2. Application load balancer : It follows slightly advanced routing technique, where you can choose based on URL path params, hostname
        and HTTP headers to which target group request is to be transferred. 
-A target group can contain multiple EC2 machines and traffic will be routed to them in round-robin fashion. 
+A target group can contain multiple EC2 machines and traffic will be routed to 
+them in round-robin fashion. 
 
 
 

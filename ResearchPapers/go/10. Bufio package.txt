@@ -1,3 +1,5 @@
+when to use bufio package?
+
 Handling io using bufio package:
 Reader:
 --------

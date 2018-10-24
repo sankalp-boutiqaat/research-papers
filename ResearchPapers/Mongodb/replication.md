@@ -59,9 +59,6 @@ Following are the collections present inside the Local database:
 
 Each secondary node has its own local oplog.
 
-
-
-
 ##Deployment
 1. First Bootup 3 mongod instance:
 

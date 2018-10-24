@@ -1,0 +1,71 @@
+# Docker Cheatsheet
+
+- Pull an image from docker hub.
+```docker pull user/image```
+
+- docker login
+```Authenticate to Docker Hub```
+
+- Uploads an image to Docker Hub.
+```docker push user/image```
+
+- List all running containers.
+```docker ps```
+
+- List all container instances
+```docker ps -a```
+
+- List all the images
+```docker images```
+
+- Show logs of the container.
+```docker logs [container name or ID]```
+
+- Show exposed port of container.
+```docker port [container name or ID]```
+
+- Runs an image, creating a container and
+  changing the terminal
+  to the terminal within the container.
+```docker run -it user/image```
+
+- Changes the command prompt
+  from the host to a running container.
+```docker attach [container name or ID]```
+
+- Start a container.
+```docker start [container name or ID]```
+
+- Stop a container.
+```docker stop [container name or ID]```
+
+- Delete a container.
+```docker rm -f [container name or ID]```
+
+- Delete an image.
+```docker rmi```
+
+- Add a new tag to an image.
+```docker tag user/image:tag user/image:newtag```
+
+- Executes a command within a running container.
+```docker exec [container name or ID] shell command```
+
+- Save a container as an image.
+```docker commit user/image```
+
+- Save an image to a tar archive.
+```docker save boutiqaat/hydrazine -o hydra.tar```
+
+- Builds a Docker image from a Dockerfile
+  in the current directory.
+```docker build -t sampleuser/ubuntu .```
+
+- Loads an image from tar archive.  
+```docker image load -i image.tar```
+
+- Assign a hostname to docker container so that containers can have readable hosts.
+```docker run --hostname=value```
+
+- Assign a name to docker container so that containers can be managed by a readable name.
+```docker run --name nginx -d nginx```

@@ -1,66 +1,62 @@
-1. Defer?
+io.Reader
+------------
 
-  (done) Value types vs Reference types.
-  (done) allowed tokens during printing (%v,%d,%s etc), when to use what.
-   type switch example
-   (done) understanding buffer package
-   (done) understanding bufio package
-   understanding fmt package.
-   (done)reading and writing files.
+Reader is an interface used to read data bytes. Following is the signature.
 
-2. (done) New() vs make().
-3. (done) Array and slices
+type Reader interface {
+        Read(p []byte) (n int, err error)
+}
 
+It reads the number of bytes equal to the length of `p`.  `n` tells the number of bytes actually read.
 
-   Read from stdin and write to a file.
-   Read a file in one go and write to other one.
-   Read a file in chunks and copy. 
+Although, in most of the cases len(p) equals n, there may be some scenarios where len(p) is greater than n.
+Such scenarios are:
+1. End Of File is reached.
+2. An error is encountered after reading atleast one byte.
+Also, its not required to check for error in such cases bcoz, A return value of n > 0 and at the same time err != nil is truly possible.
+However, the next subsequent call will return n==0 and err != nil. So a check for error should be like:
 
+if err != nil and n == 0 {
+    // its a error.
+    //next Read should return 0, error. 
+} 
 
-4. Maps.
-    (done)
+and not like:
 
-5. Structs.
-     (done) Size calculation for slice, string and bool 
-	 
-6. Goroutines.
-       (done) Diff b/w concurreny and parallalism  	
+if err != nil {
 
-If the system distributes over several machines, a number of machines could execute
-the Worker goroutines, and the Master and Workers could communicate amongst themselves
-through netchan or rpc (see chapter 15). ????
+} 
 
-Make a note of this.
-https://golang.org/cmd/go/#hdr-Description_of_testing_flags	   
+Also, a return of n==0 and err == nil is not possible. If such a case arises, itshould be err == EOF.
 
-Netchan seems a complex topic, need to dive into it.
+io.Closer
+--------------
 
-How to implement C library in go??
+A closer interface has following signature.
 
+type Closer interface {
+        Close() error
+}
 
+io.ReadCloser
+-------------------
 
+ReadCloser is the interface that groups the basic Read and Close methods. 
 
+type ReadCloser interface {
+        Reader
+        Closer
+}
 
+ioutil.NopCloser()
+---------------------
+ Its a utility method, its takes in io.Reader or io.ReadCloser and attaches a dummy close method to it.
+ Note: It is helpful when the `Close()` method does not need to be called.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+ todo:
+ 1. y nil check does not work for interfaces.
+ 2. context
+ 3. sync.Waitgroup.
 
 
 

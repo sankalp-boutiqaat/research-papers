@@ -52,7 +52,7 @@ Security Groups:
 
 Security are very similar to NACL's, they are also used to allow/deny traffic. HOwever, 
 securitry groups are used on the instance level instead of at subnet level.
-As, one NACL can havle multiple subnets under its hood, A single security group can have multiple instances under its hood.
+As, one NACL can have multiple subnets under its hood, A single security group can have multiple instances under its hood.
 
 NOTE: Single EC2 can be assigned to multiple security groups.
 

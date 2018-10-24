@@ -109,14 +109,3 @@ Also, be aware that though index build is in backgroud it is still using a good 
 
 ### Building indexes on Replicasets and Sharded Clusters.
 @todo:
-
-
-
-
-
-
-
-
-
-
-
